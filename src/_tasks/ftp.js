@@ -1,0 +1,61 @@
+"use strict"
+
+const path = require('path');
+const async = require('async');
+const _ = require('lodash');
+const del = require('del');
+const ftp = require('gulp-ftp');
+const util = require('./lib/util');
+const Common = require(path.join(__dirname, '../common'));
+
+module.exports = function (projectPath, log, callback) {
+    
+    let projectConfigPath = path.join(projectPath, 'weflow.config.json');
+    let config = null;
+
+    if(Common.fileExist(projectConfigPath)){
+        config = Common.requireUncached(projectConfigPath);
+    }else{
+        config = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
+    }
+
+    let projectName = path.basename(projectPath);
+
+    //清除目标目录
+    function delDist(cb) {
+        del(path.join(projectPath, './dist'), {force: true}).then(function () {
+            cb && cb();
+        })
+    }
+
+    function remoteFtp(cb) {
+        let remotePath = config['ftp']['remotePath'] || "";
+        let ftpConfig = _.extend(config['ftp'], {
+            remotePath: path.join(remotePath, projectName)
+        });
+        let distPath = config['ftp']['includeHtml'] ? path.join(projectPath, './dist/**/*') : [path.join(projectPath, './dist/**/*'), path.join(projectPath, '!./dist/html/**/*.html')];
+
+
+        vfs.src(distPath, {base: '.'})
+            .pipe(ftp(ftpConfig))
+            .on('end', function () {
+                console.log('ftp success.');
+                log('ftp success.');
+                cb && cb();
+            });
+    }
+
+    async.series([
+        function (next) {
+            remoteFtp(next);
+        },
+    ], function (err) {
+        if (err) {
+            throw new Error(err);
+        }
+
+        delDist();
+
+        callback && callback();
+    });
+};

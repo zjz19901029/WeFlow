@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WeFlow</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/app.css">
+</head>
+<body>
+
+<div class="wraper">
+    <div class="welcome" style="display: none">
+        <div class="logo"></div>
+        <div class="title">WeFlow</div>
+        <div class="subtitle">开启一段高效之旅</div>
+        <div class="tips">
+            <div class="icon-tips"></div>
+            <div class="tips__content">添加一个新项目</div>
+        </div>
+    </div>
+    <div class="projects">
+        <div class="projects__header">
+            Projects
+        </div>
+        <ul class="projects__list" id="js-project-list">
+            <li class="projects__list-item" data-project="2" title="/Users/littledu/dudu_workspace/2">
+                <span class="icon icon-finder"></span>
+                <div class="projects__list-content">
+                    <span class="projects__name">project</span>
+                    <div class="projects__path">/Users/Apple/Workspace/Projects/wechat-city</div>
+                </div>
+                <a href="javascript:;" class="icon icon-info"></a>
+            </li>
+            <li class="projects__list-item projects__list-item_current" data-project="2"
+                title="/Users/littledu/dudu_workspace/2">
+                <span class="icon icon-finder"></span>
+                <div class="projects__list-content">
+                    <span class="projects__name">project</span>
+                    <div class="projects__path">/Users/Apple/Workspace/Projects/wechat-city</div>
+                </div>
+                <a href="javascript:;" class="icon icon-info"></a>
+            </li>
+            <li class="projects__list-item projects__list-item_watching" data-project="2"
+                title="/Users/littledu/dudu_workspace/2">
+                <span class="icon icon-finder"></span>
+                <div class="projects__list-content">
+                    <span class="projects__name">project</span>
+                    <div class="projects__path">/Users/Apple/Workspace/Projects/wechat-city</div>
+                </div>
+                <a href="javascript:;" class="icon icon-info"></a>
+            </li>
+            <li class="projects__list-item" data-project="2" title="/Users/littledu/dudu_workspace/2">
+                <span class="icon icon-finder"></span>
+                <div class="projects__list-content">
+                    <span class="projects__name">projectprojectprojectprojectprojectprojectprojectproject</span>
+                    <div class="projects__path">
+                        /Users/Apple/Workspace/Projects/wechat-city/Users/Apple/Workspace/Projects/wechat-city
+                    </div>
+                </div>
+                <a href="javascript:;" class="icon icon-info"></a>
+            </li>
+            <li class="projects__list-item" data-project="2" title="/Users/littledu/dudu_workspace/2">
+                <span class="icon icon-finder"></span>
+                <div class="projects__list-content">
+                    <span class="projects__name">project</span>
+                    <div class="projects__path">/Users/Apple/Workspace/Projects/wechat-city</div>
+                </div>
+                <a href="javascript:;" class="icon icon-info"></a>
+            </li>
+            <li class="projects__list-item" data-project="2" title="/Users/littledu/dudu_workspace/2">
+                <span class="icon icon-finder"></span>
+                <div class="projects__list-content">
+                    <span class="projects__name">project</span>
+                    <div class="projects__path">/Users/Apple/Workspace/Projects/wechat-city</div>
+                </div>
+                <a href="javascript:;" class="icon icon-info"></a>
+            </li>
+            <li class="projects__list-item" data-project="2" title="/Users/littledu/dudu_workspace/2">
+                <span class="icon icon-finder"></span>
+                <div class="projects__list-content">
+                    <span class="projects__name">project</span>
+                    <div class="projects__path">/Users/Apple/Workspace/Projects/wechat-city</div>
+                </div>
+                <a href="javascript:;" class="icon icon-info"></a>
+            </li>
+        </ul>
+    </div>
+    <div class="bottom-fixed">
+        <div class="tasks" id="js-task-buttons">
+            <span data-task="dev" id="js-build-dev" class="tasks__button tasks__button_watching">dev</span>
+            <span data-task="dist" class="tasks__button">dist</span>
+            <span data-task="ftp" class="tasks__button">ftp</span>
+            <span data-task="zip" class="tasks__button">zip</span>
+        </div>
+        <div class="logs" id="js-log"></div>
+    </div>
+    <div class="bottom-bar">
+        <div class="bottom-bar__content">
+            <span class="icon icon-add" id="js-new-project"></span>
+            <span class="icon icon-del"></span>
+            <span class="icon icon-open">
+                <input class="bottom-bar__open" id="js-open-project" type="file" webkitdirectory multiple>
+            </span>
+            <span class="icon icon-setting" id="js-setting-button"></span>
+            <span class="icon icon-log"></span>
+        </div>
+    </div>
+</div>
+
+<div class="dudu__setting" id="js-setting">
+    <a href="javascript:;" id="js-setting-close" class="am-icon-remove"></a>
+
+    <form class="am-form">
+        <fieldset>
+            <legend>全局设置</legend>
+
+            <div class="am-form-group am-form-group-sm">
+                <label for="js-form-workspace">工作区路径</label>
+                <input type="text" data-workspace="true" id="js-form-workspace">
+            </div>
+
+            <hr>
+
+            <div class="am-form-group am-form-group-sm">
+                <label>FTP配置</label>
+                <input type="text" name="ftp-host" placeholder="host">
+                <input type="text" name="ftp-port" placeholder="port">
+                <input type="text" name="ftp-user" placeholder="user">
+                <input type="text" name="ftp-pass" placeholder="pass">
+                <input type="text" name="ftp-remotePath" placeholder="remotePath">
+
+                <div class="am-checkbox">
+                    <label>
+                        <input type="checkbox" name="ftp-includeHtml"> 是否上传 html
+                    </label>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="am-form-group am-form-group-sm">
+                <div class="am-checkbox">
+                    <label>
+                        <input type="checkbox" name="livereload"> livereload
+                    </label>
+                </div>
+                <div class="am-checkbox">
+                    <label>
+                        <input type="checkbox" name="supportREM"> 开启 REM
+                    </label>
+                </div>
+                <div class="am-checkbox">
+                    <label>
+                        <input type="checkbox" name="supportWebp"> 开启 Webp
+                    </label>
+                </div>
+                <div class="am-checkbox">
+                    <label>
+                        <input type="checkbox" name="supportChanged"> 开启 增量编译
+                    </label>
+                </div>
+                <div class="am-checkbox">
+                    <label>
+                        <input type="checkbox" name="reversion"> 开启 Reversion
+                    </label>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    window.nodeRequire = require;
+    delete window.require;
+    delete window.exports;
+    delete window.module;
+</script>
+<script src="./assets/js/jquery.min.js"></script>
+<script src="./src/app.js"></script>
+</body>
+</html>
