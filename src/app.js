@@ -17,9 +17,6 @@ const zip = nodeRequire(path.join(__dirname, './src/_tasks/zip.js'));
 const ftp = nodeRequire(path.join(__dirname, './src/_tasks/ftp.js'));
 const Common = nodeRequire(path.join(__dirname, './src/common'));
 
-
-
-
 //变量声明
 let $welcome = $('#js-welcome');
 let $openProject = $('#js-open-project');

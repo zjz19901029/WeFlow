@@ -5,7 +5,10 @@
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "build:mac": "rm -rf ./dist/ && electron-packager ./ WeFlow Mac --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --out ./dist/WeFlow --version 0.37.6"
+    "build:all": "rm -rf ./dist && electron-packager . --all",
+    "build:mac": "rm -rf ./dist/WeFlow-darwin-64 && electron-packager ./ WeFlow Mac --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --out ./dist --version=0.37.8",
+    "build:win64": "electron-packager ./ WeFlow --platform=win32 --arch=x64 --icon=./assets/img/WeFlow.icns --out ./dist --version=0.37.8",
+    "build:win32": "electron-packager ./ WeFlow --platform=win32 --arch=ia32 --version=0.37.8 --app-version=1.0.0 --asar --icon=./assets/img/WeFlow.png --out ./dist"
   },
   "repository": {
     "type": "git",
@@ -29,11 +32,12 @@
   },
   "dependencies": {
     "async": "^2.0.0-rc.3",
-    "del": "^2.2.0",
-    "extract-zip": "^1.5.0",
-    "vinyl-fs": "^2.4.3",
     "autoprefixer": "^6.3.3",
     "browser-sync": "^2.11.1",
+    "crypto-md5": "^1.0.0",
+    "del": "^2.2.0",
+    "electron-prebuilt": "^0.37.8",
+    "extract-zip": "^1.5.0",
     "gulp-cssnano": "^2.1.1",
     "gulp-ejs": "^2.1.1",
     "gulp-ftp": "^1.1.0",
@@ -60,6 +64,6 @@
     "rc": "^1.1.6",
     "rd": "^0.0.2",
     "tmt-ejs-helper": "^0.0.1",
-    "crypto-md5": "^1.0.0"
+    "vinyl-fs": "^2.4.3"
   }
 }
