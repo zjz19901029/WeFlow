@@ -16,7 +16,7 @@ const lazyImageCSS = require('gulp-lazyimagecss');  // 自动为图片样式添�
 const minifyCSS = require('gulp-cssnano');
 const imagemin = require('gulp-imagemin');
 const pngquant = require('imagemin-pngquant');
-const tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
+//const tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
 const ejshelper = require('tmt-ejs-helper');
 const postcss = require('gulp-postcss');  // CSS 预处理
 const postcssPxtorem = require('postcss-pxtorem'); // 转换 px 为 rem
@@ -38,7 +38,6 @@ function dist(projectPath, log, callback) {
     if(Common.fileExist(projectConfigPath)){
         config = Common.requireUncached(projectConfigPath);
     }else{
-        console.log(path.join(__dirname, '../../../weflow.config.json'))
         config = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
     }
 
@@ -108,8 +107,7 @@ function dist(projectPath, log, callback) {
         vfs.src(paths.src.less)
             .pipe(less())
             .pipe(lazyImageCSS({imagePath: lazyDir}))
-            .pipe(tmtsprite({margin: 4}))
-            .pipe(gulpif(condition, vfs.dest(paths.tmp.sprite), vfs.dest(paths.tmp.css)))
+            .pipe(vfs.dest(paths.tmp.css))
             .on('data', function(){})
             .on('end', function () {
                 console.log('compileLess success.');

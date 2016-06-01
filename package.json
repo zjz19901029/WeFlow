@@ -5,27 +5,27 @@
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "build:all": "rm -rf ./dist && electron-packager . --all",
-    "build:mac": "rm -rf ./dist/WeFlow-darwin-64 && electron-packager ./ WeFlow Mac --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --out ./dist --version=0.37.8",
-    "build:win64": "electron-packager ./ WeFlow --platform=win32 --arch=x64 --icon=./assets/img/WeFlow.icns --out ./dist --version=0.37.8",
-    "build:win32": "electron-packager ./ WeFlow --platform=win32 --arch=ia32 --version=0.37.8 --app-version=1.0.0 --asar --icon=./assets/img/WeFlow.png --out ./dist"
+    "build:all": "electron-packager . --all --overwrite",
+    "build:mac": "electron-packager ./ WeFlow Mac --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist --version=0.37.8",
+    "build:win64": "electron-packager ./ WeFlow --platform=win32 --arch=x64 --icon=./assets/img/WeFlow.png --overwrite --out ./dist --version=0.37.8",
+    "build:win32": "electron-packager ./ WeFlow --platform=win32 --arch=ia32 --icon=./assets/img/WeFlow.png --overwrite --out ./dist --version=0.37.8 --app-version=1.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron/electron-quick-start.git"
+    "url": "https://github.com/weixin/WeFlow"
   },
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial"
+    "workflow",
+    "F2E",
+    "GUI"
   ],
   "author": "GitHub",
-  "license": "CC0-1.0",
+  "license": "MIT License",
   "bugs": {
-    "url": "https://github.com/electron/electron-quick-start/issues"
+    "url": "https://github.com/weixin/WeFlow/issues"
   },
-  "homepage": "https://github.com/electron/electron-quick-start#readme",
+  "homepage": "https://github.com/weixin/WeFlow#readme",
   "devDependencies": {
     "electron-packager": "^6.0.2",
     "electron-prebuilt": "^0.37.0"
@@ -38,6 +38,7 @@
     "del": "^2.2.0",
     "electron-prebuilt": "^0.37.8",
     "extract-zip": "^1.5.0",
+    "gulp": "^3.9.1",
     "gulp-cssnano": "^2.1.1",
     "gulp-ejs": "^2.1.1",
     "gulp-ftp": "^1.1.0",

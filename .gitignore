@@ -25,6 +25,8 @@ build/Release
 
 # Dependency directory
 node_modules
+dist
+
 
 # Optional npm cache directory
 .npm
@@ -35,3 +37,5 @@ node_modules
 .idea
 
 tmp_dev/**
+
+src/_tasks/tmp_dev/f8e5249a79c400596963cb68cecce30f.js

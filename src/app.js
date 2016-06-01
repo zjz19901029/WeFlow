@@ -200,6 +200,7 @@ function insertOpenProject(projectPath) {
         if (!storage['projects'][projectName]) {
             storage['projects'][projectName] = {};
         }
+
         storage['projects'][projectName]['path'] = projectPath;
 
         Common.setStorage(storage);
@@ -461,17 +462,21 @@ function taskHandler(taskName){
 }
 
 function runDevTask(devPath){
-    let child = childProcess.fork(devPath, {silent: true});
+    let child = childProcess.exec(process.execPath + " " + devPath, {silent: true});
 
+    child.stdout.setEncoding('utf-8');
     child.stdout.on('data', function (data) {
+        console.log(data);
         logReply(data.toString());
     });
 
     child.stderr.on('data', function (data) {
+        console.log(data)
         logReply(data.toString());
     });
 
     child.on('close', function (code) {
+        console.log(code);
         if (code !== 0) {
             logReply(`child process exited with code ${code}`);
         }
@@ -481,6 +486,7 @@ function runDevTask(devPath){
     let projectName = $curProject.data('project');
 
     if (storage && storage['projects'] && storage['projects'][projectName]) {
+        console.log(child.pid);
         storage['projects'][projectName]['pid'] = child.pid;
         Common.setStorage(storage);
 
@@ -580,6 +586,7 @@ $setting.on('change', 'input', function () {
 
         let storage = Common.getStorage();
         let originWorkspace = storage.workspace;
+        let originPath;
 
         storage.workspace = $.trim($this.val());
 
@@ -589,9 +596,14 @@ $setting.on('change', 'input', function () {
 
                 async.series([
                     function (next) {
-                        del([originWorkspace, Common.TEMP_DEV_PATH + '/**/*'], {force: true}).then(function () {
+                        if (Common.PLATFORM === 'win32') {
+                            //windows 删除目录有bug
                             next();
-                        })
+                        }else{
+                            del([originWorkspace, path.join(Common.TEMP_DEV_PATH, '/**/*')], {force: true}).then(function () {
+                                next();
+                            })
+                        }
                     },
                     function (next) {
                         //更新 localstorage
@@ -796,18 +808,27 @@ $buildDevButton.hover(function () {
 });
 
 
-
 //结束子进程
 function killChildProcess(projectName) {
     let storage = Common.getStorage();
 
     if (storage && storage['projects'][projectName] && storage['projects'][projectName]['pid']) {
 
+
         try {
-            process.kill(storage['projects'][projectName]['pid']);
+            if(Common.PLATFORM === 'win32') {
+                childProcess.exec('taskkill /pid ' + storage['projects'][projectName]['pid'] + ' /T /F');
+            }else {
+                process.kill(storage['projects'][projectName]['pid']);
+
+            }
         } catch (e) {
             console.log('pid not found');
         }
+
+
+
+
 
         storage['projects'][projectName]['pid'] = 0;
         Common.setStorage(storage);

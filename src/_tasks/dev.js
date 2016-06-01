@@ -1,5 +1,4 @@
 "use strict";
-
 const path = require('path');
 const del = require('del');
 const ejs = require('gulp-ejs');
@@ -160,7 +159,11 @@ function watch(cb) {
 
 function watchHandler(type, file) {
 
-    let target = file.split('src')[1].match(/\/(\w+)\//);
+    if(typeof file !== 'string'){
+        file = file.path;
+    }
+
+    let target = file.split('src')[1].match(/[\/\\](\w+)[\/\\]/);
 
     if (target.length && target[1]) {
         target = target[1];

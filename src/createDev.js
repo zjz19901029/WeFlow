@@ -1,4 +1,3 @@
-'use strict';
 
 const path = require('path');
 const fs = require('fs');
@@ -13,10 +12,17 @@ function createDev(projectPath, callback) {
     let target = path.join(__dirname, './_tasks/tmp_dev');
     let devName = md5(projectPath, 'hex') + '.js';
     let devPath = path.join(target, devName);
+    let replacePath;
+
+    if(Common.PLATFORM === 'win32'){
+        replacePath = projectPath.replace(/\\/g, '\\\\');
+    }else{
+        replacePath = projectPath;
+    }
 
     if (!Common.fileExist(devPath)) {
         vfs.src(source)
-            .pipe(replace('placeholder', projectPath))
+            .pipe(replace('placeholder', replacePath))
             .pipe(rename(devName))
             .pipe(vfs.dest(target))
             .on('end', function () {
