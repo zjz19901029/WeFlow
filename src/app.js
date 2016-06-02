@@ -11,6 +11,7 @@ const _ = nodeRequire('lodash');
 const async = nodeRequire('async');
 const remote = electron.remote;
 const shell = electron.shell;
+const ipcRender = electron.ipcRenderer;
 const createDev = nodeRequire(path.join(__dirname, './src/createDev'));
 const dist = nodeRequire(path.join(__dirname, './src/_tasks/dist.js'));
 const zip = nodeRequire(path.join(__dirname, './src/_tasks/zip.js'));
@@ -41,6 +42,11 @@ let once = false;
 let curConfigPath = Common.CONFIGPATH;
 let config = nodeRequire(curConfigPath);
 let FinderTitle = Common.PLATFORM === 'win32' ? '在 文件夹 中查看' : '在 Finder 中查看';
+
+ipcRender.on('message', function(event){
+     event.send('dd')
+});
+
 
 //初始化
 init();
@@ -462,7 +468,14 @@ function taskHandler(taskName){
 }
 
 function runDevTask(devPath){
-    let child = childProcess.exec(process.execPath + " " + devPath, {silent: true});
+    let child;
+
+    if(Common.PLATFORM === 'win32'){
+        child = childProcess.exec(process.execPath + " " + devPath, {silent: true});
+    }else{
+        child = childProcess.fork(devPath, {silent: true});
+    }
+
 
     child.stdout.setEncoding('utf-8');
     child.stdout.on('data', function (data) {
@@ -586,7 +599,6 @@ $setting.on('change', 'input', function () {
 
         let storage = Common.getStorage();
         let originWorkspace = storage.workspace;
-        let originPath;
 
         storage.workspace = $.trim($this.val());
 
@@ -814,7 +826,6 @@ function killChildProcess(projectName) {
 
     if (storage && storage['projects'][projectName] && storage['projects'][projectName]['pid']) {
 
-
         try {
             if(Common.PLATFORM === 'win32') {
                 childProcess.exec('taskkill /pid ' + storage['projects'][projectName]['pid'] + ' /T /F');
@@ -825,10 +836,6 @@ function killChildProcess(projectName) {
         } catch (e) {
             console.log('pid not found');
         }
-
-
-
-
 
         storage['projects'][projectName]['pid'] = 0;
         Common.setStorage(storage);

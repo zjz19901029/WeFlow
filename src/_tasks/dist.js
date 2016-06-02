@@ -16,7 +16,6 @@ const lazyImageCSS = require('gulp-lazyimagecss');  // 自动为图片样式添�
 const minifyCSS = require('gulp-cssnano');
 const imagemin = require('gulp-imagemin');
 const pngquant = require('imagemin-pngquant');
-//const tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
 const ejshelper = require('tmt-ejs-helper');
 const postcss = require('gulp-postcss');  // CSS 预处理
 const postcssPxtorem = require('postcss-pxtorem'); // 转换 px 为 rem
@@ -26,6 +25,12 @@ const posthtmlPx2rem = require('posthtml-px2rem');
 const RevAll = require('gulp-rev-all');   // reversion
 const revDel = require('gulp-rev-delete-original');
 const Common = require(path.join(__dirname, '../common'));
+
+let tmtsprite;
+
+if(Common.PLATFORM !== 'win32'){
+    tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
+}
 
 let webp = require(path.join(__dirname, './common/webp'));
 let changed = require(path.join(__dirname, './common/changed'))();
@@ -107,7 +112,21 @@ function dist(projectPath, log, callback) {
         vfs.src(paths.src.less)
             .pipe(less())
             .pipe(lazyImageCSS({imagePath: lazyDir}))
-            .pipe(vfs.dest(paths.tmp.css))
+            .pipe(tmtsprite({margin: 4}))
+            .pipe(gulpif(condition, vfs.dest(paths.tmp.sprite), vfs.dest(paths.tmp.css)))
+            .on('data', function(){})
+            .on('end', function () {
+                console.log('compileLess success.');
+                log('compileLess success.');
+                cb && cb();
+            })
+    }
+
+    //win 编译LESS
+    function compileLessForWin(cb) {
+        vfs.src(paths.src.less)
+            .pipe(less())
+            .pipe(lazyImageCSS({imagePath: lazyDir}))
             .on('data', function(){})
             .on('end', function () {
                 console.log('compileLess success.');
@@ -181,6 +200,17 @@ function dist(projectPath, log, callback) {
             .on('end', function () {
                 console.log('copyMedia success.');
                 log('copyMedia success.');
+                cb && cb();
+            });
+    }
+
+    //复制slice
+    function copySlice(cb) {
+        vfs.src(paths.src.slice, {base: paths.src.dir})
+            .pipe(vfs.dest(paths.dist.dir))
+            .on('end', function () {
+                console.log('copySlice success.');
+                log('copySlice success.');
                 cb && cb();
             });
     }
@@ -327,11 +357,15 @@ function dist(projectPath, log, callback) {
          * 先删除目标目录,保证最新
          * @param next
          */
-            function (next) {
+        function (next) {
             delDist(next);
         },
         function (next) {
-            compileLess(next);
+            if(Common.PLATFORM === 'win32'){
+                compileLessForWin(next);
+            }else{
+                compileLess(next);
+            }
         },
         function (next) {
             compileAutoprefixer(next);
@@ -349,6 +383,13 @@ function dist(projectPath, log, callback) {
                 },
                 function (cb) {
                     copyMedia(cb);
+                },
+                function(cb){
+                    if(Common.PLATFORM === 'win32'){
+                        copySlice(cb);
+                    }else{
+                        cb();
+                    }
                 },
                 function (cb) {
                     uglifyJs(cb);
