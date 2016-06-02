@@ -276,7 +276,9 @@ header {
 }
 
 .download-box {
-    margin-top: 2rem
+    margin-top: 2rem;
+    position: relative;
+    z-index: 99;
 }
 
 .words {
