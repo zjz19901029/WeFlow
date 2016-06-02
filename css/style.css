@@ -227,11 +227,15 @@ header {
 
 .oracle-bg {
     background-image: url(../img/bg@2x.png);
-    width: 100%;
+    width: 71.55rem;
+    height: 45.75rem;
+    left: 50%;
+    margin-left: -35.775rem;
     margin-top: 23.5rem;
-    background-size: 71.55rem;
+    background-size: 100%;
     position: absolute;
-    bottom: 0
+    bottom: 0;
+    background-position: center center;
 }
 
 .logo {
