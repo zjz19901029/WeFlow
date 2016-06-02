@@ -74,224 +74,456 @@ legend {
     display: none
 }
 
-/*reset done*/
+html {
+    font-size: 20PX;
+}
+
+@media only screen and (min-width: 320px) {
+    html {
+        font-size: 19PX !important;
+    }
+}
+
+@media only screen and (min-width: 375px) {
+    html {
+        font-size: 20PX !important;
+    }
+}
+
+@media only screen and (min-width: 400px) {
+    html {
+        font-size: 21.33333333PX !important;
+    }
+}
+
+@media only screen and (min-width: 414px) {
+    html {
+        font-size: 22.08PX !important;
+    }
+}
+
+@media only screen and (min-width: 480px) {
+    html {
+        font-size: 25.6PX !important;
+    }
+}
+
+html {
+    color: #000;
+    background: #fff
+}
+
+blockquote, body, code, dd, div, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, input, legend, li, ol, p, pre, td, textarea, th, ul {
+    margin: 0;
+    padding: 0
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+fieldset, img {
+    border: 0
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+    font-style: normal;
+    font-weight: 400
+}
+
+ol, ul {
+    list-style: none
+}
+
+caption, th {
+    text-align: left
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: 400
+}
+
+q:after, q:before {
+    content: ''
+}
+
+abbr, acronym {
+    border: 0;
+    font-variant: normal
+}
+
+sup {
+    vertical-align: text-top
+}
+
+sub {
+    vertical-align: text-bottom
+}
+
+input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    *font-size: 100%
+}
+
+legend {
+    color: #000
+}
+
+#yui3-css-stamp.cssreset {
+    display: none
+}
+
+html {
+    font-size: 20px
+}
+
+@media only screen and (min-width: 320px) {
+    html {
+        font-size: 15px !important
+    }
+}
+
+@media only screen and (min-width: 375px) {
+    html {
+        font-size: 17px !important
+    }
+}
+
+@media only screen and (min-width: 400px) {
+    html {
+        font-size: 18px !important
+    }
+}
+
+@media only screen and (min-width: 414px) {
+    html {
+        font-size: 19px !important
+    }
+}
+
+@media only screen and (min-width: 480px) {
+    html {
+        font-size: 20px !important
+    }
+}
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Microsoft YaHei', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, Microsoft YaHei, sans-serif
 }
 
 header {
     position: relative;
-    height: 1380px;
+    height: 69rem;
     width: 100%;
     overflow: hidden;
     text-align: center;
     color: #fff;
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(87, 232, 138)), to(rgb(20, 169, 72)));
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#57e88a), to(#14a948))
 }
 
 .oracle-bg {
     background-image: url(../img/bg@2x.png);
     width: 100%;
-    height: 915px;
-    margin-top: 470px;
-    -webkit-background-size: 1431px;
-    background-size: 1431px;;
+    margin-top: 23.5rem;
+    background-size: 71.55rem;
     position: absolute;
-    bottom: 0;
+    bottom: 0
 }
 
 .logo {
     background-image: url(../img/logo@2x.png);
-    width: 131px;
-    height: 143px;
-    text-indent: -9999px;
-    -webkit-background-size: 131px;
-    background-size: 131px;
+    width: 6.55rem;
+    height: 7.15rem;
+    text-indent: -499.95rem;
+    background-size: 6.55rem;
     display: block;
     margin: 0 auto;
-    margin-top: 200px;
-    background-repeat: no-repeat;
+    margin-top: 10rem;
+    background-repeat: no-repeat
 }
 
 .description {
-    margin-top: 36px;
+    margin-top: 1.8rem;
+    font-size: .7rem
 }
 
 .screenshot {
     background-image: url(../img/screenshot@2x.png);
-    width: 422px;
-    height: 633px;
-    text-indent: -9999px;
-    -webkit-background-size: 422px;
-    background-size: 422px;;
+    width: 21.1rem;
+    height: 31.65rem;
+    max-width: 21.1rem;
+    min-width: 16rem;
+    text-indent: -499.95rem;
+    background-size: 100%;
     background-repeat: no-repeat;
     display: block;
     margin: 0 auto;
-    margin-top: 45px;
+    margin-top: 2.25rem;
+    position: relative;
+    z-index: 99
 }
 
 .download-box {
-    margin-top: 40px;
+    margin-top: 2rem
 }
 
 .words {
-    color: #1D1D1D;
+    color: #1d1d1d;
     text-align: center;
-    font-size: 14px;
+    font-size: .7rem
 }
 
 .download-btn {
-    height: 42px;
-    line-height: 42px;
-    width: 198px;
-    font-size: 16px;
+    height: 2.1rem;
+    line-height: 2.1rem;
+    width: 9.9rem;
+    font-size: .8rem;
     display: block;
     margin: 0 auto;
-    margin-top: 47px;
+    margin-top: 2.35rem;
     color: #fff;
     text-decoration: none;
-    border: 2px solid rgba(255, 255, 255, 0.68);
-    border-radius: 50px;
+    border: .1rem solid hsla(0, 0%, 100%, .68);
+    border-radius: 2.5rem
 }
 
 .tips {
-    font-size: 10px;
-    height: 24px;
-    margin-top: 5px;
-    line-height: 24px;
-    color: rgba(255, 255, 255, 0.63);
+    font-size: .5rem;
+    height: 1.2rem;
+    margin-top: .25rem;
+    line-height: 1.2rem;
+    color: hsla(0, 0%, 100%, .63)
 }
 
 .mod-des {
-    text-align: center;
+    text-align: center
 }
 
 .mod-des__list-box {
-    width: 320px;
+    width: 16rem;
     margin: 0 auto;
     text-align: left;
-    margin-bottom: 20px;
-
+    margin-bottom: 1rem
 }
 
 .mod-des__list-box:last-child {
-    padding-bottom: 20px;
+    padding-bottom: 1rem;
     border: none;
-    background-image: -webkit-linear-gradient(270deg, transparent, transparent 50%, transparent 50%),
-    -webkit-linear-gradient(180deg, transparent, transparent 50%, transparent 50%),
-    -webkit-linear-gradient(90deg, #BABABA, #BABABA 50%, transparent 50%),
-    -webkit-linear-gradient(0, transparent, transparent 50%, transparent 50%);
+    background-image: -webkit-linear-gradient(270deg, transparent, transparent 50%, transparent 0), -webkit-linear-gradient(180deg, transparent, transparent 50%, transparent 0), -webkit-linear-gradient(90deg, #bababa, #bababa 50%, transparent 0), -webkit-linear-gradient(0, transparent, transparent 50%, transparent 0);
     background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%;
     background-repeat: no-repeat;
-    background-position: top, right top, bottom, left top;
-}
-
-.mod-des__list-name {
-
+    background-position: top, 100% 0, bottom, 0 0
 }
 
 .mod-des__title {
-    font-size: 35px;
+    font-size: 1.75rem;
     color: #003103;
-    margin-top: 49px;
-    margin-bottom: 50px;
-
+    margin-top: 2.45rem;
+    margin-bottom: 2.5rem
 }
 
 .mod-des__list {
-    margin-top: 10px;
+    margin-top: .5rem;
     list-style: disc outside;
-    padding-left: 25px;
+    padding-left: 1.25rem
 }
 
 .mod-des__item {
-    color: #3262B2;
+    color: #3262b2;
     display: list-item;
-    font-size: 14px;
-    line-height: 23px;
-    height: 23px;
-    text-decoration: none;
-}
-
-.support {
-
+    font-size: .7rem;
+    line-height: 1.15rem;
+    height: 1.15rem;
+    text-decoration: none
 }
 
 .support-description {
-    margin-top: 50px;
-    font-size: 16px;
+    margin-top: 2.5rem;
+    font-size: .7rem;
     text-align: center;
     color: #003103;
-    line-height: 24px;
+    line-height: 1.2rem
 }
-.support-link{
-    color: #3262B2;
-    text-decoration: none;
+
+.support-link {
+    color: #3262b2;
+    text-decoration: none
 }
+
 .support-example {
-    margin-top: 50px;
+    margin-top: 2.5rem;
     text-align: center;
-    margin-bottom: 75px;
+    margin-bottom: 3.75rem
 }
 
 .support-item {
-    height: 30px;
-    text-indent: -9999px;
+    padding: 0 0.6rem;
+    height: 1.5rem;
+    text-indent: -499.95rem;
     display: inline-block;
-    margin-right: 35px;
+    margin-bottom: 1rem;
+
 }
 
 .support-item:last-child {
-    margin-right: 0;
+    margin-right: 0
 }
 
 footer {
-    width: 500px;
     margin: 0 auto;
     overflow: hidden;
     border: none;
-    background-image: -webkit-linear-gradient(270deg, #BABABA, #BABABA 50%, transparent 50%),
-    -webkit-linear-gradient(180deg, transparent, transparent 50%, transparent 50%),
-    -webkit-linear-gradient(90deg, transparent, transparent 50%, transparent 50%),
-    -webkit-linear-gradient(0, transparent, transparent 50%, transparent 50%);
+    background-image: -webkit-linear-gradient(270deg, #bababa, #bababa 50%, transparent 0), -webkit-linear-gradient(180deg, transparent, transparent 50%, transparent 0), -webkit-linear-gradient(90deg, transparent, transparent 50%, transparent 0), -webkit-linear-gradient(0, transparent, transparent 50%, transparent 0);
     background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%;
     background-repeat: no-repeat;
-    background-position: top, right top, bottom, left top;
+    background-position: top, 100% 0, bottom, 0 0
 }
 
 .links {
-    margin-top: 40px;
-    text-align: center;
+    margin-top: 2rem;
+    text-align: center
 }
 
 .links__github {
-    width: 40px;
-    height: 40px;
+    width: 1rem;
+    height: 1rem;
     display: inline-block;
-    -webkit-background-size: 40px;
-    background-size: 40px;
+    background-size: 1rem;
     background-image: url(../img/github@2x.png);
-    margin-right: 30px;
+    margin-right: 1.5rem;
     background-repeat: no-repeat;
-    text-indent: -9999px;
-    text-decoration: none;
+    text-indent: -499.95rem;
+    text-decoration: none
 }
 
 .links__dribbble {
-    width: 40px;
-    height: 40px;
+    width: 1rem;
+    height: 1rem;
     display: inline-block;
     background-image: url(../img/dribbble@2x.png);
-    -webkit-background-size: 40px;
-    background-size: 40px;
-    text-indent: -9999px;
-    text-decoration: none;
+    background-size: 1rem;
+    text-indent: -499.95rem;
+    text-decoration: none
 }
 
 .license {
-    font-size: 14px;
-    color: #BABABA;
+    font-size: .6rem;
+    color: #bababa;
     text-align: center;
-    margin: 36px;
+    margin: 1.8rem
+}
+.forkme {
+    transform: rotate(45deg);
+    background-color: #FFF;
+    overflow: hidden;
+    position: fixed;
+    z-index: 300;
+    width: 240px;
+    right: -60px;
+    top: 46px;
+    border-style: solid;
+    border-color: #7B7979;
+}
+
+
+@import url(http://fonts.googleapis.com/css?family=Cabin+Condensed:500&text=Fork%20me%20on%20GitHub);
+
+body {
+    overflow-x: hidden;
+}
+
+.ribbon {
+    position: absolute;
+    top: 42px;
+    width: 200px;
+    padding: 1px 0;
+    background: #000;
+    color: #eee;
+    -moz-box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.ribbon.left {
+    left: -42px;
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.ribbon.right {
+    right: -42px;
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.ribbon a,
+.ribbon a:visited,
+.ribbon a:active,
+.ribbon a:hover {
+    display: block;
+    padding: 1px 0;
+    height: 24px;
+    line-height: 24px;
+    color: inherit;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Cabin Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.3);
+    -moz-text-shadow: 0 0 10px rgba(0,0,0,0.31);
+    -webkit-text-shadow: 0 0 10px rgba(0,0,0,0.31);
+    text-shadow: 0 0 10px rgba(0,0,0,0.31);
+}
+
+.ribbon.black {
+    background: #000;
+}
+
+.ribbon.red {
+    background: #c00;
+}
+
+.ribbon.blue {
+    background: #09e;
+}
+
+.ribbon.green {
+    background: #0a0;
+}
+
+.ribbon.orange {
+    background: #d80;
+}
+
+.ribbon.purple {
+    background: #c0c;
+}
+
+.ribbon.grey {
+    background: #888;
+}
+
+.ribbon.white {
+    background: #eee;
+    color: black;
+}
+
+.ribbon.white a {
+    border: 2px dotted rgba(100,100,100,0.2);
+}
+.ribbon.fixed{
+    position: fixed;
+    z-index: 9999;
+    opacity: 0.8;
 }
