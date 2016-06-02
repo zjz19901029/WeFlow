@@ -252,7 +252,9 @@ header {
 
 .description {
     margin-top: 1.8rem;
-    font-size: .7rem
+    font-size: .7rem;
+    position: relative;
+    z-index: 99;
 }
 
 .screenshot {
@@ -261,6 +263,8 @@ header {
     height: 31.65rem;
     max-width: 21.1rem;
     min-width: 16rem;
+    position: relative;
+    z-index: 99;
     text-indent: -499.95rem;
     background-size: 100%;
     background-repeat: no-repeat;
@@ -292,7 +296,9 @@ header {
     color: #fff;
     text-decoration: none;
     border: .1rem solid hsla(0, 0%, 100%, .68);
-    border-radius: 2.5rem
+    border-radius: 2.5rem;
+    position: relative;
+    z-index: 99;
 }
 
 .tips {
