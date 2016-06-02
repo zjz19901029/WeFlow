@@ -1,11 +1,21 @@
-# <center>WeFlow v1.0</center>
+# WeFlow v1.0 [![Version Number](https://img.shields.io/badge/v-1.0.0-blue.svg?style=flat)](https://github.com/weixin/WeFlow/ "Version Number")
 
-[<center>点击下载</center>]()
-<center>(支持 Mac OS / Windows / Linux 操作系统)</center>  
+[![Join the chat at https://gitter.im/weixin/tmt-workflow](https://badges.gitter.im/Join%20Chat.svg?style=flat)](https://gitter.im/TmT?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![TmT Name](https://img.shields.io/badge/Team-TmT-brightgreen.svg?style=flat)](https://github.com/orgs/TmT/people "Tencent Moe Team") 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://opensource.org/licenses/MIT "Feel free to contribute.") 
+
+> 一个基于 [tmt-workflow](https://github.com/weixin/tmt-workflow) 的前端工作流工具。
+> 官网：[http://weflow.io/](http://weflow.io/)
+
+## 安装使用
 
 
+[点击下载](https://github.com/weixin/WeFlow/releases)
+(支持 Mac OS / Windows / Linux 操作系统)
 
-![](http://ww1.sinaimg.cn/large/644eac00jw1f4hdyjnfeaj21kw19qq9f.jpg)
+## 界面预览
+
+![](http://ww2.sinaimg.cn/large/644eac00jw1f4hedcpqvsj21e01fednq.jpg)
 
 ## 参与贡献
  
