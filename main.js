@@ -27,7 +27,7 @@ function createWindow() {
     mainWindow.loadURL('file://' + __dirname + '/app.html');
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 
     mainWindow.on('close', function (event) {
         if(process.platform !== 'win32' && !willClose){
@@ -58,9 +58,6 @@ app.on('window-all-closed', function () {
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
         app.quit();
-    }else{
-        // closeEmit = true;
-        // app.hide();
     }
 });
 

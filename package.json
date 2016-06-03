@@ -5,10 +5,10 @@
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "build:all": "electron-packager . --all --overwrite --out ./dist",
-    "build:mac": "electron-packager ./ WeFlow Mac --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist --version=0.37.8",
-    "build:win64": "electron-packager ./ WeFlow --platform=win32 --arch=x64 --icon=./assets/img/WeFlow.png --overwrite --out ./dist --version=0.37.8",
-    "build:win32": "electron-packager ./ WeFlow --platform=win32 --arch=ia32 --icon=./assets/img/WeFlow.png --overwrite --out ./dist --version=0.37.8 --app-version=1.0.0"
+    "build:all": "electron-packager . --all --overwrite --out ./dist/$npm_package_version",
+    "build:mac": "electron-packager ./ WeFlow --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist/$npm_package_version --version=0.37.8",
+    "build:win64": "electron-packager ./ WeFlow --platform=win32 --arch=x64 --icon=./assets/img/WeFlow.png --overwrite --out ./dist/$npm_package_version --version=0.37.8",
+    "build:win32": "electron-packager ./ WeFlow --platform=win32 --arch=ia32 --icon=./assets/img/WeFlow.png --overwrite --out ./dist/$npm_package_version --version=0.37.8"
   },
   "repository": {
     "type": "git",
