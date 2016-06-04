@@ -4,7 +4,7 @@ const path = nodeRequire('path');
 const fs = nodeRequire('fs');
 const childProcess = nodeRequire('child_process');
 const del = nodeRequire('del');
-const vfs = nodeRequire('vinyl-fs');
+const gulp = nodeRequire('gulp');
 const extract = nodeRequire('extract-zip');
 const electron = nodeRequire('electron');
 const _ = nodeRequire('lodash');
@@ -12,11 +12,11 @@ const async = nodeRequire('async');
 const remote = electron.remote;
 const shell = electron.shell;
 const ipcRender = electron.ipcRenderer;
-const createDev = nodeRequire(path.join(__dirname, './src/createDev'));
 const dist = nodeRequire(path.join(__dirname, './src/_tasks/dist.js'));
 const zip = nodeRequire(path.join(__dirname, './src/_tasks/zip.js'));
 const ftp = nodeRequire(path.join(__dirname, './src/_tasks/ftp.js'));
 const Common = nodeRequire(path.join(__dirname, './src/common'));
+const devPath = path.join(__dirname, './src/_tasks/dev.js');
 
 //变量声明
 let $welcome = $('#js-welcome');
@@ -42,11 +42,6 @@ let once = false;
 let curConfigPath = Common.CONFIGPATH;
 let config = nodeRequire(curConfigPath);
 let FinderTitle = Common.PLATFORM === 'win32' ? '在 文件夹 中查看' : '在 Finder 中查看';
-
-ipcRender.on('message', function(event){
-     event.send('dd')
-});
-
 
 //初始化
 init();
@@ -145,30 +140,25 @@ $projectList[0].ondrop = function (e) {
 
 function openProject(projectPath) {
 
-    //打开项目的时候,需要创建 dev.js 的执行文件
-    createDev(projectPath, function (projectPath, devPath) {
-        let projectName = path.basename(projectPath);
-        let storage = Common.getStorage();
+  let storage = Common.getStorage();
+  let projectName = path.basename(projectPath);
 
-        if (storage && storage['workspace']) {
-            if (!storage['projects']) {
-                storage['projects'] = {};
-            }
+  if (storage && storage['workspace']) {
+      if (!storage['projects']) {
+          storage['projects'] = {};
+      }
 
-            if (storage['projects'][projectName]) {
-                alert('项目已存在');
-            } else {
-                storage['projects'][projectName] = {};
-                storage['projects'][projectName]['path'] = projectPath;
-                storage['projects'][projectName]['devPath'] = devPath;
-                Common.setStorage(storage);
+      if (storage['projects'][projectName]) {
+          alert('项目已存在');
+      } else {
+          storage['projects'][projectName] = {};
+          storage['projects'][projectName]['path'] = projectPath;
+          Common.setStorage(storage);
 
-                //插入打开的项目
-                insertOpenProject(projectPath);
-            }
-        }
-    });
-
+          //插入打开的项目
+          insertOpenProject(projectPath);
+      }
+  }
 }
 
 //插入打开的项目
@@ -214,7 +204,6 @@ function insertOpenProject(projectPath) {
 
 }
 
-
 //删除项目
 $delProject.on('click', function () {
     delProject();
@@ -245,7 +234,6 @@ function delProject(cb) {
     $curProject.trigger('click');
 
     killChildProcess(projectName);
-    delDevFile(projectName);
 
     let storage = Common.getStorage();
 
@@ -262,17 +250,6 @@ function delProject(cb) {
 
     cb && cb();
 }
-
-//删除 dev.js
-function delDevFile(projectName) {
-    let storage = Common.getStorage();
-
-    if (storage && storage['projects'][projectName] && storage['projects'][projectName]['devPath'] && Common.fileExist(storage['projects'][projectName]['devPath'])) {
-        fs.unlinkSync(storage['projects'][projectName]['devPath']);
-    }
-}
-
-
 
 //新建项目
 $newProject.on('click', function(){
@@ -395,15 +372,11 @@ function newProject(projectPath, callback){
             throw new Error(err);
         }
 
-        //生成 dev task
-        createDev(projectPath, function(projectPath, devPath){
-            callback && callback(projectPath, devPath);
-        });
-
+        newProjectReply(projectPath);
     });
 }
 
-function newProjectReply(projectPath, devPath){
+function newProjectReply(projectPath){
     let projectName = path.basename(projectPath);
     let storage = Common.getStorage();
 
@@ -417,7 +390,6 @@ function newProjectReply(projectPath, devPath){
         } else {
             storage['projects'][projectName] = {};
             storage['projects'][projectName]['path'] = projectPath;
-            storage['projects'][projectName]['devPath'] = devPath;
             Common.setStorage(storage);
 
             $curProject.data('project', projectName);
@@ -428,6 +400,9 @@ function newProjectReply(projectPath, devPath){
         }
 
         $projectList.scrollTop($projectList.get(0).scrollHeight);
+
+        console.log('new Project success.');
+
     }
 }
 
@@ -453,7 +428,7 @@ function taskHandler(taskName){
         } else {
             let storage = Common.getStorage();
             if (storage && storage['projects'] && storage['projects'][projectName]) {
-                runDevTask(storage['projects'][projectName]['devPath']);
+                runDevTask(storage['projects'][projectName]['path']);
             }
         }
 
@@ -467,24 +442,23 @@ function taskHandler(taskName){
     }
 }
 
-function runDevTask(devPath){
+function runDevTask(projectPath){
     let child;
 
     if(Common.PLATFORM === 'win32'){
-        child = childProcess.exec(process.execPath + " " + devPath, {silent: true});
+        child = childProcess.exec("node" + " " + devPath + " " + projectPath, {silent: true});
     }else{
-        child = childProcess.fork(devPath, {silent: true});
+        child = childProcess.fork(devPath, [projectPath], {silent: true});
     }
-
 
     child.stdout.setEncoding('utf-8');
     child.stdout.on('data', function (data) {
-        console.log(data);
+        console.log(data.toString());
         logReply(data.toString());
     });
 
     child.stderr.on('data', function (data) {
-        console.log(data)
+        console.log(data.toString());
         logReply(data.toString());
     });
 
@@ -499,12 +473,12 @@ function runDevTask(devPath){
     let projectName = $curProject.data('project');
 
     if (storage && storage['projects'] && storage['projects'][projectName]) {
-        console.log(child.pid);
         storage['projects'][projectName]['pid'] = child.pid;
         Common.setStorage(storage);
 
         setWatching();
 
+        console.log('current pid: ' + child.pid);
         $logStatus.text('Done');
     }
 
@@ -602,8 +576,8 @@ $setting.on('change', 'input', function () {
 
         storage.workspace = $.trim($this.val());
 
-        vfs.src(path.join(originWorkspace, '/**/*'))
-            .pipe(vfs.dest(storage.workspace))
+        gulp.src(path.join(originWorkspace, '/**/*'))
+            .pipe(gulp.dest(storage.workspace))
             .on('end', function () {
 
                 async.series([
@@ -612,7 +586,7 @@ $setting.on('change', 'input', function () {
                             //windows 删除目录有bug
                             next();
                         }else{
-                            del([originWorkspace, path.join(Common.TEMP_DEV_PATH, '/**/*')], {force: true}).then(function () {
+                            del([originWorkspace], {force: true}).then(function () {
                                 next();
                             })
                         }
@@ -623,12 +597,7 @@ $setting.on('change', 'input', function () {
 
                         async.eachSeries(projects, function (project, callback) {
                             project.path = project.path.replace(originWorkspace, storage.workspace);
-                            createDev(project.path, function (projectPath, devPath) {
-                                project.devPath = devPath;
-                                console.log(project.path + ' create success.');
-
-                                callback();
-                            });
+                            callback();
                         }, function () {
                             Common.setStorage(storage);
                             next();
@@ -696,10 +665,6 @@ function updateConfig($this) {
     let checked = $this.prop('checked');
     let type = $this.attr('type');
 
-    if (!val) {
-        return;
-    }
-
     let nameArr = name.split('-');
     let pname = nameArr[0];
     let cname = nameArr[1];
@@ -739,8 +704,8 @@ function settingCurrentProject() {
 
     //如果当前项目下的 config 不存在的时候,先挪过去
     if (!Common.fileExist(curConfigPath)) {
-        vfs.src(Common.CONFIGPATH)
-            .pipe(vfs.dest(projectPath))
+        gulp.src(Common.CONFIGPATH)
+            .pipe(gulp.dest(projectPath))
             .on('end', function () {
                 console.log('create weflow.config.json success');
                 initConfig();

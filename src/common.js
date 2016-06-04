@@ -14,7 +14,6 @@ Common.CONFIGPATH = path.join(__dirname, '../', Common.CONFIGNAME);
 Common.PLATFORM = process.platform;
 Common.DEFAULT_PATH = Common.PLATFORM === 'win32' ? 'desktop' : 'home';
 Common.TEMPLAGE_PROJECT = path.resolve(path.join(__dirname, '../templates/project.zip'));
-Common.TEMP_DEV_PATH = path.join(__dirname, './_tasks/tmp_dev');
 
 Common.requireUncached = function (module) {
     delete require.cache[require.resolve(module)];

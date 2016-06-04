@@ -5,7 +5,6 @@ const ejs = require('gulp-ejs');
 const ejshelper = require('tmt-ejs-helper');
 const async = require('async');
 const gulp = require('gulp');
-const vfs = require('vinyl-fs');
 const less = require('gulp-less');
 const bs = require('browser-sync').create();  // 自动刷新浏览器
 const gulpif = require('gulp-if');
@@ -14,16 +13,23 @@ const postcss = require('gulp-postcss');   // CSS 预处理
 const postcssPxtorem = require('postcss-pxtorem'); // CSS 转换 `px` 为 `rem`
 const posthtml = require('gulp-posthtml');  // HTML 预处理
 const posthtmlPx2rem = require('posthtml-px2rem');  // HTML 内联 CSS 转换 `px` 为 `rem`
-const Common = require(path.join(__dirname, '../../common.js'));
+const Common = require(path.join(__dirname, '../common.js'));
 
-let projectPath = path.resolve('placeholder');
+let projectPath;
+
+if(process.argv[2]){
+    projectPath = process.argv[2];
+}else{
+  throw new Error('need projectPath');
+}
+
 let projectConfigPath = path.join(projectPath, 'weflow.config.json');
 let config = null;
 
 if(Common.fileExist(projectConfigPath)){
     config = Common.requireUncached(projectConfigPath);
 }else{
-    config = Common.requireUncached(path.join(__dirname, '../../../weflow.config.json'));
+    config = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
 }
 
 let lazyDir = config.lazyDir || ['../slice'];
@@ -54,7 +60,7 @@ function copyHandler(type, file, cb) {
         file = paths['src'][type];
     }
 
-    vfs.src(file, {base: paths.src.dir})
+    gulp.src(file, {base: paths.src.dir})
         .pipe(gulp.dest(paths.dev.dir))
         .on('end', function () {
             console.log(`copy ${type} success.`);
@@ -68,7 +74,7 @@ function reloadHandler() {
 };
 
 function compileLess(cb) {
-    vfs.src(paths.src.less)
+    gulp.src(paths.src.less)
         .pipe(less())
         .on('error', function (error) {
             console.log(error.message);
@@ -84,7 +90,7 @@ function compileLess(cb) {
             ])
         ))
         .pipe(lazyImageCSS({imagePath: lazyDir}))
-        .pipe(vfs.dest(paths.dev.css))
+        .pipe(gulp.dest(paths.dev.css))
         .on('data', function () {
         })
         .on('end', function () {
@@ -99,7 +105,7 @@ function compileLess(cb) {
 
 //编译 html
 function compileHtml(cb) {
-    vfs.src(paths.src.html)
+    gulp.src(paths.src.html)
         .pipe(ejs(ejshelper()).on('error', function (error) {
             console.log(error.message);
         }))
@@ -112,7 +118,7 @@ function compileHtml(cb) {
                 })
             ))
         )
-        .pipe(vfs.dest(paths.dev.html))
+        .pipe(gulp.dest(paths.dev.html))
         .on('data', function () {
         })
         .on('end', function () {
@@ -321,5 +327,3 @@ async.series([
         throw new Error(error);
     }
 });
-
-

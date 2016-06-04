@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 const async = require('async');
-const vfs = require('vinyl-fs');
+const gulp = require('gulp');
 const fs = require('fs');
 const del = require('del');
 const path = require('path');
@@ -109,11 +109,11 @@ function dist(projectPath, log, callback) {
 
     //编译 less
     function compileLess(cb) {
-        vfs.src(paths.src.less)
+        gulp.src(paths.src.less)
             .pipe(less())
             .pipe(lazyImageCSS({imagePath: lazyDir}))
             .pipe(tmtsprite({margin: 4}))
-            .pipe(gulpif(condition, vfs.dest(paths.tmp.sprite), vfs.dest(paths.tmp.css)))
+            .pipe(gulpif(condition, gulp.dest(paths.tmp.sprite), gulp.dest(paths.tmp.css)))
             .on('data', function(){})
             .on('end', function () {
                 console.log('compileLess success.');
@@ -124,7 +124,7 @@ function dist(projectPath, log, callback) {
 
     //win 编译LESS
     function compileLessForWin(cb) {
-        vfs.src(paths.src.less)
+        gulp.src(paths.src.less)
             .pipe(less())
             .pipe(lazyImageCSS({imagePath: lazyDir}))
             .on('data', function(){})
@@ -137,9 +137,9 @@ function dist(projectPath, log, callback) {
 
     //自动补全
     function compileAutoprefixer(cb) {
-        vfs.src(paths.tmp.cssAll)
+        gulp.src(paths.tmp.cssAll)
             .pipe(postcss(postcssOption))
-            .pipe(vfs.dest(paths.tmp.css))
+            .pipe(gulp.dest(paths.tmp.css))
             .on('end', function () {
                 console.log('compileAutoprefixer success.');
                 log('compileAutoprefixer success.');
@@ -149,7 +149,7 @@ function dist(projectPath, log, callback) {
 
     //CSS 压缩
     function miniCSS(cb) {
-        vfs.src(paths.tmp.cssAll)
+        gulp.src(paths.tmp.cssAll)
             .pipe(minifyCSS({
                 safe: true,
                 reduceTransforms: false,
@@ -157,7 +157,7 @@ function dist(projectPath, log, callback) {
                 compatibility: 'ie7',
                 keepSpecialComments: 0
             }))
-            .pipe(vfs.dest(paths.tmp.css))
+            .pipe(gulp.dest(paths.tmp.css))
             .on('end', function () {
                 console.log('miniCSS success.');
                 log('miniCSS success.');
@@ -167,11 +167,11 @@ function dist(projectPath, log, callback) {
 
     //图片压缩
     function imageminImg(cb) {
-        vfs.src(paths.src.img)
+        gulp.src(paths.src.img)
             .pipe(imagemin({
                 use: [pngquant()]
             }))
-            .pipe(vfs.dest(paths.tmp.img))
+            .pipe(gulp.dest(paths.tmp.img))
             .on('end', function () {
                 console.log('imageminImg success.');
                 log('imageminImg success.');
@@ -181,11 +181,11 @@ function dist(projectPath, log, callback) {
 
     //雪碧图压缩
     function imageminSprite(cb) {
-        vfs.src(paths.tmp.spriteAll)
+        gulp.src(paths.tmp.spriteAll)
             .pipe(imagemin({
                 use: [pngquant()]
             }))
-            .pipe(vfs.dest(paths.tmp.sprite))
+            .pipe(gulp.dest(paths.tmp.sprite))
             .on('end', function () {
                 console.log('imageminSprite success.');
                 log('imageminSprite success.');
@@ -195,8 +195,8 @@ function dist(projectPath, log, callback) {
 
     //复制媒体文件
     function copyMedia(cb) {
-        vfs.src(paths.src.media, {base: paths.src.dir})
-            .pipe(vfs.dest(paths.dist.dir))
+        gulp.src(paths.src.media, {base: paths.src.dir})
+            .pipe(gulp.dest(paths.dist.dir))
             .on('end', function () {
                 console.log('copyMedia success.');
                 log('copyMedia success.');
@@ -206,8 +206,8 @@ function dist(projectPath, log, callback) {
 
     //复制slice
     function copySlice(cb) {
-        vfs.src(paths.src.slice, {base: paths.src.dir})
-            .pipe(vfs.dest(paths.dist.dir))
+        gulp.src(paths.src.slice, {base: paths.src.dir})
+            .pipe(gulp.dest(paths.dist.dir))
             .on('end', function () {
                 console.log('copySlice success.');
                 log('copySlice success.');
@@ -217,9 +217,9 @@ function dist(projectPath, log, callback) {
 
     //JS 压缩
     function uglifyJs(cb) {
-        vfs.src(paths.src.js, {base: paths.src.dir})
+        gulp.src(paths.src.js, {base: paths.src.dir})
             .pipe(uglify())
-            .pipe(vfs.dest(paths.tmp.dir))
+            .pipe(gulp.dest(paths.tmp.dir))
             .on('end', function () {
                 console.log('uglifyJs success.');
                 log('uglifyJs success.');
@@ -229,7 +229,7 @@ function dist(projectPath, log, callback) {
 
     //html 编译
     function compileHtml(cb) {
-        vfs.src(paths.src.html)
+        gulp.src(paths.src.html)
             .pipe(ejs(ejshelper()))
             .pipe(gulpif(
                 config.supportREM,
@@ -243,7 +243,7 @@ function dist(projectPath, log, callback) {
             .pipe(usemin({  //JS 合并压缩
                 jsmin: uglify()
             }))
-            .pipe(vfs.dest(paths.tmp.html))
+            .pipe(gulp.dest(paths.tmp.html))
             .on('end', function () {
                 console.log('compileHtml success.');
                 log('compileHtml success.');
@@ -259,14 +259,14 @@ function dist(projectPath, log, callback) {
         });
 
         if (config['reversion']) {
-            vfs.src(paths.tmp.dirAll)
+            gulp.src(paths.tmp.dirAll)
                 .pipe(revAll.revision())
-                .pipe(vfs.dest(paths.tmp.dir))
+                .pipe(gulp.dest(paths.tmp.dir))
                 .pipe(revDel({
                     exclude: /(.html|.htm)$/
                 }))
                 .pipe(revAll.manifestFile())
-                .pipe(vfs.dest(paths.tmp.dir))
+                .pipe(gulp.dest(paths.tmp.dir))
                 .on('end', function () {
                     console.log('reversion success.');
                     log('reversion success.');
@@ -296,8 +296,8 @@ function dist(projectPath, log, callback) {
     function findChanged(cb) {
 
         if (!config['supportChanged']) {
-            vfs.src(paths.tmp.dirAll, {base: paths.tmp.dir})
-                .pipe(vfs.dest(paths.dist.dir))
+            gulp.src(paths.tmp.dirAll, {base: paths.tmp.dir})
+                .pipe(gulp.dest(paths.dist.dir))
                 .on('end', function () {
                     delTmp(cb);
                 })
@@ -338,8 +338,8 @@ function dist(projectPath, log, callback) {
                     });
                 }
 
-                vfs.src(tmpSrc, {base: paths.tmp.dir})
-                    .pipe(vfs.dest(paths.dist.dir))
+                gulp.src(tmpSrc, {base: paths.tmp.dir})
+                    .pipe(gulp.dest(paths.dist.dir))
                     .on('end', function () {
                         delTmp(cb);
                     })
@@ -425,4 +425,3 @@ function dist(projectPath, log, callback) {
 }
 
 module.exports = dist;
-
