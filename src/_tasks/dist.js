@@ -81,7 +81,7 @@ function dist(projectPath, log, callback) {
             dir: path.join(projectPath, './tmp'),
             dirAll: path.join(projectPath, './tmp/**/*'),
             css: path.join(projectPath, './tmp/css'),
-            cssAll: path.join(projectPath, './tmp/style-*.css'),
+            cssAll: path.join(projectPath, './tmp/css/style-*.css'),
             img: path.join(projectPath, './tmp/img'),
             html: path.join(projectPath, './tmp/html'),
             sprite: path.join(projectPath, './tmp/sprite'),
@@ -127,6 +127,7 @@ function dist(projectPath, log, callback) {
         gulp.src(paths.src.less)
             .pipe(less())
             .pipe(lazyImageCSS({imagePath: lazyDir}))
+            .pipe(gulp.dest(paths.tmp.css))
             .on('data', function(){})
             .on('end', function () {
                 console.log('compileLess success.');

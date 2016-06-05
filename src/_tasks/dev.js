@@ -165,10 +165,6 @@ function watch(cb) {
 
 function watchHandler(type, file) {
 
-    if(typeof file !== 'string'){
-        file = file.path;
-    }
-
     let target = file.split('src')[1].match(/[\/\\](\w+)[\/\\]/);
 
     if (target.length && target[1]) {
@@ -178,7 +174,7 @@ function watchHandler(type, file) {
     switch (target) {
         case 'img':
             if (type === 'removed') {
-                let tmp = file.replace('src/', 'dev/');
+                let tmp = file.replace(/src/, 'dev');
                 del([tmp], {force: true}).then(function () {
                     reloadHandler();
                 });
@@ -189,7 +185,7 @@ function watchHandler(type, file) {
 
         case 'slice':
             if (type === 'removed') {
-                var tmp = file.replace('src/', 'dev/');
+                var tmp = file.replace(/src/, 'dev');
                 del([tmp], {force: true});
             } else {
                 copyHandler('slice', file);
@@ -198,7 +194,7 @@ function watchHandler(type, file) {
 
         case 'js':
             if (type === 'removed') {
-                var tmp = file.replace('src/', 'dev/');
+                var tmp = file.replace(/src/, 'dev');
                 del([tmp], {force: true});
             } else {
                 copyHandler('js', file);
@@ -207,7 +203,7 @@ function watchHandler(type, file) {
 
         case 'media':
             if (type === 'removed') {
-                var tmp = file.replace('src/', 'dev/');
+                var tmp = file.replace(/src/, 'dev');
                 del([tmp], {force: true});
             } else {
                 copyHandler('media', file);
@@ -217,7 +213,7 @@ function watchHandler(type, file) {
         case 'css':
 
             if (type === 'removed') {
-                var tmp = file.replace('src/', 'dev/').replace('.less', '.css');
+                var tmp = file.replace(/src/, 'dev').replace('.less', '.css');
                 del([tmp], {force: true});
             } else {
                 compileLess();
@@ -227,7 +223,8 @@ function watchHandler(type, file) {
 
         case 'html':
             if (type === 'removed') {
-                var tmp = file.replace('src/', 'dev/');
+                var tmp = file.replace(/src/, 'dev');
+                console.log(tmp);
                 del([tmp], {force: true}).then(function () {
                 });
             } else {
