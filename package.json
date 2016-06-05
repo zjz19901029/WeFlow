@@ -7,11 +7,15 @@
     "start": "electron main.js",
     "build:mac": "electron-packager ./ WeFlow --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist/$npm_package_version --version=0.37.8",
     "pack": "build --target dir",
-    "dist": "rimraf dist && build"
+    "dist": "rimraf dist && build",
+    "dist:win64": "./node_modules/.bin/build --win --x64"
   },
   "build": {
     "app-bundle-id": "com.weixin.weflow",
-    "app-category-type": "publish.app-category.weflow-design"
+    "app-category-type": "publish.app-category.weflow-design",
+    "win": {
+        "iconUrl": "http://7xojg5.com1.z0.glb.clouddn.com/icon.ico"
+    }
   },
   "repository": {
     "type": "git",
