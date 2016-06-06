@@ -21,6 +21,7 @@ module.exports = function (projectPath, log, callback) {
             .pipe(zip('dist.zip'))
             .pipe(vfs.dest(projectPath))
             .on('end', function(){
+                console.log('zip success.');
                 log('zip success.');
                 cb && cb();
             })

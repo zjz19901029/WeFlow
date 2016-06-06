@@ -34,6 +34,13 @@ if(Common.fileExist(projectConfigPath)){
 
 let lazyDir = config.lazyDir || ['../slice'];
 
+if(Common.PLATFORM === 'win32'){
+    for(let i = 0; i < lazyDir.length; i++){
+        lazyDir[i] = lazyDir[i].replace(/\//g, '\\');
+    }
+}
+
+
 let paths = {
     src: {
         dir: path.join(projectPath, './src'),
