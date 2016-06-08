@@ -40,28 +40,28 @@ var template = [
                 label: '执行 开发流程',
                 accelerator: 'CmdOrCtrl+1',
                 click: function (item, focusedWindow) {
-                    taskHandler('dev');
+                    runTask('dev');
                 }
             },
             {
                 label: '执行 生产流程',
                 accelerator: 'CmdOrCtrl+2',
                 click: function (item, focusedWindow) {
-                    taskHandler('dist');
+                    runTask('dist');
                 }
             },
             {
                 label: 'FTP 发布部署',
                 accelerator: 'CmdOrCtrl+3',
                 click: function (item, focusedWindow) {
-                    taskHandler('ftp');
+                    runTask('ftp');
                 }
             },
             {
                 label: 'Zip 打包',
                 accelerator: 'CmdOrCtrl+4',
                 click: function (item, focusedWindow) {
-                    taskHandler('zip');
+                    runTask('zip');
                 }
             }
         ]

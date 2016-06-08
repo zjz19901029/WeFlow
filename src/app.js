@@ -11,12 +11,11 @@ const _ = nodeRequire('lodash');
 const async = nodeRequire('async');
 const remote = electron.remote;
 const shell = electron.shell;
-const ipcRender = electron.ipcRenderer;
+const dev = nodeRequire(path.join(__dirname, './src/_tasks/dev.js'));
 const dist = nodeRequire(path.join(__dirname, './src/_tasks/dist.js'));
 const zip = nodeRequire(path.join(__dirname, './src/_tasks/zip.js'));
 const ftp = nodeRequire(path.join(__dirname, './src/_tasks/ftp.js'));
 const Common = nodeRequire(path.join(__dirname, './src/common'));
-const devPath = path.join(__dirname, './src/_tasks/dev.js');
 
 //变量声明
 let $welcome = $('#js-welcome');
@@ -42,6 +41,7 @@ let once = false;
 let curConfigPath = Common.CONFIGPATH;
 let config = nodeRequire(curConfigPath);
 let FinderTitle = Common.PLATFORM === 'win32' ? '在 文件夹 中查看' : '在 Finder 中查看';
+let bsObj = {};
 
 //初始化
 init();
@@ -140,25 +140,25 @@ $projectList[0].ondrop = function (e) {
 
 function openProject(projectPath) {
 
-  let storage = Common.getStorage();
-  let projectName = path.basename(projectPath);
+    let storage = Common.getStorage();
+    let projectName = path.basename(projectPath);
 
-  if (storage && storage['workspace']) {
-      if (!storage['projects']) {
-          storage['projects'] = {};
-      }
+    if (storage && storage['workspace']) {
+        if (!storage['projects']) {
+            storage['projects'] = {};
+        }
 
-      if (storage['projects'][projectName]) {
-          alert('项目已存在');
-      } else {
-          storage['projects'][projectName] = {};
-          storage['projects'][projectName]['path'] = projectPath;
-          Common.setStorage(storage);
+        if (storage['projects'][projectName]) {
+            alert('项目已存在');
+        } else {
+            storage['projects'][projectName] = {};
+            storage['projects'][projectName]['path'] = projectPath;
+            Common.setStorage(storage);
 
-          //插入打开的项目
-          insertOpenProject(projectPath);
-      }
-  }
+            //插入打开的项目
+            insertOpenProject(projectPath);
+        }
+    }
 }
 
 //插入打开的项目
@@ -216,7 +216,7 @@ $delProjectBtn.on('click', function () {
 
 function delProject(cb) {
 
-    if(!$curProject.length){
+    if (!$curProject.length) {
         return;
     }
 
@@ -252,11 +252,11 @@ function delProject(cb) {
 }
 
 //新建项目
-$newProject.on('click', function(){
+$newProject.on('click', function () {
     newProjectFn();
 });
 
-function newProjectFn(){
+function newProjectFn() {
     if (!$welcome.hasClass('hide')) {
         $welcome.addClass('hide');
     }
@@ -331,8 +331,8 @@ function setProjectInfo($project, $input, text) {
             $input.attr('contenteditable', false);
             $curProject = $project.remove();
 
-            newProject(projectPath, function (projectPath, devPath) {
-                newProjectReply(projectPath, devPath);
+            newProject(projectPath, function (projectPath) {
+                newProjectReply(projectPath);
             });
 
         } else {
@@ -344,39 +344,39 @@ function setProjectInfo($project, $input, text) {
 
 }
 
-function newProject(projectPath, callback){
+function newProject(projectPath, callback) {
     let workspace = path.dirname(projectPath);
 
     //先判断一下工作区是否存在
-    if(!Common.dirExist(workspace)){
-        try{
+    if (!Common.dirExist(workspace)) {
+        try {
             fs.mkdirSync(path.join(workspace));
-        }catch (err){
+        } catch (err) {
             throw new Error(err);
         }
     }
 
     //创建项目目录
-    if(Common.dirExist(projectPath)){
+    if (Common.dirExist(projectPath)) {
         throw new Error('project already exists');
-    }else{
-        try{
+    } else {
+        try {
             fs.mkdirSync(path.join(projectPath));
-        }catch (err){
+        } catch (err) {
             throw new Error(err);
         }
     }
 
     extract(Common.TEMPLAGE_PROJECT, {dir: projectPath}, function (err) {
-        if(err){
+        if (err) {
             throw new Error(err);
         }
 
-        newProjectReply(projectPath);
+        callback(projectPath);
     });
 }
 
-function newProjectReply(projectPath){
+function newProjectReply(projectPath) {
     let projectName = path.basename(projectPath);
     let storage = Common.getStorage();
 
@@ -411,84 +411,41 @@ $('#js-tasks').find('.tasks__button').on('click', function () {
 
     let taskName = $(this).data('task');
 
-    taskHandler(taskName);
+    runTask(taskName);
 
 });
 
-function taskHandler(taskName){
+function runTask(taskName) {
 
-    let projectName = $curProject.data('project');
+    let projectPath = $curProject.attr('title');
 
     if (taskName === 'dev') {
 
         if ($buildDevButton.data('devwatch')) {
-            $logStatus.text('running…');
-            killChildProcess(projectName);
-            setNormal();
-        } else {
-            let storage = Common.getStorage();
-            if (storage && storage['projects'] && storage['projects'][projectName]) {
-                runDevTask(storage['projects'][projectName]['path']);
+
+            if (bsObj[$curProject.attr('title')]) {
+                try {
+                    bsObj[$curProject.attr('title')].exit();
+                    logReply('Listening has quit.');
+                    console.log('Listening has quit.');
+                } catch (err) {
+                    console.log(err);
+                }
             }
+
+            bsObj[$curProject.attr('title')] = null;
+            setNormal();
+
+        } else {
+            dev(projectPath, function (data) {
+                logReply(data);
+            }, function (bs) {
+                bsObj[projectPath] = bs;
+                setWatching();
+                $logStatus.text('Done');
+            });
         }
 
-    } else {
-        let storage = Common.getStorage();
-        if (storage && storage['projects'] && storage['projects'][projectName]) {
-            runTask(storage['projects'][projectName]['path'], taskName);
-        }
-
-        $logStatus.text('running…');
-    }
-}
-
-function runDevTask(projectPath){
-    let child;
-
-    if(Common.PLATFORM === 'win32'){
-        child = childProcess.exec("node" + " " + devPath + " " + projectPath, {silent: true});
-    }else{
-        child = childProcess.fork(devPath, [projectPath], {silent: true});
-    }
-
-    child.stdout.setEncoding('utf-8');
-    child.stdout.on('data', function (data) {
-        console.log(data.toString());
-        logReply(data.toString());
-    });
-
-    child.stderr.on('data', function (data) {
-        console.log(data.toString());
-        logReply(data.toString());
-    });
-
-    child.on('close', function (code) {
-        console.log(code);
-        if (code !== 0) {
-            logReply(`child process exited with code ${code}`);
-        }
-    });
-
-    let storage = Common.getStorage();
-    let projectName = $curProject.data('project');
-
-    if (storage && storage['projects'] && storage['projects'][projectName]) {
-        storage['projects'][projectName]['pid'] = child.pid;
-        Common.setStorage(storage);
-
-        setWatching();
-
-        console.log('current pid: ' + child.pid);
-        $logStatus.text('Done');
-    }
-
-}
-
-function runTask(projectPath, taskName){
-
-    if(!taskName){
-        taskName = projectPath;
-        projectPath = $curProject.attr('title');
     }
 
     if (taskName === 'dist') {
@@ -524,7 +481,7 @@ function runTask(projectPath, taskName){
     }
 }
 
-function logReply(data){
+function logReply(data) {
     let D = new Date();
     let h = D.getHours();
     let m = D.getMinutes();
@@ -545,7 +502,7 @@ $settingButton.on('click', function () {
     settingFn();
 });
 
-function settingFn(){
+function settingFn() {
     curConfigPath = Common.CONFIGPATH;
     initConfig();
 
@@ -585,7 +542,7 @@ $setting.on('change', 'input', function () {
                         if (Common.PLATFORM === 'win32') {
                             //windows 删除目录有bug
                             next();
-                        }else{
+                        } else {
                             del([originWorkspace], {force: true}).then(function () {
                                 next();
                             })
@@ -783,34 +740,6 @@ $buildDevButton.hover(function () {
         $this.text('监听中...');
     }
 });
-
-
-//结束子进程
-function killChildProcess(projectName) {
-    let storage = Common.getStorage();
-
-    if (storage && storage['projects'][projectName] && storage['projects'][projectName]['pid']) {
-
-        try {
-            if(Common.PLATFORM === 'win32') {
-                childProcess.exec('taskkill /pid ' + storage['projects'][projectName]['pid'] + ' /T /F');
-            }else {
-                process.kill(storage['projects'][projectName]['pid']);
-
-            }
-        } catch (e) {
-            console.log('pid not found');
-        }
-
-        storage['projects'][projectName]['pid'] = 0;
-        Common.setStorage(storage);
-
-        $logStatus.text('Done');
-    }
-}
-
-
-
 
 function showAbout() {
     const BrowserWindow = remote.BrowserWindow;
