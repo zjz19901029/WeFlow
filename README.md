@@ -14,7 +14,11 @@
 
 ## 界面预览
 
-![](http://ww2.sinaimg.cn/large/644eac00jw1f4hedcpqvsj21e01fednq.jpg)
+![Screenshot](http://ww2.sinaimg.cn/large/644eac00jw1f4hedcpqvsj21e01fednq.jpg)
+
+## 设计稿和源码
+
+所有代码在 GitHub 开源，你可以 `fork` 进行定制，所有设计稿 Sketch 源文件可在 [Dribbble 项目页面获取](https://dribbble.com/hzlzh/projects/380016-WeFlow)
 
 ## 参与贡献
  
