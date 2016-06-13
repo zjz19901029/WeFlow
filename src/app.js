@@ -223,6 +223,8 @@ function delProject(cb) {
     let projectName = $curProject.data('project');
     let index = $curProject.index();
 
+    killBs();
+
     $curProject.remove();
 
     if (index > 0) {
@@ -233,7 +235,6 @@ function delProject(cb) {
 
     $curProject.trigger('click');
 
-    killChildProcess(projectName);
 
     let storage = Common.getStorage();
 
@@ -249,6 +250,22 @@ function delProject(cb) {
     console.log('del project success.');
 
     cb && cb();
+}
+
+function killBs(){
+    var projectPath = $curProject.attr('title');
+    if (bsObj[projectPath]) {
+        try {
+            bsObj[projectPath].exit();
+            logReply('Listening has quit.');
+            console.log('Listening has quit.');
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    bsObj[$curProject.attr('title')] = null;
+    setNormal();
 }
 
 //新建项目
@@ -284,37 +301,54 @@ function newProjectFn() {
     editName($projectHtml, $input);
 }
 
+var keyboard = false;
 function editName($project, $input) {
     let text;
     let hasText = false;
 
     $input.keypress(function (event) {
             let $this = $(this);
-            text = $.trim($this.text());
-            if (event.which === 13 && !hasText) {
-                if (text !== '') {
-                    setProjectInfo($project, $this, text);
+                text = $.trim($this.text());
 
-                    hasText = true;
-                } else {
-                    alert('请输入项目名');
-                    this.focus();
+                if (event.which === 13 && !hasText) {
+                    keyboard = true;
+                    if (text !== '') {
+                        setProjectInfo($project, $this, text);
+                        hasText = true;
+                         keyboard = false;
+                    } else {
+                        alert('请输入项目名');
+                        
+                        setTimeout(function(){
+                            $this.html('');
+                            this.focus();
+                        }, 10)
+                    }
                 }
-            }
+            
         })
         .blur(function () {
+            let $this = $(this);
+            text = $.trim($this.text());
 
-            if (!hasText) {
-                let $this = $(this);
-                text = $.trim($this.text());
-                if (text !== '') {
-                    setProjectInfo($project, $this, text);
+            if(text){
+                hasText = false;
+                keyboard = false;
+            }
 
-                    hasText = true;
-                } else {
-                    alert('请输入项目名');
-                    this.focus();
-                }
+            if (!hasText && !keyboard) {
+                
+                setTimeout(function(){
+                    
+                    if (text !== '') {
+                        setProjectInfo($project, $this, text);
+
+                        hasText = true;
+                    } else {
+                        alert('请输入项目名');
+                        this.focus();
+                    }
+                }, 100);
             }
         });
 }
@@ -423,18 +457,7 @@ function runTask(taskName) {
 
         if ($buildDevButton.data('devwatch')) {
 
-            if (bsObj[$curProject.attr('title')]) {
-                try {
-                    bsObj[$curProject.attr('title')].exit();
-                    logReply('Listening has quit.');
-                    console.log('Listening has quit.');
-                } catch (err) {
-                    console.log(err);
-                }
-            }
-
-            bsObj[$curProject.attr('title')] = null;
-            setNormal();
+            killBs();
 
         } else {
             dev(projectPath, function (data) {

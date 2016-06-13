@@ -15,6 +15,7 @@ const usemin = require('gulp-usemin2');
 const lazyImageCSS = require('gulp-lazyimagecss');  // 自动为图片样式添加 宽/高/background-size 属性
 const minifyCSS = require('gulp-cssnano');
 const imagemin = require('gulp-imagemin');
+const tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
 const pngquant = require('imagemin-pngquant');
 const ejshelper = require('tmt-ejs-helper');
 const postcss = require('gulp-postcss');  // CSS 预处理
@@ -25,12 +26,6 @@ const posthtmlPx2rem = require('posthtml-px2rem');
 const RevAll = require('gulp-rev-all');   // reversion
 const revDel = require('gulp-rev-delete-original');
 const Common = require(path.join(__dirname, '../common'));
-
-let tmtsprite;
-
-if(Common.PLATFORM !== 'win32'){
-    tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
-}
 
 let webp = require(path.join(__dirname, './common/webp'));
 let changed = require(path.join(__dirname, './common/changed'))();
@@ -128,20 +123,6 @@ function dist(projectPath, log, callback) {
             })
     }
 
-    //win 编译LESS
-    function compileLessForWin(cb) {
-        gulp.src(paths.src.less)
-            .pipe(less())
-            .pipe(lazyImageCSS({imagePath: lazyDir}))
-            .pipe(gulp.dest(paths.tmp.css))
-            .on('data', function(){})
-            .on('end', function () {
-                console.log('compileLess success.');
-                log('compileLess success.');
-                cb && cb();
-            })
-    }
-
     //自动补全
     function compileAutoprefixer(cb) {
         gulp.src(paths.tmp.cssAll)
@@ -211,17 +192,6 @@ function dist(projectPath, log, callback) {
             });
     }
 
-    //复制slice
-    function copySlice(cb) {
-        gulp.src(paths.src.slice, {base: paths.src.dir})
-            .pipe(gulp.dest(paths.dist.dir))
-            .on('end', function () {
-                console.log('copySlice success.');
-                log('copySlice success.');
-                cb && cb();
-            });
-    }
-
     //JS 压缩
     function uglifyJs(cb) {
         gulp.src(paths.src.js, {base: paths.src.dir})
@@ -268,11 +238,6 @@ function dist(projectPath, log, callback) {
         if (config['reversion']) {
             gulp.src(paths.tmp.dirAll)
                 .pipe(revAll.revision())
-                .pipe(gulp.dest(paths.tmp.dir))
-                .pipe(revDel({
-                    exclude: /(.html|.htm)$/
-                }))
-                .pipe(revAll.manifestFile())
                 .pipe(gulp.dest(paths.tmp.dir))
                 .on('end', function () {
                     console.log('reversion success.');
@@ -368,11 +333,7 @@ function dist(projectPath, log, callback) {
             delDist(next);
         },
         function (next) {
-            if(Common.PLATFORM === 'win32'){
-                compileLessForWin(next);
-            }else{
-                compileLess(next);
-            }
+            compileLess(next);
         },
         function (next) {
             compileAutoprefixer(next);
@@ -390,13 +351,6 @@ function dist(projectPath, log, callback) {
                 },
                 function (cb) {
                     copyMedia(cb);
-                },
-                function(cb){
-                    if(Common.PLATFORM === 'win32'){
-                        copySlice(cb);
-                    }else{
-                        cb();
-                    }
                 },
                 function (cb) {
                     uglifyJs(cb);
