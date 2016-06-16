@@ -220,7 +220,7 @@ header {
 
 .oracle-bg {
     position: absolute;
-    bottom: 0;
+    bottom: 1rem;
     left: 50%;
     margin-top: 23.5rem;
     margin-left: -35.775rem;
@@ -326,6 +326,11 @@ header {
     text-decoration: none;
     font-size: .8rem;
     line-height: 2.1rem;
+    opacity: 0.7;
+    transition: opacity .1s linear;
+}
+.download-btn:hover{
+    opacity: 1;
 }
 
 .tips {
