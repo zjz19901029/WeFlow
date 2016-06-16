@@ -1,6 +1,6 @@
 html {
-    color: #000;
-    background: #FFF
+    background: #FFF;
+    color: #000
 }
 
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
@@ -9,8 +9,8 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fiel
 }
 
 table {
-    border-collapse: collapse;
-    border-spacing: 0
+    border-spacing: 0;
+    border-collapse: collapse
 }
 
 fieldset, img {
@@ -18,8 +18,8 @@ fieldset, img {
 }
 
 address, caption, cite, code, dfn, em, strong, th, var {
-    font-style: normal;
-    font-weight: normal
+    font-weight: normal;
+    font-style: normal
 }
 
 ol, ul {
@@ -31,8 +31,8 @@ caption, th {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-size: 100%;
-    font-weight: normal
+    font-weight: normal;
+    font-size: 100%
 }
 
 q:before, q:after {
@@ -53,10 +53,10 @@ sub {
 }
 
 input, textarea, select {
-    font-family: inherit;
-    font-size: inherit;
     font-weight: inherit;
-    *font-size: 100%
+    font-size: inherit;
+    *font-size: 100%;
+    font-family: inherit
 }
 
 legend {
@@ -102,8 +102,8 @@ html {
 }
 
 html {
-    color: #000;
-    background: #fff
+    background: #fff;
+    color: #000
 }
 
 blockquote, body, code, dd, div, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, input, legend, li, ol, p, pre, td, textarea, th, ul {
@@ -112,8 +112,8 @@ blockquote, body, code, dd, div, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6,
 }
 
 table {
-    border-collapse: collapse;
-    border-spacing: 0
+    border-spacing: 0;
+    border-collapse: collapse
 }
 
 fieldset, img {
@@ -121,8 +121,8 @@ fieldset, img {
 }
 
 address, caption, cite, code, dfn, em, strong, th, var {
-    font-style: normal;
-    font-weight: 400
+    font-weight: 400;
+    font-style: normal
 }
 
 ol, ul {
@@ -134,8 +134,8 @@ caption, th {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-size: 100%;
-    font-weight: 400
+    font-weight: 400;
+    font-size: 100%
 }
 
 q:after, q:before {
@@ -156,10 +156,10 @@ sub {
 }
 
 input, select, textarea {
-    font-family: inherit;
-    font-size: inherit;
     font-weight: inherit;
-    *font-size: 100%
+    font-size: inherit;
+    *font-size: 100%;
+    font-family: inherit
 }
 
 legend {
@@ -210,79 +210,100 @@ body {
 
 header {
     position: relative;
-    height: 69rem;
-    width: 100%;
     overflow: hidden;
-    text-align: center;
+    width: 100%;
+    height: 69rem;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#57e88a), to(#14a948));
     color: #fff;
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#57e88a), to(#14a948))
+    text-align: center
 }
 
 .oracle-bg {
-    background-image: url(../img/bg@2x.png);
-    width: 71.55rem;
-    height: 45.75rem;
-    left: 50%;
-    margin-left: -35.775rem;
-    margin-top: 23.5rem;
-    background-size: 100%;
     position: absolute;
     bottom: 0;
+    left: 50%;
+    margin-top: 23.5rem;
+    margin-left: -35.775rem;
+    width: 71.55rem;
+    height: 45.75rem;
+    background-image: url(../img/bg@2x.png);
     background-position: center center;
+    background-size: 100%;
 }
-
-.logo {
-    background-image: url(../img/logo@2x.png);
-    width: 6.55rem;
-    height: 7.15rem;
-    text-indent: -499.95rem;
-    background-size: 6.55rem;
-    display: block;
+.logo{
+    position: relative;
     margin: 0 auto;
     margin-top: 10rem;
-    background-repeat: no-repeat;
+    width: 1.8rem;
+    height: 3.35rem;
+}
+.logo-icon {
     position: relative;
+    display: block;
+    width: 1.8rem;
+    height: 3.35rem;
+    background-image: url(../img/logo-icon.png);
+    background-size: 1.8rem;
+    background-repeat: no-repeat;
+    text-indent: -499.95rem;
+    -webkit-transform: scale3d(.9,.9,.9);
+    transform: scale3d(.9,.9,.9);
+    -webkit-animation: hue 1s infinite linear;
+    -webkit-animation-duration: 1.8s;
+    animation-duration: 1.8s;
+}
+.logo-name {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    margin-top: 1.5rem;
+    width: 6.525rem;
+    height: 1.475rem;
+    background-image: url(../img/logo-name.png);
+    background-size: 6.525rem;
+    background-repeat: no-repeat;
+    text-indent: -499.95rem;
 }
 .logo-timeline{
-    background-image: url(../img/timeline@2x.png);
+    margin: 0 auto;
+    margin-top: -11rem;
+    margin-left: -1.9rem;
     width: 19.1rem;
     height: 11.35rem;
-    text-indent: -499.95rem;
+    background-image: url(../img/timeline@2x.png);
     background-size: 16.1rem;
-    display: none;
-    margin: 0 auto;
-    margin-top: -9.4rem;
-    background-repeat: no-repeat
+    background-repeat: no-repeat;
+    text-indent: -499.95rem
 }
 .description {
-    margin-top: 1.8rem;
-    font-size: .7rem;
     position: relative;
     z-index: 99;
+    margin-top: 1.8rem;
+    font-size: .7rem;
 }
 
 .screenshot {
-    background-image: url(../img/screenshot@2x.png);
-    width: 21.1rem;
-    height: 31.65rem;
-    max-width: 21.1rem;
-    min-width: 16rem;
+    position: relative;
     position: relative;
     z-index: 99;
-    text-indent: -499.95rem;
-    background-size: 100%;
-    background-repeat: no-repeat;
+    z-index: 99;
     display: block;
     margin: 0 auto;
     margin-top: 2.25rem;
-    position: relative;
-    z-index: 99
+    min-width: 16rem;
+    max-width: 21.1rem;
+    width: 21.1rem;
+    height: 31.65rem;
+    background-image: url(../img/screenshot@2x.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    text-indent: -499.95rem
 }
 
 .download-box {
-    margin-top: 2rem;
     position: relative;
     z-index: 99;
+    margin-top: 2rem;
 }
 
 .words {
@@ -292,27 +313,27 @@ header {
 }
 
 .download-btn {
-    height: 2.1rem;
-    line-height: 2.1rem;
-    width: 9.9rem;
-    font-size: .8rem;
+    position: relative;
+    z-index: 99;
     display: block;
     margin: 0 auto;
     margin-top: 2.35rem;
-    color: #fff;
-    text-decoration: none;
+    width: 9.9rem;
+    height: 2.1rem;
     border: .1rem solid hsla(0, 0%, 100%, .68);
     border-radius: 2.5rem;
-    position: relative;
-    z-index: 99;
+    color: #fff;
+    text-decoration: none;
+    font-size: .8rem;
+    line-height: 2.1rem;
 }
 
 .tips {
-    font-size: .5rem;
-    height: 1.2rem;
     margin-top: .25rem;
-    line-height: 1.2rem;
-    color: hsla(0, 0%, 100%, .63)
+    height: 1.2rem;
+    color: hsla(0, 0%, 100%, .63);
+    font-size: .5rem;
+    line-height: 1.2rem
 }
 
 .mod-des {
@@ -321,52 +342,82 @@ header {
 }
 
 .mod-des__list-box {
-    width: 16rem;
     margin: 0 auto;
-    text-align: left;
-    margin-bottom: 1rem
+    margin-bottom: 1rem;
+    width: 16rem;
+    text-align: left
 }
 .mod-des__list a:hover{
-    color: #136e24;
     margin-left: 8px;
+    color: #136e24;
 }
 
 .mod-des__list-box:last-child {
     padding-bottom: 1rem;
     border: none;
     background-image: -webkit-linear-gradient(270deg, transparent, transparent 50%, transparent 0), -webkit-linear-gradient(180deg, transparent, transparent 50%, transparent 0), -webkit-linear-gradient(90deg, #bababa, #bababa 50%, transparent 0), -webkit-linear-gradient(0, transparent, transparent 50%, transparent 0);
+    background-position: top, 100% 0, bottom, 0 0;
     background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%;
-    background-repeat: no-repeat;
-    background-position: top, 100% 0, bottom, 0 0
+    background-repeat: no-repeat
 }
 
 .mod-des__title {
-    font-size: 1.75rem;
-    color: #065315;
     margin-top: 2.45rem;
-    margin-bottom: 2.5rem
+    margin-bottom: 2.5rem;
+    color: #065315;
+    font-size: 1.75rem
 }
 
 .mod-des__list {
     margin-top: .5rem;
-    list-style: disc outside;
-    padding-left: 1.25rem
+    padding-left: 1.25rem;
+    list-style: disc outside
+}
+.mod-des__list-name{
+    position: relative;
+}
+.mod-des__list-name:before{
+    position: absolute;
+    top: 0rem;
+    left: -1.8rem;
+    display: block;
+    content: '';
+}
+.mod-des__list-name_yu:before{
+    width: 1.2rem;
+    height: 1.3rem;
+    background-image: url(../img/yu.png);
+    background-size: 1.2rem;
+}
+.mod-des__list-name_zhi:before{
+    left: -1.6rem;
+    width: 1rem;
+    height: 1.7rem;
+    background-image: url(../img/zhi.png);
+    background-size: 1rem;
+}
+.mod-des__list-name_gong:before{
+    left: -1.6rem;
+    width: .6rem;
+    height: 1.85rem;
+    background-image: url(../img/gong.png);
+    background-size: .6rem;
 }
 
 .mod-des__item {
-    color: #1ca336;
     display: list-item;
-    font-size: .7rem;
-    line-height: 1.15rem;
     height: 1.15rem;
-    text-decoration: none
+    color: #1ca336;
+    text-decoration: none;
+    font-size: .7rem;
+    line-height: 1.15rem
 }
 
 .support-description {
     margin-top: 2.5rem;
-    font-size: .7rem;
-    text-align: center;
     color: #003103;
+    text-align: center;
+    font-size: .7rem;
     line-height: 1.2rem
 }
 
@@ -377,16 +428,16 @@ header {
 
 .support-example {
     margin-top: 2.5rem;
-    text-align: center;
-    margin-bottom: 3.75rem
+    margin-bottom: 3.75rem;
+    text-align: center
 }
 
 .support-item {
+    display: inline-block;
+    margin-bottom: 1rem;
     padding: 0 0.6rem;
     height: 1.5rem;
     text-indent: -499.95rem;
-    display: inline-block;
-    margin-bottom: 1rem;
 
 }
 
@@ -395,13 +446,13 @@ header {
 }
 
 footer {
-    margin: 0 auto;
     overflow: hidden;
+    margin: 0 auto;
     border: none;
     background-image: -webkit-linear-gradient(270deg, #bababa, #bababa 50%, transparent 0), -webkit-linear-gradient(180deg, transparent, transparent 50%, transparent 0), -webkit-linear-gradient(90deg, transparent, transparent 50%, transparent 0), -webkit-linear-gradient(0, transparent, transparent 50%, transparent 0);
+    background-position: top, 100% 0, bottom, 0 0;
     background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%;
-    background-repeat: no-repeat;
-    background-position: top, 100% 0, bottom, 0 0
+    background-repeat: no-repeat
 }
 
 .links {
@@ -410,44 +461,44 @@ footer {
 }
 
 .links__github {
+    display: inline-block;
+    margin-right: 1.5rem;
     width: 1rem;
     height: 1rem;
-    display: inline-block;
-    background-size: 1rem;
     background-image: url(../img/github@2x.png);
-    margin-right: 1.5rem;
+    background-size: 1rem;
     background-repeat: no-repeat;
-    text-indent: -499.95rem;
-    text-decoration: none
+    text-decoration: none;
+    text-indent: -499.95rem
 }
 
 .links__dribbble {
+    display: inline-block;
     width: 1rem;
     height: 1rem;
-    display: inline-block;
     background-image: url(../img/dribbble@2x.png);
     background-size: 1rem;
-    text-indent: -499.95rem;
-    text-decoration: none
+    text-decoration: none;
+    text-indent: -499.95rem
 }
 
 .license {
-    font-size: .6rem;
+    margin: 1.8rem;
     color: #bababa;
     text-align: center;
-    margin: 1.8rem
+    font-size: .6rem
 }
 .forkme {
-    transform: rotate(45deg);
-    background-color: #FFF;
-    overflow: hidden;
     position: fixed;
-    z-index: 300;
-    width: 240px;
-    right: -60px;
     top: 46px;
+    right: -60px;
+    z-index: 300;
+    overflow: hidden;
+    width: 240px;
     border-style: solid;
     border-color: #7B7979;
+    background-color: #FFF;
+    transform: rotate(45deg);
 }
 
 
@@ -460,30 +511,30 @@ body {
 .ribbon {
     position: absolute;
     top: 42px;
-    width: 200px;
     padding: 1px 0;
+    width: 200px;
     background: #000;
-    color: #eee;
-    -moz-box-shadow: 0 0 10px rgba(0,0,0,0.5);
     -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0 0 10px rgba(0,0,0,0.5);
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    color: #eee;
 }
 
 .ribbon.left {
     left: -42px;
-    -moz-transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
-    -o-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
     -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
     transform: rotate(-45deg);
 }
 
 .ribbon.right {
     right: -42px;
-    -moz-transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
     transform: rotate(45deg);
 }
 
@@ -494,17 +545,17 @@ body {
     display: block;
     padding: 1px 0;
     height: 24px;
-    line-height: 24px;
+    border: 1px solid rgba(255,255,255,0.3);
     color: inherit;
     text-align: center;
     text-decoration: none;
-    font-family: 'Cabin Condensed', sans-serif;
-    font-size: 16px;
+    text-shadow: 0 0 10px rgba(0,0,0,0.31);
     font-weight: 500;
-    border: 1px solid rgba(255,255,255,0.3);
+    font-size: 16px;
+    font-family: 'Cabin Condensed', sans-serif;
+    line-height: 24px;
     -moz-text-shadow: 0 0 10px rgba(0,0,0,0.31);
     -webkit-text-shadow: 0 0 10px rgba(0,0,0,0.31);
-    text-shadow: 0 0 10px rgba(0,0,0,0.31);
 }
 
 .ribbon.black {
@@ -548,3 +599,57 @@ body {
     z-index: 9999;
     opacity: 0.8;
 }
+@-webkit-keyframes bounceIn {
+    0% {
+        opacity: 1;
+        -webkit-transform: scale3d(1,1,1);
+        transform: scale3d(1,1,1)
+    }
+
+    30% {
+        -webkit-transform: scale3d(1.1,1.1,1.1);
+        transform: scale3d(1.1,1.1,1.1)
+    }
+
+    60% {
+        -webkit-transform: scale3d(.9,.9,.9);
+        transform: scale3d(.9,.9,.9)
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: scale3d(1,1,1);
+        transform: scale3d(1,1,1)
+    }
+}
+
+@keyframes bounceIn {
+
+    0% {
+        opacity: 1;
+        -webkit-transform: scale3d(1,1,1);
+        transform: scale3d(1,1,1)
+    }
+
+    30% {
+        -webkit-transform: scale3d(1.1,1.1,1.1);
+        transform: scale3d(1.1,1.1,1.1)
+    }
+
+    60% {
+        -webkit-transform: scale3d(.9,.9,.9);
+        transform: scale3d(.9,.9,.9)
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: scale3d(1,1,1);
+        transform: scale3d(1,1,1)
+    }
+}
+
+.bounceIn {
+    -webkit-animation-name: bounceIn;
+    animation-name: bounceIn
+}
+
