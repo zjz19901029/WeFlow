@@ -326,6 +326,10 @@ header {
     text-align: left;
     margin-bottom: 1rem
 }
+.mod-des__list a:hover{
+    color: #136e24;
+    margin-left: 8px;
+}
 
 .mod-des__list-box:last-child {
     padding-bottom: 1rem;
