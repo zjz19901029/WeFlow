@@ -345,11 +345,15 @@ header {
     margin: 0 auto;
     margin-bottom: 1rem;
     width: 16rem;
-    text-align: left
+    text-align: left;
+}
+.mod-des__list a{
+    transition: margin-left .2s linear;
 }
 .mod-des__list a:hover{
     margin-left: 8px;
     color: #136e24;
+    cursor: pointer;
 }
 
 .mod-des__list-box:last-child {
@@ -430,6 +434,12 @@ header {
     margin-top: 2.5rem;
     margin-bottom: 3.75rem;
     text-align: center
+}
+.support-example img{
+    opacity: .7;
+}
+.support-example img:hover{
+    opacity: 1;
 }
 
 .support-item {
