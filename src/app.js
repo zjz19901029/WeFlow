@@ -19,6 +19,7 @@ const Common = nodeRequire(path.join(__dirname, './src/common'));
 
 //变量声明
 let $welcome = $('#js-welcome');
+let $example = $('#js-example');
 let $openProject = $('#js-open-project');
 let $newProject = $('#js-new-project');
 let $projectList = $('#js-project-list');
@@ -107,6 +108,53 @@ function initData() {
         }
     }
 }
+
+//导入示例项目
+$example.on('click', function () {
+
+    let storage = Common.getStorage();
+
+    if (storage && storage['workspace']) {
+        let projectName = Common.EXAMPLE_NAME;
+        let projectPath = path.join(storage['workspace'], Common.EXAMPLE_NAME);
+
+        if (storage.projects[projectName]) {
+            //已经打开,直接切换
+        } else {
+
+            extract(Common.TEMPLAGE_EXAMPLE, {dir: storage['workspace']}, function (err) {
+                if (err) {
+                    throw new Error(err);
+                }
+
+                let $projectHtml = $(`<li class="projects__list-item" data-project="${Common.EXAMPLE_NAME}" title="${projectPath}">
+                              <span class="icon icon-finder" data-finder="true" title="${FinderTitle}"></span>
+                              <div class="projects__list-content">
+                                  <span class="projects__name">${Common.EXAMPLE_NAME}</span>
+                                  <div class="projects__path">${projectPath}</div>
+                              </div>
+                              <a href="javascript:;" class="icon icon-info projects__info"></a>
+                        </li>`);
+
+                $projectList.append($projectHtml);
+
+                $projectList.scrollTop($projectList.get(0).scrollHeight);
+
+                $projectHtml.trigger('click');
+
+                storage['projects'][projectName] = {};
+                storage['projects'][projectName]['path'] = projectPath;
+                Common.setStorage(storage);
+
+                console.log('new Project Success.');
+            });
+        }
+    }
+
+    if (!$welcome.hasClass('hide')) {
+        $welcome.addClass('hide');
+    }
+});
 
 
 //打开项目

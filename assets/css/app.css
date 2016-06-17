@@ -149,6 +149,7 @@ html, body {
     font-size: 18px;
     color: #1CA629;
     margin-top: 15px;
+    margin-bottom: 10px;
 
     opacity: 0;
     transform: translateY(50px);
@@ -160,10 +161,44 @@ html, body {
     font-size: 12px;
     color: #4A4A4A;
     margin-top: 10px;
+    margin-bottom: 113px;
 
     opacity: 0;
     transform: translateY(50px);
     animation: show ease 1s .5s both;
+}
+
+.welcome-example {
+    position: relative;
+    width: 136px;
+    height: 28px;
+    line-height: 28px;
+    color: #4A90E2;
+    font-size: 12px;
+    text-align: center;
+    margin: 0 auto;
+    cursor: pointer;
+
+    opacity: 0;
+    transform: translateY(50px);
+    animation: show ease 1s .8s both;
+}
+
+.welcome-example:hover,
+.welcome-example:active {
+    opacity: 0.58;
+}
+
+.welcome-example:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #4A90E2;
+    border-radius: 2px;
 }
 
 .tips {
@@ -335,7 +370,7 @@ html, body {
 }
 
 .projects__list .icon:hover,
-.projects__list .icon:active{
+.projects__list .icon:active {
     opacity: .8;
 }
 
@@ -419,7 +454,7 @@ html, body {
 }
 
 .tasks__button:hover,
-.tasks__button:active{
+.tasks__button:active {
     opacity: 0.58;
 }
 
@@ -503,15 +538,15 @@ html, body {
     opacity: 1;
 }
 
-.logs__time{
+.logs__time {
     color: #999;
 }
 
-.onepx{
+.onepx {
     position: relative;
 }
 
-.onepx:after{
+.onepx:after {
     content: '';
     box-sizing: border-box;
     position: absolute;
@@ -562,7 +597,7 @@ html, body {
     padding: 0 15px;
 }
 
-input:focus{
+input:focus {
     outline: none;
 }
 
@@ -578,7 +613,7 @@ input:focus{
     padding: 0 1px;
 }
 
-.ui-text input{
+.ui-text input {
     position: relative;
     z-index: 1;
     width: 100%;
@@ -589,7 +624,7 @@ input:focus{
     color: #3B99FC;
 }
 
-.ui-text:after{
+.ui-text:after {
     content: '';
     width: 100%;
     height: 100%;
@@ -616,11 +651,11 @@ input:focus{
     margin-bottom: 10px;
 }
 
-.ui-checkbox label{
+.ui-checkbox label {
     position: relative;
 }
 
-.ui-checkbox input+label:before{
+.ui-checkbox input + label:before {
     content: '';
     position: absolute;
     left: -27px;
@@ -631,7 +666,7 @@ input:focus{
     background-size: 14px 14px;
 }
 
-.ui-checkbox input:checked+label:before{
+.ui-checkbox input:checked + label:before {
     background-image: url(../img/checkbox-on.png);
 }
 
@@ -678,7 +713,7 @@ input:focus{
     cursor: pointer;
 }
 
-.setting__del:after{
+.setting__del:after {
     content: '';
     box-sizing: border-box;
     position: absolute;
@@ -768,7 +803,7 @@ input:focus{
     text-decoration: none;
 }
 
-.about__buttom-list-item:after{
+.about__buttom-list-item:after {
     content: '';
     box-sizing: border-box;
     position: absolute;
@@ -801,9 +836,9 @@ input:focus{
     border-color: #4A90E2;
 }
 
-
 @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
-    .tasks__button:after {
+    .tasks__button:after,
+    .welcome-example:after {
         width: 200%;
         height: 200%;
         transform-origin: 0 0;
@@ -813,7 +848,7 @@ input:focus{
     .onepx:after,
     .setting__del:after,
     .ui-text:after,
-    .about__buttom-list-item:after{
+    .about__buttom-list-item:after {
         width: 200%;
         height: 200%;
         transform-origin: 0 0;

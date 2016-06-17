@@ -14,6 +14,8 @@ Common.CONFIGPATH = path.join(__dirname, '../', Common.CONFIGNAME);
 Common.PLATFORM = process.platform;
 Common.DEFAULT_PATH = Common.PLATFORM === 'win32' ? 'desktop' : 'home';
 Common.TEMPLAGE_PROJECT = path.resolve(path.join(__dirname, '../templates/project.zip'));
+Common.TEMPLAGE_EXAMPLE = path.resolve(path.join(__dirname, '../templates/example.zip'));
+Common.EXAMPLE_NAME = 'WeFlow-example';
 
 Common.requireUncached = function (module) {
     delete require.cache[require.resolve(module)];
