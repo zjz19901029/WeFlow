@@ -5,12 +5,13 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://opensource.org/licenses/MIT "Feel free to contribute.") 
 
 > 一个基于 [tmt-workflow](https://github.com/weixin/tmt-workflow) 前端工作流的开发工具。
-> 官网：[http://weflow.io/](http://weflow.io/)
+> 官网：[http://weflow.io/](http://weflow.io/)  
+> 目前已支持了：微信游戏、微信广告等项目的前端构建工作。
 
 ## 安装使用
 
 [下载安装](https://github.com/weixin/WeFlow/releases)
-(支持 Mac OS / Windows / Linux 操作系统)
+(支持 macOS / Windows / Linux 操作系统)
 
 ## 界面预览
 
