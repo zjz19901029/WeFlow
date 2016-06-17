@@ -6,7 +6,7 @@
 
 > 一个基于 [tmt-workflow](https://github.com/weixin/tmt-workflow) 前端工作流的开发工具。
 > 官网：[http://weflow.io/](http://weflow.io/)  
-> 目前已支持了：微信游戏、微信广告等项目的前端构建工作。
+> 目前已支持了：微信游戏、微信广告等项目的 [第三方合作团队](http://ad.weixin.qq.com/learn/2-3-3--%E5%89%8D%E7%AB%AF%E5%B7%A5%E4%BD%9C%E6%B5%81) 的前端构建工作，如果你更习惯`命令行`操作，可以直接使用基于 Gulp 开发的 [tmt-workflow](https://github.com/weixin/tmt-workflow) :)
 
 ## 安装使用
 
