@@ -138,15 +138,15 @@ if (process.platform == 'darwin') {
             {
                 label: '偏好设置',
                 accelerator: 'CmdOrCtrl+,',
-                click: function (item, focusedWindow) {
+                click: function () {
                     settingFn();
                 }
             },
             {
-                label: '检查版本更新…',
+                label: '检查更新…',
                 accelerator: '',
-                click: function (item, focusedWindow) {
-                    alert('功能实现中...')
+                click: function () {
+                    checkForUpdate(true);
                 }
             },
             {
@@ -181,6 +181,7 @@ if (process.platform == 'darwin') {
                 label: '退出',
                 accelerator: 'Command+Q',
                 click: function () {
+                    stopWatch();
                     remote.app.quit();
                 }
             }

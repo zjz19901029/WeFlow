@@ -2,7 +2,6 @@
 
 const path = nodeRequire('path');
 const fs = nodeRequire('fs');
-const childProcess = nodeRequire('child_process');
 const del = nodeRequire('del');
 const gulp = nodeRequire('gulp');
 const extract = nodeRequire('extract-zip');
@@ -10,12 +9,16 @@ const electron = nodeRequire('electron');
 const _ = nodeRequire('lodash');
 const async = nodeRequire('async');
 const remote = electron.remote;
+const ipc = electron.ipcRenderer;
 const shell = electron.shell;
+const dialog = electron.dialog;
+const BrowserWindow = remote.BrowserWindow;
 const dev = nodeRequire(path.join(__dirname, './src/_tasks/dev.js'));
 const dist = nodeRequire(path.join(__dirname, './src/_tasks/dist.js'));
 const zip = nodeRequire(path.join(__dirname, './src/_tasks/zip.js'));
 const ftp = nodeRequire(path.join(__dirname, './src/_tasks/ftp.js'));
 const Common = nodeRequire(path.join(__dirname, './src/common'));
+const packageJson = nodeRequire(path.join(__dirname, './package.json'));
 
 //变量声明
 let $welcome = $('#js-welcome');
@@ -43,6 +46,7 @@ let curConfigPath = Common.CONFIGPATH;
 let config = nodeRequire(curConfigPath);
 let FinderTitle = Common.PLATFORM === 'win32' ? '在 文件夹 中查看' : '在 Finder 中查看';
 let bsObj = {};
+let checkHandler = null;
 
 //初始化
 init();
@@ -50,6 +54,8 @@ init();
 //如果是第一次打开,设置数据并存储
 //其他则直接初始化数据
 function init() {
+
+    checkForUpdate();
 
     let storage = Common.getStorage();
 
@@ -62,15 +68,88 @@ function init() {
 
         let workspace = path.join(remote.app.getPath(Common.DEFAULT_PATH), Common.WORKSPACE);
 
-        $formWorkspace.val(workspace);
+        fs.mkdir(workspace, function (err) {
 
-        storage.workspace = workspace;
-        Common.setStorage(storage)
+            if (err) {
+                throw new Error(err);
+            }
+
+            $formWorkspace.val(workspace);
+
+            storage.workspace = workspace;
+            Common.setStorage(storage);
+
+            console.log('Create workspace success.');
+        });
     } else {
+        checkLocalProjects();
         initData();
     }
 
 }
+
+//每次启动的时候检查本地项目是否还存在
+function checkLocalProjects() {
+    let storage = Common.getStorage();
+
+    if (storage) {
+        if (storage.workspace) {
+
+            if (!Common.dirExist(storage.workspace)) {
+                console.log('本地工作区已不存在');
+
+                //清空数据
+                storage.projects = {};
+            }
+
+            if (storage.projects) {
+
+                let projects = storage.projects;
+
+                _.forEach(projects, function (project, key) {
+                    if (!Common.dirExist(project.path)) {
+                        delete projects[key];
+                    }
+                });
+
+                storage.projects = projects;
+
+            }
+
+            Common.setStorage(storage);
+
+        }
+    }
+}
+
+//检查更新
+function checkForUpdate(action) {
+    if (action) {
+        checkHandler = $.ajax({
+            method: 'GET',
+            url: Common.CHECKURL,
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                if (data[0].tag_name > packageJson.version) {
+                    ipc.send('checkForUpdate', 1)
+                }else{
+                    ipc.send('checkForUpdate', 0);
+                }
+            }
+        });
+    }
+}
+
+ipc.on('checkForUpdateReply', function (event, index, status) {
+    if(status){
+        if(index === 1){
+            alert('哈哈哈, 你真的以为我等下会提醒你吗?');
+        }else{
+            shell.openExternal(Common.DOWNLOADURL);
+        }
+    }
+});
 
 //初始化数据
 function initData() {
@@ -118,7 +197,7 @@ $example.on('click', function () {
         let projectName = Common.EXAMPLE_NAME;
         let projectPath = path.join(storage['workspace'], Common.EXAMPLE_NAME);
 
-        if (storage.projects[projectName]) {
+        if (storage.projects && storage.projects[projectName]) {
             //已经打开,直接切换
         } else {
 
@@ -141,6 +220,10 @@ $example.on('click', function () {
                 $projectList.scrollTop($projectList.get(0).scrollHeight);
 
                 $projectHtml.trigger('click');
+
+                if (!storage['projects']) {
+                    storage['projects'] = {};
+                }
 
                 storage['projects'][projectName] = {};
                 storage['projects'][projectName]['path'] = projectPath;
@@ -300,7 +383,7 @@ function delProject(cb) {
     cb && cb();
 }
 
-function killBs(){
+function killBs() {
     var projectPath = $curProject.attr('title');
     if (bsObj[projectPath]) {
         try {
@@ -356,38 +439,38 @@ function editName($project, $input) {
 
     $input.keypress(function (event) {
             let $this = $(this);
-                text = $.trim($this.text());
+            text = $.trim($this.text());
 
-                if (event.which === 13 && !hasText) {
-                    keyboard = true;
-                    if (text !== '') {
-                        setProjectInfo($project, $this, text);
-                        hasText = true;
-                         keyboard = false;
-                    } else {
-                        alert('请输入项目名');
-                        
-                        setTimeout(function(){
-                            $this.html('');
-                            this.focus();
-                        }, 10)
-                    }
+            if (event.which === 13 && !hasText) {
+                keyboard = true;
+                if (text !== '') {
+                    setProjectInfo($project, $this, text);
+                    hasText = true;
+                    keyboard = false;
+                } else {
+                    alert('请输入项目名');
+
+                    setTimeout(function () {
+                        $this.html('');
+                        this.focus();
+                    }, 10)
                 }
-            
+            }
+
         })
         .blur(function () {
             let $this = $(this);
             text = $.trim($this.text());
 
-            if(text){
+            if (text) {
                 hasText = false;
                 keyboard = false;
             }
 
             if (!hasText && !keyboard) {
-                
-                setTimeout(function(){
-                    
+
+                setTimeout(function () {
+
                     if (text !== '') {
                         setProjectInfo($project, $this, text);
 
@@ -614,9 +697,11 @@ $setting.on('change', 'input', function () {
                             //windows 删除目录有bug
                             next();
                         } else {
-                            del([originWorkspace], {force: true}).then(function () {
-                                next();
-                            })
+                            shell.moveItemToTrash(originWorkspace);
+                            next();
+                            // del([originWorkspace], {force: true}).then(function () {
+                            //     next();
+                            // })
                         }
                     },
                     function (next) {
@@ -705,7 +790,7 @@ function updateConfig($this) {
 
     //写入configPath
     changeTimer = setTimeout(function () {
-        fs.writeFile(curConfigPath, JSON.stringify(config), function (err) {
+        fs.writeFile(curConfigPath, JSON.stringify(config, null, 4), function (err) {
             if (err) {
                 throw new Error(err);
             }
@@ -813,7 +898,6 @@ $buildDevButton.hover(function () {
 });
 
 function showAbout() {
-    const BrowserWindow = remote.BrowserWindow;
 
     let win = new BrowserWindow({
         width: 360,
@@ -849,3 +933,11 @@ $projectList.on('click', '[data-finder=true]', function () {
 $cleanLog.on('click', function () {
     $logContent.html('');
 });
+
+function stopWatch() {
+    _.forEach(bsObj, function (item) {
+        if(item){
+            item.exit();
+        }
+    });
+}

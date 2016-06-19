@@ -1,11 +1,11 @@
 {
   "name": "WeFlow",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "build:mac": "electron-packager ./ WeFlow --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist/$npm_package_version --version=0.37.8",
+    "build:mac": "rimraf dist && electron-packager ./ WeFlow --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist/$npm_package_version --version=0.37.8",
     "build:win64": "rimraf dist-win && electron-packager ./ WeFlow --platform=win32 --arch=x64 --icon=./assets/img/WeFlow.png --overwrite --out ./dist-win --version=0.37.8",
     "pack": "build --target dir",
     "dist": "rimraf dist && build"

@@ -2,6 +2,8 @@
 
 const electron = require('electron');
 const app = electron.app;
+const dialog = electron.dialog;
+const ipc = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 
@@ -29,11 +31,12 @@ function createWindow() {
     // mainWindow.webContents.openDevTools();
 
     mainWindow.on('close', function (event) {
-        if(process.platform !== 'win32' && !willClose){
+        if (process.platform !== 'win32' && !willClose) {
             app.hide();
             event.preventDefault();
         }
-    });``
+    });
+    ``
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -59,7 +62,7 @@ app.on('window-all-closed', function () {
     }
 });
 
-app.on('before-quit', function(){
+app.on('before-quit', function () {
     willClose = true;
 });
 
@@ -72,4 +75,29 @@ app.on('activate', function () {
     }
 
     app.show();
+});
+
+//检查更新
+ipc.on('checkForUpdate', function (event, status) {
+    let options = {};
+
+    if(status){
+        options = {
+            type: 'info',
+            title: '检查更新...',
+            message: "当前已有新版本, 请更新",
+            buttons: ['点击下载最新版本', '稍后提醒我']
+        }
+    }else{
+        options = {
+            type: 'info',
+            title: '检查更新...',
+            message: "当前为最新版本, 不需要更新",
+            buttons: ['确定']
+        }
+    }
+
+    dialog.showMessageBox(options, function (index) {
+        event.sender.send('checkForUpdateReply', index, status);
+    });
 });
