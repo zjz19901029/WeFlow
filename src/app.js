@@ -124,27 +124,25 @@ function checkLocalProjects() {
 
 //检查更新
 function checkForUpdate(action) {
-    if (action) {
-        checkHandler = $.ajax({
-            method: 'GET',
-            url: Common.CHECKURL,
-            dataType: 'json',
-            cache: false,
-            success: function (data) {
-                if (data[0].tag_name > packageJson.version) {
-                    ipc.send('checkForUpdate', 1)
-                }else{
-                    ipc.send('checkForUpdate', 0);
-                }
+    checkHandler = $.ajax({
+        method: 'GET',
+        url: Common.CHECKURL,
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+            if (data && data.release && data.release > packageJson.version) {
+                ipc.send('checkForUpdate', 1)
+            }else{
+                action && ipc.send('checkForUpdate', 0);
             }
-        });
-    }
+        }
+    });
 }
 
 ipc.on('checkForUpdateReply', function (event, index, status) {
     if(status){
         if(index === 1){
-            alert('哈哈哈, 你真的以为我等下会提醒你吗?');
+            alert('哈哈哈, 你真的以为我等下会提醒你吗?赶紧去下载最新版本吧！');
         }else{
             shell.openExternal(Common.DOWNLOADURL);
         }
@@ -693,16 +691,8 @@ $setting.on('change', 'input', function () {
 
                 async.series([
                     function (next) {
-                        if (Common.PLATFORM === 'win32') {
-                            //windows 删除目录有bug
-                            next();
-                        } else {
-                            shell.moveItemToTrash(originWorkspace);
-                            next();
-                            // del([originWorkspace], {force: true}).then(function () {
-                            //     next();
-                            // })
-                        }
+                        shell.moveItemToTrash(originWorkspace);
+                        next();
                     },
                     function (next) {
                         //更新 localstorage

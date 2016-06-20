@@ -159,7 +159,7 @@ var template = [
     }
 ];
 
-if (process.platform == 'darwin') {
+if (process.platform === 'darwin') {
     var name = remote.app.getName();
     template.unshift({
         label: name,
@@ -224,6 +224,23 @@ if (process.platform == 'darwin') {
                 }
             }
         ]
+    });
+}else if(process.platform === 'win32'){
+    let helpItem = template[template.length-1];
+    
+    helpItem.submenu.unshift({
+        label: '检查更新…',
+        accelerator: '',
+        click: function () {
+            checkForUpdate(true);
+        }
+    });
+
+    helpItem.submenu.unshift({
+        label: '关于',
+        click: function (item, focusedWindow) {
+            showAbout();
+        }
     });
 }
 
