@@ -16,6 +16,8 @@ Common.DEFAULT_PATH = Common.PLATFORM === 'win32' ? 'desktop' : 'home';
 Common.TEMPLAGE_PROJECT = path.resolve(path.join(__dirname, '../templates/project.zip'));
 Common.TEMPLAGE_EXAMPLE = path.resolve(path.join(__dirname, '../templates/example.zip'));
 Common.EXAMPLE_NAME = 'WeFlow-example';
+Common.CHECKURL = 'https://raw.githubusercontent.com/weixin/WeFlow/master/package.json';
+Common.DOWNLOADURL = 'https://github.com/weixin/WeFlow/releases';
 
 Common.requireUncached = function (module) {
     delete require.cache[require.resolve(module)];

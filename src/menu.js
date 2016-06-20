@@ -159,7 +159,7 @@ var template = [
     }
 ];
 
-if (process.platform == 'darwin') {
+if (process.platform === 'darwin') {
     var name = remote.app.getName();
     template.unshift({
         label: name,
@@ -176,15 +176,15 @@ if (process.platform == 'darwin') {
             {
                 label: '偏好设置',
                 accelerator: 'CmdOrCtrl+,',
-                click: function (item, focusedWindow) {
+                click: function () {
                     settingFn();
                 }
             },
             {
-                label: '检查版本更新…',
+                label: '检查更新…',
                 accelerator: '',
-                click: function (item, focusedWindow) {
-                    alert('功能实现中...')
+                click: function () {
+                    checkForUpdate(true);
                 }
             },
             {
@@ -219,10 +219,28 @@ if (process.platform == 'darwin') {
                 label: '退出',
                 accelerator: 'Command+Q',
                 click: function () {
+                    stopWatch();
                     remote.app.quit();
                 }
             }
         ]
+    });
+}else if(process.platform === 'win32'){
+    let helpItem = template[template.length-1];
+    
+    helpItem.submenu.unshift({
+        label: '检查更新…',
+        accelerator: '',
+        click: function () {
+            checkForUpdate(true);
+        }
+    });
+
+    helpItem.submenu.unshift({
+        label: '关于',
+        click: function (item, focusedWindow) {
+            showAbout();
+        }
     });
 }
 
