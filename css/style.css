@@ -337,10 +337,10 @@ header {
     margin-top: .25rem;
     height: 1.2rem;
     color: hsla(0, 0%, 100%, .63);
-    font-size: .5rem;
+    font-size: .6rem;
     line-height: 1.2rem
 }
-
+.tips a{color:#007100;text-decoration:none; }
 .mod-des {
     color: #065315;
     text-align: center
@@ -415,7 +415,6 @@ header {
 
 .mod-des__item {
     display: list-item;
-    height: 1.15rem;
     color: #1ca336;
     text-decoration: none;
     font-size: .7rem;
@@ -427,7 +426,9 @@ header {
     color: #003103;
     text-align: center;
     font-size: .7rem;
-    line-height: 1.2rem
+    line-height: 1.2rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 .support-link {
@@ -453,7 +454,6 @@ header {
     padding: 0 0.6rem;
     height: 1.5rem;
     text-indent: -499.95rem;
-
 }
 
 .support-item:last-child {
