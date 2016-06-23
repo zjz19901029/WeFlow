@@ -239,6 +239,11 @@ function dist(projectPath, log, callback) {
             gulp.src(paths.tmp.dirAll)
                 .pipe(revAll.revision())
                 .pipe(gulp.dest(paths.tmp.dir))
+                .pipe(revDel({
+                    exclude: /(.html|.htm)$/
+                }))
+                .pipe(revAll.manifestFile())
+                .pipe(gulp.dest(paths.tmp.dir))
                 .on('end', function () {
                     console.log('reversion success.');
                     log('reversion success.');

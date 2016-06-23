@@ -109,7 +109,7 @@ var template = [
         submenu: [
             {
                 label: '进入当前项目配置',
-                accelerator: 'CmdOrCtrl+shift+,',
+                accelerator: 'CmdOrCtrl+/',
                 click: function (item, focusedWindow) {
                     settingCurrentProject();
                 }
@@ -156,7 +156,7 @@ var template = [
                 }
             },
             {
-                label: '建议 & 反馈…',
+                label: '建议 或 反馈…',
                 click: function () {
                     electron.shell.openExternal('https://github.com/weixin/weflow/issues');
                 }

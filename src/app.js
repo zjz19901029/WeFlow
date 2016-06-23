@@ -47,12 +47,14 @@ let config = nodeRequire(curConfigPath);
 let FinderTitle = Common.PLATFORM === 'win32' ? '在 文件夹 中查看' : '在 Finder 中查看';
 let bsObj = {};
 let checkHandler = null;
+let newProjectSucess = false;
+
 
 //初始化
 init();
 
 //如果是第一次打开,设置数据并存储
-//其他则直接初始化数据
+//其他则直接初始化数据 v
 function init() {
 
     checkForUpdate();
@@ -132,7 +134,7 @@ function checkForUpdate(action) {
         success: function (data) {
             if (data && data.release && data.release > packageJson.version) {
                 ipc.send('checkForUpdate', 1)
-            }else{
+            } else {
                 action && ipc.send('checkForUpdate', 0);
             }
         }
@@ -140,10 +142,10 @@ function checkForUpdate(action) {
 }
 
 ipc.on('checkForUpdateReply', function (event, index, status) {
-    if(status){
-        if(index === 1){
+    if (status) {
+        if (index === 1) {
             alert('哈哈哈, 你真的以为我等下会提醒你吗?赶紧去下载最新版本吧！');
-        }else{
+        } else {
             shell.openExternal(Common.DOWNLOADURL);
         }
     }
@@ -399,7 +401,11 @@ function killBs() {
 
 //新建项目
 $newProject.on('click', function () {
-    newProjectFn();
+    console.log('click')
+    if (!newProjectSucess) {
+        newProjectSucess = true;
+        newProjectFn();
+    }
 });
 
 function newProjectFn() {
@@ -431,12 +437,14 @@ function newProjectFn() {
 }
 
 var keyboard = false;
+let blurTimer = null;
 function editName($project, $input) {
     let text;
     let hasText = false;
 
     $input.keypress(function (event) {
             let $this = $(this);
+            let _this = this;
             text = $.trim($this.text());
 
             if (event.which === 13 && !hasText) {
@@ -450,35 +458,44 @@ function editName($project, $input) {
 
                     setTimeout(function () {
                         $this.html('');
-                        this.focus();
+                        _this.focus();
                     }, 10)
                 }
             }
 
         })
         .blur(function () {
+
             let $this = $(this);
-            text = $.trim($this.text());
+            let _this = this;
 
-            if (text) {
-                hasText = false;
-                keyboard = false;
-            }
+            //解决当用新建按钮来失焦时的重复执行问题
+            clearTimeout(blurTimer);
 
-            if (!hasText && !keyboard) {
+            blurTimer = setTimeout(function () {
+                console.log('blur')
+                text = $.trim($this.text());
 
-                setTimeout(function () {
+                if (text) {
+                    hasText = false;
+                    keyboard = false;
+                }
 
-                    if (text !== '') {
-                        setProjectInfo($project, $this, text);
+                if (!hasText && !keyboard) {
 
-                        hasText = true;
-                    } else {
-                        alert('请输入项目名');
-                        this.focus();
-                    }
-                }, 100);
-            }
+                    setTimeout(function () {
+
+                        if (text !== '') {
+                            setProjectInfo($project, $this, text);
+
+                            hasText = true;
+                        } else {
+                            alert('请输入项目名');
+                            _this.focus();
+                        }
+                    }, 100);
+                }
+            }, 100);
         });
 }
 
@@ -495,6 +512,7 @@ function setProjectInfo($project, $input, text) {
             $curProject = $project.remove();
 
             newProject(projectPath, function (projectPath) {
+                console.log('dd')
                 newProjectReply(projectPath);
             });
 
@@ -566,19 +584,31 @@ function newProjectReply(projectPath) {
 
         console.log('new Project success.');
 
+        newProjectSucess = false;
+
     }
 }
+
+let taskTimer = null;
 
 //绑定任务按钮事件
 $('#js-tasks').find('.tasks__button').on('click', function () {
 
-    let taskName = $(this).data('task');
+    let $this = $(this);
 
-    runTask(taskName);
+    clearTimeout(taskTimer);
+
+    taskTimer = setTimeout(function () {
+        let taskName = $this.data('task');
+
+        runTask(taskName, $this);
+    }, 200);
 
 });
 
-function runTask(taskName) {
+function runTask(taskName, context) {
+
+    $logStatus.text('Running...');
 
     let projectPath = $curProject.attr('title');
 
@@ -587,6 +617,7 @@ function runTask(taskName) {
         if ($buildDevButton.data('devwatch')) {
 
             killBs();
+            $logStatus.text('Done');
 
         } else {
             dev(projectPath, function (data) {
@@ -601,33 +632,48 @@ function runTask(taskName) {
     }
 
     if (taskName === 'dist') {
+        context.text('执行中');
         dist(projectPath, function (data) {
             logReply(data);
         }, function () {
-            $logStatus.text('Done');
+            setTimeout(function () {
+                $logStatus.text('Done');
+                context.text('生产编译')
+            }, 500);
         });
     }
 
     if (taskName === 'zip') {
+        context.text('执行中');
         dist(projectPath, function (data) {
             logReply(data);
         }, function () {
             zip(projectPath, function (data) {
                 logReply(data);
             }, function () {
-                $logStatus.text('Done');
+                setTimeout(function () {
+                    $logStatus.text('Done');
+                    context.text('Zip 打包');
+                }, 500);
             });
         });
     }
 
     if (taskName === 'ftp') {
+        context.text('执行中');
         dist(projectPath, function (data) {
             logReply(data);
         }, function () {
             ftp(projectPath, function (data) {
                 logReply(data);
-            }, function () {
-                $logStatus.text('Done');
+            }, function (data) {
+                if (data) {
+                    alert('请配置 FTP 信息');
+                }
+                setTimeout(function () {
+                    $logStatus.text('Done');
+                    context.text('FTP 部署');
+                }, 500);
             })
         })
     }
@@ -926,8 +972,17 @@ $cleanLog.on('click', function () {
 
 function stopWatch() {
     _.forEach(bsObj, function (item) {
-        if(item){
+        if (item) {
             item.exit();
         }
     });
 }
+
+
+$('#js-help').on('click', function () {
+    var href = $(this).attr('href');
+
+    shell.openExternal(href);
+
+    event.preventDefault();
+});

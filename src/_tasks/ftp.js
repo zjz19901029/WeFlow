@@ -2,6 +2,7 @@
 
 const path = require('path');
 const async = require('async');
+const gulp = require('gulp');
 const _ = require('lodash');
 const del = require('del');
 const ftp = require('gulp-ftp');
@@ -17,6 +18,13 @@ module.exports = function (projectPath, log, callback) {
         config = Common.requireUncached(projectConfigPath);
     }else{
         config = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
+    }
+
+    let configFTP = config.ftp;
+
+    if(configFTP.host === '' || configFTP.port === '' || configFTP.user === ''){
+        callback('ftp config');
+        return;
     }
 
     let projectName = path.basename(projectPath);
@@ -36,7 +44,7 @@ module.exports = function (projectPath, log, callback) {
         let distPath = config['ftp']['includeHtml'] ? path.join(projectPath, './dist/**/*') : [path.join(projectPath, './dist/**/*'), path.join(projectPath, '!./dist/html/**/*.html')];
 
 
-        vfs.src(distPath, {base: '.'})
+        gulp.src(distPath, {base: '.'})
             .pipe(ftp(ftpConfig))
             .on('end', function () {
                 console.log('ftp success.');
