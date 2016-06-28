@@ -17,6 +17,7 @@ const dev = nodeRequire(path.join(__dirname, './src/_tasks/dev.js'));
 const dist = nodeRequire(path.join(__dirname, './src/_tasks/dist.js'));
 const zip = nodeRequire(path.join(__dirname, './src/_tasks/zip.js'));
 const ftp = nodeRequire(path.join(__dirname, './src/_tasks/ftp.js'));
+const sftp = nodeRequire(path.join(__dirname, './src/_tasks/sftp.js'));
 const Common = nodeRequire(path.join(__dirname, './src/common'));
 const packageJson = nodeRequire(path.join(__dirname, './package.json'));
 
@@ -308,7 +309,7 @@ function insertOpenProject(projectPath) {
                                   <span class="projects__name">${projectName}</span>
                                   <div class="projects__path">${projectPath}</div>
                               </div>
-                              <a href="javascript:;" class="icon icon-info projects__info"></a>
+                              <a href="javascript:;" class="icon icon-info projects__info" title="项目设置"></a>
                         </li>`);
 
     $projectList.append($projectHtml);
@@ -419,7 +420,7 @@ function newProjectFn() {
                                   <span class="projects__name" contenteditable></span>
                                   <div class="projects__path"></div>
                               </div>
-                              <a href="javascript:;" class="icon icon-info projects__info"></a>
+                              <a href="javascript:;" class="icon icon-info projects__info" title="项目设置"></a>
                         </li>`);
 
     $projectList.append($projectHtml);
@@ -653,26 +654,42 @@ function runTask(taskName, context) {
             }, function () {
                 setTimeout(function () {
                     $logStatus.text('Done');
-                    context.text('Zip 打包');
+                    context.text('打包');
                 }, 500);
             });
         });
     }
 
     if (taskName === 'ftp') {
+
+        let projectPath = $curProject.attr('title');
+
+        let projectConfigPath = path.join(projectPath, 'weflow.config.json');
+        let projectConfig = null;
+
+        if (Common.fileExist(projectConfigPath)) {
+            projectConfig = Common.requireUncached(projectConfigPath);
+        } else {
+            projectConfig = Common.requireUncached(Common.CONFIGPATH);
+        }
+
+        let deploy = projectConfig['ftp']['ssh'] ? sftp : ftp;
+
+
         context.text('执行中');
         dist(projectPath, function (data) {
             logReply(data);
         }, function () {
-            ftp(projectPath, function (data) {
+
+            deploy(projectPath, function (data) {
                 logReply(data);
             }, function (data) {
                 if (data) {
-                    alert('请配置 FTP 信息');
+                    alert('请在设置中配置 服务器上传 信息');
                 }
                 setTimeout(function () {
                     $logStatus.text('Done');
-                    context.text('FTP 部署');
+                    context.text('上传');
                 }, 500);
             })
         })
@@ -719,7 +736,7 @@ $settingClose.on('click', function () {
 });
 
 $setting.on('change', 'input', function () {
-
+    
     clearTimeout(changeTimer);
 
     let $this = $(this);
@@ -971,11 +988,13 @@ $cleanLog.on('click', function () {
 });
 
 function stopWatch() {
-    _.forEach(bsObj, function (item) {
-        if (item) {
-            item.exit();
-        }
-    });
+    if(bsObj){
+        _.forEach(bsObj, function (item) {
+            if (item) {
+                item.exit();
+            }
+        });
+    }
 }
 
 
