@@ -8,6 +8,7 @@ class Common {
 }
 
 Common.NAME = 'WeFlow';
+Common.ROOT = path.join(__dirname, '../');
 Common.WORKSPACE = `${Common.NAME}_workspace`;
 Common.CONFIGNAME = 'weflow.config.json';
 Common.CONFIGPATH = path.join(__dirname, '../', Common.CONFIGNAME);

@@ -5,12 +5,15 @@ const ejs = require('gulp-ejs');
 const ejshelper = require('tmt-ejs-helper');
 const async = require('async');
 const gulp = require('gulp');
+const gulpif = require('gulp-if');
 const less = require('gulp-less');
 const lazyImageCSS = require('gulp-lazyimagecss');  // 自动为图片样式添加 宽/高/background-size 属性
 const postcss = require('gulp-postcss');   // CSS 预处理
 const posthtml = require('gulp-posthtml');  // HTML 预处理
 const sass = require('gulp-sass');
+const babel = require('gulp-babel');
 const Common = require(path.join(__dirname, '../common.js'));
+
 
 function dev(projectPath, log, callback) {
 
@@ -33,11 +36,10 @@ function dev(projectPath, log, callback) {
         }
     }
 
-
     let paths = {
         src: {
             dir: path.join(projectPath, './src'),
-            img: path.join(projectPath, './src/img/**/*.{JPG,jpg,png,gif}'),
+            img: path.join(projectPath, './src/img/**/*.{JPG,jpg,png,gif,svg}'),
             slice: path.join(projectPath, './src/slice/**/*.png'),
             js: path.join(projectPath, './src/js/**/*.js'),
             media: path.join(projectPath, './src/media/**/*'),
@@ -51,7 +53,8 @@ function dev(projectPath, log, callback) {
         dev: {
             dir: path.join(projectPath, './dev'),
             css: path.join(projectPath, './dev/css'),
-            html: path.join(projectPath, './dev/html')
+            html: path.join(projectPath, './dev/html'),
+            js: path.join(projectPath, './dev/js')
         }
     };
 
@@ -101,7 +104,7 @@ function dev(projectPath, log, callback) {
     function compileSass(cb) {
         gulp.src(paths.src.sass)
             .pipe(sass())
-            .on('error', function(error){
+            .on('error', function (error) {
                 console.log(error.message);
                 log(error.message);
             })
@@ -134,6 +137,24 @@ function dev(projectPath, log, callback) {
                 if (cb) {
                     console.log('compile Html success.');
                     log('compile Html success.');
+                    cb();
+                } else {
+                    reloadHandler();
+                }
+            })
+    }
+
+    //编译 JS
+    function compileJs(cb) {
+        gulp.src(paths.src.js)
+            .pipe(babel({
+                presets: ['es2015', 'stage-2']
+            }))
+            .pipe(gulp.dest(paths.dev.js))
+            .on('end', function () {
+                if (cb) {
+                    console.log('compile JS success.');
+                    log('compile JS success.');
                     cb();
                 } else {
                     reloadHandler();
@@ -314,7 +335,7 @@ function dev(projectPath, log, callback) {
                     copyHandler('slice', cb);
                 },
                 function (cb) {
-                    copyHandler('js', cb);
+                    compileJs(cb);
                 },
                 function (cb) {
                     copyHandler('media', cb);

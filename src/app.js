@@ -11,7 +11,7 @@ const async = nodeRequire('async');
 const remote = electron.remote;
 const ipc = electron.ipcRenderer;
 const shell = electron.shell;
-const dialog = electron.dialog;
+const dialog = remote.dialog;
 const BrowserWindow = remote.BrowserWindow;
 const dev = nodeRequire(path.join(__dirname, './src/_tasks/dev.js'));
 const dist = nodeRequire(path.join(__dirname, './src/_tasks/dist.js'));
@@ -253,6 +253,11 @@ $openProject.on('change', function () {
     }
 });
 
+$welcome[0].ondragover = $welcome[0].ondragleave = $welcome[0].ondragend = $welcome[0].ondrop = function(e){
+    e.preventDefault();
+    return false;
+};
+
 $projectList[0].ondragover = function () {
     return false;
 };
@@ -455,7 +460,12 @@ function editName($project, $input) {
                     hasText = true;
                     keyboard = false;
                 } else {
-                    alert('请输入项目名');
+                    dialog.showMessageBox({
+                        type: 'info',
+                        title: '提示',
+                        message: "请输入项目名",
+                        buttons: ['确定']
+                    });
 
                     setTimeout(function () {
                         $this.html('');
@@ -474,7 +484,6 @@ function editName($project, $input) {
             clearTimeout(blurTimer);
 
             blurTimer = setTimeout(function () {
-                console.log('blur')
                 text = $.trim($this.text());
 
                 if (text) {
@@ -491,7 +500,12 @@ function editName($project, $input) {
 
                             hasText = true;
                         } else {
-                            alert('请输入项目名');
+                            dialog.showMessageBox({
+                                type: 'info',
+                                title: '提示',
+                                message: "请输入项目名",
+                                buttons: ['确定']
+                            });
                             _this.focus();
                         }
                     }, 100);
@@ -639,6 +653,8 @@ function runTask(taskName, context) {
         }, function () {
             setTimeout(function () {
                 $logStatus.text('Done');
+                logReply('dist 编译完成');
+                console.log('dist 编译完成');
                 context.text('生产编译')
             }, 500);
         });
@@ -654,6 +670,8 @@ function runTask(taskName, context) {
             }, function () {
                 setTimeout(function () {
                     $logStatus.text('Done');
+                    logReply('打包完成');
+                    console.log('打包完成');
                     context.text('打包');
                 }, 500);
             });
@@ -689,6 +707,8 @@ function runTask(taskName, context) {
                 }
                 setTimeout(function () {
                     $logStatus.text('Done');
+                    logReply('上传完成');
+                    console.log('上传完成');
                     context.text('上传');
                 }, 500);
             })
