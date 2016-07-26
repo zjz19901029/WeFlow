@@ -12,7 +12,6 @@ const posthtml = require('gulp-posthtml');  // HTML 预处理
 const sass = require('gulp-sass');
 const Common = require(path.join(__dirname, '../common.js'));
 
-
 function dev(projectPath, log, callback) {
 
     const bs = require('browser-sync').create();  // 自动刷新浏览器
@@ -27,12 +26,6 @@ function dev(projectPath, log, callback) {
     }
 
     let lazyDir = config.lazyDir || ['../slice'];
-
-    if (Common.PLATFORM === 'win32') {
-        for (let i = 0; i < lazyDir.length; i++) {
-            lazyDir[i] = lazyDir[i].replace(/\//g, '\\');
-        }
-    }
 
     let paths = {
         src: {

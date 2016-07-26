@@ -44,12 +44,6 @@ function dist(projectPath, log, callback) {
 
     let lazyDir = config.lazyDir || ['../slice'];
 
-    if (Common.PLATFORM === 'win32') {
-        for (let i = 0; i < lazyDir.length; i++) {
-            lazyDir[i] = lazyDir[i].replace(/\//g, '\\');
-        }
-    }
-
     let postcssOption = [];
 
     if (config.supportREM) {
