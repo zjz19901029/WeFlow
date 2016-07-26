@@ -460,16 +460,13 @@ function editName($project, $input) {
                     hasText = true;
                     keyboard = false;
                 } else {
-                    dialog.showMessageBox({
-                        type: 'info',
-                        title: '提示',
-                        message: "请输入项目名",
-                        buttons: ['确定']
-                    });
+                    alert('请输入项目名')
 
                     setTimeout(function () {
                         $this.html('');
-                        _this.focus();
+                        if(Common.PLATFORM !== 'win32'){
+                            _this.focus();
+                        }
                     }, 10)
                 }
             }
@@ -500,13 +497,10 @@ function editName($project, $input) {
 
                             hasText = true;
                         } else {
-                            dialog.showMessageBox({
-                                type: 'info',
-                                title: '提示',
-                                message: "请输入项目名",
-                                buttons: ['确定']
-                            });
-                            _this.focus();
+                            alert('请输入项目名');
+                            if(Common.PLATFORM !== 'win32'){
+                                _this.focus();
+                            }
                         }
                     }, 100);
                 }
@@ -704,13 +698,18 @@ function runTask(taskName, context) {
             }, function (data) {
                 if (data) {
                     alert('请在设置中配置 服务器上传 信息');
-                }
-                setTimeout(function () {
                     $logStatus.text('Done');
-                    logReply('上传完成');
-                    console.log('上传完成');
+                    logReply('上传中断');
+                    console.log('上传中断');
                     context.text('上传');
-                }, 500);
+                }else{
+                    setTimeout(function () {
+                        $logStatus.text('Done');
+                        logReply('上传完成');
+                        console.log('上传完成');
+                        context.text('上传');
+                    }, 500);
+                }
             })
         })
     }

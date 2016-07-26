@@ -26,7 +26,6 @@ const posthtmlPx2rem = require('posthtml-px2rem');
 const RevAll = require('weflow-rev-all');   // reversion
 const revDel = require('gulp-rev-delete-original');
 const sass = require('gulp-sass');
-const babel = require('gulp-babel');
 const Common = require(path.join(__dirname, '../common'));
 
 let webp = require(path.join(__dirname, './common/webp'));
@@ -55,7 +54,7 @@ function dist(projectPath, log, callback) {
 
     if (config.supportREM) {
         postcssOption = [
-            postcssAutoprefixer({browsers: ['last 5 versions']}),
+            postcssAutoprefixer({browsers: ['last 9 versions']}),
             postcssPxtorem({
                 root_value: '20', // 基准值 html{ font-zise: 20px; }
                 prop_white_list: [], // 对所有 px 值生效
@@ -64,7 +63,7 @@ function dist(projectPath, log, callback) {
         ]
     } else {
         postcssOption = [
-            postcssAutoprefixer({browsers: ['last 5 versions']})
+            postcssAutoprefixer({browsers: ['last 9 versions']})
         ]
     }
 
@@ -220,23 +219,16 @@ function dist(projectPath, log, callback) {
             });
     }
 
-    //编译 JS
-    function compileJs(cb) {
-        gulp.src(paths.src.js)
-            .pipe(babel({
-                presets: ['es2015', 'stage-2']
-            }))
+    //JS 压缩
+    function uglifyJs(cb) {
+        gulp.src(paths.src.js, {base: paths.src.dir})
             .pipe(uglify())
-            .pipe(gulp.dest(paths.tmp.js))
+            .pipe(gulp.dest(paths.tmp.dir))
             .on('end', function () {
-                if (cb) {
-                    console.log('compile JS success.');
-                    log('compile JS success.');
-                    cb();
-                } else {
-                    reloadHandler();
-                }
-            })
+                console.log('uglifyJs success.');
+                log('uglifyJs success.');
+                cb && cb();
+            });
     }
 
     //html 编译
@@ -395,7 +387,7 @@ function dist(projectPath, log, callback) {
                     copyMedia(cb);
                 },
                 function (cb) {
-                    compileJs(cb);
+                    uglifyJs(cb);
                 }
             ], function (error) {
                 if (error) {

@@ -5,13 +5,11 @@ const ejs = require('gulp-ejs');
 const ejshelper = require('tmt-ejs-helper');
 const async = require('async');
 const gulp = require('gulp');
-const gulpif = require('gulp-if');
 const less = require('gulp-less');
 const lazyImageCSS = require('gulp-lazyimagecss');  // 自动为图片样式添加 宽/高/background-size 属性
 const postcss = require('gulp-postcss');   // CSS 预处理
 const posthtml = require('gulp-posthtml');  // HTML 预处理
 const sass = require('gulp-sass');
-const babel = require('gulp-babel');
 const Common = require(path.join(__dirname, '../common.js'));
 
 
@@ -144,25 +142,7 @@ function dev(projectPath, log, callback) {
             })
     }
 
-    //编译 JS
-    function compileJs(cb) {
-        gulp.src(paths.src.js)
-            .pipe(babel({
-                presets: ['es2015', 'stage-2']
-            }))
-            .pipe(gulp.dest(paths.dev.js))
-            .on('end', function () {
-                if (cb) {
-                    console.log('compile JS success.');
-                    log('compile JS success.');
-                    cb();
-                } else {
-                    reloadHandler();
-                }
-            })
-    }
-
-//监听文件
+    //监听文件
     function watch(cb) {
         var watcher = gulp.watch([
                 paths.src.img,
@@ -335,7 +315,7 @@ function dev(projectPath, log, callback) {
                     copyHandler('slice', cb);
                 },
                 function (cb) {
-                    compileJs(cb);
+                    copyHandler('js', cb);
                 },
                 function (cb) {
                     copyHandler('media', cb);
