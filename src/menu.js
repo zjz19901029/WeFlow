@@ -136,6 +136,13 @@ var template = [
                 label: '关闭窗口',
                 accelerator: 'CmdOrCtrl+W',
                 role: 'close'
+            },
+            {
+                label: '调试模式',
+                accelerator: 'Option+CmdOrCtrl+I',
+                click: function () {
+                    remote.getCurrentWindow().webContents.toggleDevTools();
+                }
             }
         ]
     },

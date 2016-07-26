@@ -11,10 +11,10 @@ const gulpif = require('gulp-if');
 const less = require('gulp-less');
 const util = require(path.join(__dirname, './lib/util'));
 const uglify = require('gulp-uglify');
-const usemin = require('gulp-usemin2');
+const usemin = require('gulp-usemin');
 const lazyImageCSS = require('gulp-lazyimagecss');  // 自动为图片样式添加 宽/高/background-size 属性
 const minifyCSS = require('gulp-cssnano');
-const imagemin = require('gulp-imagemin');
+const imagemin = require('weflow-imagemin');
 const tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
 const pngquant = require('imagemin-pngquant');
 const ejshelper = require('tmt-ejs-helper');
@@ -23,7 +23,7 @@ const postcssPxtorem = require('postcss-pxtorem'); // 转换 px 为 rem
 const postcssAutoprefixer = require('autoprefixer');
 const posthtml = require('gulp-posthtml');
 const posthtmlPx2rem = require('posthtml-px2rem');
-const RevAll = require('gulp-rev-all');   // reversion
+const RevAll = require('weflow-rev-all');   // reversion
 const revDel = require('gulp-rev-delete-original');
 const sass = require('gulp-sass');
 const Common = require(path.join(__dirname, '../common'));
@@ -54,7 +54,7 @@ function dist(projectPath, log, callback) {
 
     if (config.supportREM) {
         postcssOption = [
-            postcssAutoprefixer({browsers: ['last 5 versions']}),
+            postcssAutoprefixer({browsers: ['last 9 versions']}),
             postcssPxtorem({
                 root_value: '20', // 基准值 html{ font-zise: 20px; }
                 prop_white_list: [], // 对所有 px 值生效
@@ -63,14 +63,14 @@ function dist(projectPath, log, callback) {
         ]
     } else {
         postcssOption = [
-            postcssAutoprefixer({browsers: ['last 5 versions']})
+            postcssAutoprefixer({browsers: ['last 9 versions']})
         ]
     }
 
     let paths = {
         src: {
             dir: path.join(projectPath, './src'),
-            img: path.join(projectPath, './src/img/**/*.{JPG,jpg,png,gif}'),
+            img: path.join(projectPath, './src/img/**/*.{JPG,jpg,png,gif,svg}'),
             slice: path.join(projectPath, './src/slice/**/*.png'),
             js: path.join(projectPath, './src/js/**/*.js'),
             media: path.join(projectPath, './src/media/**/*'),
@@ -86,6 +86,7 @@ function dist(projectPath, log, callback) {
             cssAll: path.join(projectPath, './tmp/css/style-*.css'),
             img: path.join(projectPath, './tmp/img'),
             html: path.join(projectPath, './tmp/html'),
+            js: path.join(projectPath, './tmp/js'),
             sprite: path.join(projectPath, './tmp/sprite'),
             spriteAll: path.join(projectPath, './tmp/sprite/**/*')
         },
@@ -243,9 +244,8 @@ function dist(projectPath, log, callback) {
                     })
                 ))
             )
-            .pipe(usemin({  //JS 合并压缩
-                jsmin: uglify()
-            }))
+            .pipe(gulp.dest(paths.tmp.html))
+            .pipe(usemin())
             .pipe(gulp.dest(paths.tmp.html))
             .on('end', function () {
                 console.log('compileHtml success.');

@@ -12,6 +12,7 @@ const posthtml = require('gulp-posthtml');  // HTML 预处理
 const sass = require('gulp-sass');
 const Common = require(path.join(__dirname, '../common.js'));
 
+
 function dev(projectPath, log, callback) {
 
     const bs = require('browser-sync').create();  // 自动刷新浏览器
@@ -33,11 +34,10 @@ function dev(projectPath, log, callback) {
         }
     }
 
-
     let paths = {
         src: {
             dir: path.join(projectPath, './src'),
-            img: path.join(projectPath, './src/img/**/*.{JPG,jpg,png,gif}'),
+            img: path.join(projectPath, './src/img/**/*.{JPG,jpg,png,gif,svg}'),
             slice: path.join(projectPath, './src/slice/**/*.png'),
             js: path.join(projectPath, './src/js/**/*.js'),
             media: path.join(projectPath, './src/media/**/*'),
@@ -51,7 +51,8 @@ function dev(projectPath, log, callback) {
         dev: {
             dir: path.join(projectPath, './dev'),
             css: path.join(projectPath, './dev/css'),
-            html: path.join(projectPath, './dev/html')
+            html: path.join(projectPath, './dev/html'),
+            js: path.join(projectPath, './dev/js')
         }
     };
 
@@ -101,7 +102,7 @@ function dev(projectPath, log, callback) {
     function compileSass(cb) {
         gulp.src(paths.src.sass)
             .pipe(sass())
-            .on('error', function(error){
+            .on('error', function (error) {
                 console.log(error.message);
                 log(error.message);
             })
@@ -141,7 +142,7 @@ function dev(projectPath, log, callback) {
             })
     }
 
-//监听文件
+    //监听文件
     function watch(cb) {
         var watcher = gulp.watch([
                 paths.src.img,
