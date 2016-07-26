@@ -14,6 +14,6 @@ addons:
     - g++-4.8
 before_script:
   - npm install
-  - npm run build:linux
+  - npm run build:linux64
   - zip -rq dist.zip dist
 script: node build/upload.js
