@@ -4,6 +4,8 @@ const path = nodeRequire('path');
 const fs = nodeRequire('fs');
 const del = nodeRequire('del');
 const gulp = nodeRequire('gulp');
+const ejs = nodeRequire('gulp-ejs');
+const rename = nodeRequire('gulp-rename');
 const extract = nodeRequire('extract-zip');
 const electron = nodeRequire('electron');
 const _ = nodeRequire('lodash');
@@ -13,6 +15,7 @@ const ipc = electron.ipcRenderer;
 const shell = electron.shell;
 const dialog = remote.dialog;
 const BrowserWindow = remote.BrowserWindow;
+const initdir = nodeRequire(path.join(__dirname, './src/_tasks/init.js'));
 const dev = nodeRequire(path.join(__dirname, './src/_tasks/dev.js'));
 const dist = nodeRequire(path.join(__dirname, './src/_tasks/dist.js'));
 const zip = nodeRequire(path.join(__dirname, './src/_tasks/zip.js'));
@@ -535,8 +538,8 @@ function setProjectInfo($project, $input, text) {
 }
 
 function newProject(projectPath, callback) {
-    let workspace = path.dirname(projectPath);
-
+    let workspace = path.dirname(projectPath)
+    let projectname = path.basename(projectPath)
     //先判断一下工作区是否存在
     if (!Common.dirExist(workspace)) {
         try {
@@ -557,12 +560,28 @@ function newProject(projectPath, callback) {
         }
     }
 
-    extract(Common.TEMPLAGE_PROJECT, {dir: projectPath}, function (err) {
+    extract(Common.TEMPLAGE_PROJECT, {dir: projectPath}, function (err) {//解压缩模板文件
         if (err) {
             throw new Error(err);
         }
-
-        callback(projectPath);
+        try {//创建项目专属的img目录
+            fs.mkdirSync(path.join(projectPath,'src/img',projectname));
+        } catch (err) {
+            throw new Error(err);
+        }
+        initdir(projectPath,function (data) {
+                logReply(data);
+            },callback);
+        /*try {//创建项目专属的css文件
+            fs.rename(path.join(projectPath,'src/css/index.scss'),path.join(projectPath,'src/css',projectname+'.scss'));
+        } catch (err) {
+            throw new Error(err);
+        }
+        try {//创建项目专属的js文件
+            fs.rename(path.join(projectPath,'src/js/index.js'),path.join(projectPath,'src/js',projectname+'.js'));
+        } catch (err) {
+            throw new Error(err);
+        }*/
     });
 }
 

@@ -17,6 +17,7 @@ function dev(projectPath, log, callback) {
     const bs = require('browser-sync').create();  // 自动刷新浏览器
 
     let projectConfigPath = path.join(projectPath, 'weflow.config.json');
+    let projectName = path.basename(projectPath);
     let config = null;
 
     if (Common.fileExist(projectConfigPath)) {
@@ -44,7 +45,7 @@ function dev(projectPath, log, callback) {
         dev: {
             dir: path.join(projectPath, './dev'),
             css: path.join(projectPath, './dev/css'),
-            html: path.join(projectPath, './dev/html'),
+            html: path.join(projectPath, './dev/activities'),
             js: path.join(projectPath, './dev/js')
         }
     };
@@ -257,7 +258,7 @@ function dev(projectPath, log, callback) {
                 baseDir: paths.dev.dir,
                 directory: true
             },
-            startPath: "/html",
+            startPath: "/activities/"+projectName+'.html',
             port: 8080,
             reloadDelay: 0,
             timestamps: true,
