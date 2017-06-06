@@ -71,6 +71,11 @@ Common.getStorage = function () {
 
 Common.setStorage = function (storage) {
     localStorage.setItem(Common.NAME, JSON.stringify(storage));
+    fs.writeFile(path.join(storage.workspace,Common.NAME+'.json'), JSON.stringify(storage), function(err){
+        if(err){
+            alert(err)
+        }
+    })
 };
 
 Common.resetStorage = function () {
@@ -78,6 +83,11 @@ Common.resetStorage = function () {
 
     if (storage) {
         storage.removeItem(Common.NAME);
+        fs.writeFile(path.join(storage.workspace,Common.NAME+'.json'), '', function(err){
+            if(err){
+                alert(err)
+            }
+        })
     }
 };
 

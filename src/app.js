@@ -73,20 +73,35 @@ function init() {
         storage.name = Common.NAME;
 
         let workspace = path.join(remote.app.getPath(Common.DEFAULT_PATH), Common.WORKSPACE);
-
-        fs.mkdir(workspace, function (err) {
-
-            if (err) {
-                throw new Error(err);
+        if (Common.dirExist(workspace)) {//判断工作区目录已存在，直接获取已存在的记录json
+            var jsonFile = path.join(workspace,Common.NAME+'.json');
+            if(Common.fileExist(jsonFile)){//如果json文件存在
+                let json = fs.readFileSync(path.join(workspace,Common.NAME+'.json'),"utf-8");  
+                let storage = JSON.parse(json);
+                $formWorkspace.val(storage.workspace);
+                Common.setStorage(storage);
+                
+            }else{
+                $formWorkspace.val(workspace);
+                storage.workspace = workspace;
+                Common.setStorage(storage);
             }
-
-            $formWorkspace.val(workspace);
-
-            storage.workspace = workspace;
-            Common.setStorage(storage);
-
             console.log('Create workspace success.');
-        });
+        } else {
+            fs.mkdir(workspace, function (err) {
+
+                if (err) {
+                    throw new Error(err);
+                }
+
+                $formWorkspace.val(workspace);
+
+                storage.workspace = workspace;
+                Common.setStorage(storage);
+
+                console.log('Create workspace success.');
+            });
+        }
     } else {
         checkLocalProjects();
         initData();
@@ -167,19 +182,24 @@ function initData() {
 
         if (!_.isEmpty(storage['projects'])) {
             let html = '';
-
+            let tempProjects = [];
             for (let i in storage['projects']) {
-
-                html += `<li class="projects__list-item" data-project="${i}" title="${storage['projects'][i]['path']}">
+                storage['projects'][i].name = i;
+                tempProjects.push(storage['projects'][i]);
+            }
+            tempProjects.sort(function(a,b){
+                return b.creattime-a.creattime
+            })
+            for(let i=0;i<tempProjects.length;i++){
+                html += `<li class="projects__list-item" data-project="${tempProjects[i]['name']}" title="${tempProjects[i]['path']}">
                               <span class="icon icon-finder" data-finder="true" title="${FinderTitle}"></span>
                               <div class="projects__list-content">
-                                  <span class="projects__name">${i}</span>
-                                  <div class="projects__path">${storage['projects'][i]['path']}</div>
+                                  <span class="projects__name">${tempProjects[i]['name']}</span>
+                                  <div class="projects__path">${tempProjects[i]['path']}</div>
                               </div>
                               <a href="javascript:;" class="icon icon-info projects__info"></a>
                         </li>`;
             }
-
             $projectList.html(html);
 
             //当前活动项目
@@ -219,7 +239,7 @@ $example.on('click', function () {
                               <a href="javascript:;" class="icon icon-info projects__info"></a>
                         </li>`);
 
-                $projectList.append($projectHtml);
+                $projectList.prepend($projectHtml);
 
                 $projectList.scrollTop($projectList.get(0).scrollHeight);
 
@@ -320,7 +340,7 @@ function insertOpenProject(projectPath) {
                               <a href="javascript:;" class="icon icon-info projects__info" title="项目设置"></a>
                         </li>`);
 
-    $projectList.append($projectHtml);
+    $projectList.prepend($projectHtml);
 
     $projectList.scrollTop($projectList.get(0).scrollHeight);
 
@@ -431,7 +451,7 @@ function newProjectFn() {
                               <a href="javascript:;" class="icon icon-info projects__info" title="项目设置"></a>
                         </li>`);
 
-    $projectList.append($projectHtml);
+    $projectList.prepend($projectHtml);
 
     $projectList.scrollTop($projectList.get(0).scrollHeight);
 
@@ -524,14 +544,15 @@ function setProjectInfo($project, $input, text) {
             $curProject = $project.remove();
 
             newProject(projectPath, function (projectPath) {
-                console.log('dd')
                 newProjectReply(projectPath);
             });
 
         } else {
-            alert(text + ' 项目已存在');
-            $input.text('');
-            editName($project, $input);
+            var res = confirm(text + ' 项目已存在');
+            if(res||!res){
+                $input.text('');
+                editName($project, $input);
+            }
         }
     }
 
@@ -599,13 +620,14 @@ function newProjectReply(projectPath) {
         } else {
             storage['projects'][projectName] = {};
             storage['projects'][projectName]['path'] = projectPath;
+            storage['projects'][projectName]['creattime'] = new Date().getTime();
             Common.setStorage(storage);
 
             $curProject.data('project', projectName);
             $curProject.attr('title', projectPath);
             $curProject.find('.projects__path').text(projectPath);
 
-            $projectList.append($curProject);
+            $projectList.prepend($curProject);
         }
 
         $projectList.scrollTop($projectList.get(0).scrollHeight);

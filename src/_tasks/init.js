@@ -29,7 +29,7 @@ function init(projectPath, log, callback){
 
 	function cssRename(next){
 		try {//创建项目专属的css文件
-            fs.rename(path.join(projectPath,'src/css/index.scss'),path.join(projectPath,'src/css',projectName+'.scss'));
+            fs.rename(path.join(projectPath,'src/css/index.less'),path.join(projectPath,'src/css',projectName+'.less'));
         } catch (err) {
             throw new Error(err);
         }

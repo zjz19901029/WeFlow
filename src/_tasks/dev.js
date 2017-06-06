@@ -1,15 +1,19 @@
 "use strict";
 const path = require('path');
+const gulpwatch = require('gulp-watch');
 const del = require('del');
 const ejs = require('gulp-ejs');
 const ejshelper = require('tmt-ejs-helper');
 const async = require('async');
 const gulp = require('gulp');
 const less = require('gulp-less');
-const lazyImageCSS = require('gulp-lazyimagecss');  // 自动为图片样式添加 宽/高/background-size 属性
+const autoprefixer = require("autoprefixer");
 const postcss = require('gulp-postcss');   // CSS 预处理
 const posthtml = require('gulp-posthtml');  // HTML 预处理
-const sass = require('gulp-sass');
+const webpack = require("webpack");
+const fs= require("fs");
+let webpackConfig = require('./webpack.js');
+//const sass = require('gulp-sass');
 const Common = require(path.join(__dirname, '../common.js'));
 
 function dev(projectPath, log, callback) {
@@ -26,21 +30,17 @@ function dev(projectPath, log, callback) {
         config = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
     }
 
-    let lazyDir = config.lazyDir || ['../slice'];
-
     let paths = {
         src: {
             dir: path.join(projectPath, './src'),
-            img: path.join(projectPath, './src/img/**/*.{JPG,jpg,png,gif,svg}'),
+            img: path.join(projectPath, './src/img/**/*'),
             slice: path.join(projectPath, './src/slice/**/*.png'),
-            js: path.join(projectPath, './src/js/**/*.js'),
+            js: path.join(projectPath, './src/js/*.js'),
             media: path.join(projectPath, './src/media/**/*'),
-            less: [path.join(projectPath, './src/css/style-*.less'), path.join(projectPath, './src/css/**/*.css')],
+            less: path.join(projectPath, './src/css/'+projectName+'.less'),
             lessAll: path.join(projectPath, './src/css/**/*.less'),
-            sass: path.join(projectPath, './src/css/style-*.scss'),
-            sassAll: path.join(projectPath, './src/css/**/*.scss'),
-            html: [path.join(projectPath, './src/html/**/*.html'), path.join(projectPath, '!./src/html/_*/**/**.html')],
-            htmlAll: path.join(projectPath, './src/html/**/*.html')
+            html: [path.join(projectPath, './src/activities/*.html'), path.join(projectPath, '!./src/activities/_*/**.html')],
+            htmlAll: path.join(projectPath, './src/activities/**/*.html')
         },
         dev: {
             dir: path.join(projectPath, './dev'),
@@ -73,11 +73,7 @@ function dev(projectPath, log, callback) {
 
     function compileLess(cb) {
         gulp.src(paths.src.less)
-            .pipe(less({relativeUrls: true}))
-            .on('error', function (error) {
-                console.log(error.message);
-            })
-            .pipe(lazyImageCSS({imagePath: lazyDir}))
+            .pipe(less())
             .pipe(gulp.dest(paths.dev.css))
             .on('data', function () {
             })
@@ -85,29 +81,6 @@ function dev(projectPath, log, callback) {
                 if (cb) {
                     console.log('compile Less success.');
                     log('compile Less success.');
-                    cb();
-                } else {
-                    reloadHandler();
-                }
-            })
-    }
-
-    //编译 sass
-    function compileSass(cb) {
-        gulp.src(paths.src.sass)
-            .pipe(sass())
-            .on('error', function (error) {
-                console.log(error.message);
-                log(error.message);
-            })
-            .pipe(lazyImageCSS({imagePath: lazyDir}))
-            .pipe(gulp.dest(paths.dev.css))
-            .on('data', function () {
-            })
-            .on('end', function () {
-                if (cb) {
-                    console.log('compile Sass success.');
-                    log('compile Sass success.');
                     cb();
                 } else {
                     reloadHandler();
@@ -136,18 +109,35 @@ function dev(projectPath, log, callback) {
             })
     }
 
+    //编译 js
+    function compileJs(cb) {
+        var myConfig = Object.create(webpackConfig);
+        myConfig.entry = path.join(projectPath, './src/js/'+projectName+'.js')
+        myConfig.output.path = path.join(projectPath, './dev/js/')
+        myConfig.output.filename  = projectName+'.js';
+        webpack(myConfig, function(err, stats) {
+            if(err) log(err);
+            if (cb) {
+                console.log('compile js success.');
+                log('compile js success.');
+                cb();
+            } else {
+                reloadHandler();
+            }
+        });
+    }
+
     //监听文件
-    function watch(cb) {
-        var watcher = gulp.watch([
+    function watch(cb) {   
+        let watcher = gulpwatch([
                 paths.src.img,
                 paths.src.slice,
                 paths.src.js,
                 paths.src.media,
                 paths.src.lessAll,
-                paths.src.sassAll,
+                //paths.src.sassAll,
                 paths.src.htmlAll
-            ],
-            {ignored: /[\/\\]\./}
+            ]
         );
 
         watcher
@@ -207,7 +197,7 @@ function dev(projectPath, log, callback) {
                     var tmp = file.replace(/src/, 'dev');
                     del([tmp], {force: true});
                 } else {
-                    copyHandler('js', file);
+                    compileJs();
                 }
                 break;
 
@@ -231,12 +221,12 @@ function dev(projectPath, log, callback) {
                     if (ext === '.less') {
                         compileLess();
                     } else {
-                        compileSass();
+                        //compileSass();
                     }
                 }
 
                 break;
-
+            case 'activities':
             case 'html':
                 if (type === 'removed') {
                     let tmp = file.replace(/src/, 'dev');
@@ -305,11 +295,11 @@ function dev(projectPath, log, callback) {
                 function (cb) {
                     copyHandler('img', cb);
                 },
-                function (cb) {
+                /*function (cb) {
                     copyHandler('slice', cb);
-                },
+                },*/
                 function (cb) {
-                    copyHandler('js', cb);
+                    compileJs(cb);
                 },
                 function (cb) {
                     copyHandler('media', cb);
@@ -317,9 +307,9 @@ function dev(projectPath, log, callback) {
                 function (cb) {
                     compileLess(cb);
                 },
-                function (cb) {
+                /*function (cb) {
                     compileSass(cb);
-                },
+                },*/
                 function (cb) {
                     compileHtml(cb);
                 }

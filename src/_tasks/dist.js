@@ -14,18 +14,20 @@ const uglify = require('gulp-uglify');
 const usemin = require('gulp-usemin');
 const lazyImageCSS = require('gulp-lazyimagecss');  // 自动为图片样式添加 宽/高/background-size 属性
 const minifyCSS = require('gulp-cssnano');
-const imagemin = require('weflow-imagemin');
-const tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
+const imagemin = require('gulp-imagemin');
+//const tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
 const pngquant = require('imagemin-pngquant');
 const ejshelper = require('tmt-ejs-helper');
 const postcss = require('gulp-postcss');  // CSS 预处理
 const postcssPxtorem = require('postcss-pxtorem'); // 转换 px 为 rem
-const postcssAutoprefixer = require('autoprefixer');
+const autoprefixer = require('autoprefixer');
 const posthtml = require('gulp-posthtml');
 const posthtmlPx2rem = require('posthtml-px2rem');
 const RevAll = require('weflow-rev-all');   // reversion
 const revDel = require('gulp-rev-delete-original');
-const sass = require('gulp-sass');
+const webpack = require("webpack");
+let webpackConfig = require('./webpack.js');
+//const sass = require('gulp-sass');
 const Common = require(path.join(__dirname, '../common'));
 
 let webp = require(path.join(__dirname, './common/webp'));
@@ -34,6 +36,7 @@ let changed = require(path.join(__dirname, './common/changed'))();
 function dist(projectPath, log, callback) {
 
     let projectConfigPath = path.join(projectPath, 'weflow.config.json');
+    let projectName = path.basename(projectPath);
     let config = null;
 
     if (Common.fileExist(projectConfigPath)) {
@@ -44,13 +47,13 @@ function dist(projectPath, log, callback) {
 
     let lazyDir = config.lazyDir || ['../slice'];
 
-    let postcssOption = [];
+  /*  let postcssOption = [];
 
     if (config.supportREM) {
         postcssOption = [
             postcssAutoprefixer({browsers: ['last 9 versions']}),
             postcssPxtorem({
-                root_value: '20', // 基准值 html{ font-zise: 20px; }
+                root_value: '75', // 基准值 html{ font-zise: 20px; }
                 prop_white_list: [], // 对所有 px 值生效
                 minPixelValue: 2 // 忽略 1px 值
             })
@@ -59,36 +62,24 @@ function dist(projectPath, log, callback) {
         postcssOption = [
             postcssAutoprefixer({browsers: ['last 9 versions']})
         ]
-    }
+    }*/
 
     let paths = {
         src: {
             dir: path.join(projectPath, './src'),
             img: path.join(projectPath, './src/img/**/*.{JPG,jpg,png,gif,svg}'),
-            slice: path.join(projectPath, './src/slice/**/*.png'),
-            js: path.join(projectPath, './src/js/**/*.js'),
+            js: path.join(projectPath, './src/js/*.js'),
             media: path.join(projectPath, './src/media/**/*'),
-            less: path.join(projectPath, './src/css/style-*.less'),
-            sass: path.join(projectPath, './src/css/style-*.scss'),
-            html: [path.join(projectPath, './src/html/**/*.html'), path.join(projectPath, '!./src/html/_*/**.html')],
-            htmlAll: path.join(projectPath, './src/html/**/*')
-        },
-        tmp: {
-            dir: path.join(projectPath, './tmp'),
-            dirAll: path.join(projectPath, './tmp/**/*'),
-            css: path.join(projectPath, './tmp/css'),
-            cssAll: path.join(projectPath, './tmp/css/style-*.css'),
-            img: path.join(projectPath, './tmp/img'),
-            html: path.join(projectPath, './tmp/html'),
-            js: path.join(projectPath, './tmp/js'),
-            sprite: path.join(projectPath, './tmp/sprite'),
-            spriteAll: path.join(projectPath, './tmp/sprite/**/*')
+            less: path.join(projectPath, './src/css/'+projectName+'.less'),
+            //sass: path.join(projectPath, './src/css/style-*.scss'),
+            html: path.join(projectPath, './src/activities/*.html'),
+            htmlAll: path.join(projectPath, './src/activities/**/*')
         },
         dist: {
             dir: path.join(projectPath, './dist'),
             css: path.join(projectPath, './dist/css'),
             img: path.join(projectPath, './dist/img'),
-            html: path.join(projectPath, './dist/html'),
+            html: path.join(projectPath, './dist/activities'),
             sprite: path.join(projectPath, './dist/sprite')
         }
     };
@@ -107,25 +98,34 @@ function dist(projectPath, log, callback) {
     //编译 less
     function compileLess(cb) {
         gulp.src(paths.src.less)
-            .pipe(less({relativeUrls: true}))
+            .pipe(less())
             .on('error', function (error) {
-                console.log(error.message);
                 log(error.message);
+                console.log(error.message);
             })
-            .pipe(lazyImageCSS({imagePath: lazyDir}))
-            .pipe(tmtsprite({margin: 4}))
-            .pipe(gulpif(condition, gulp.dest(paths.tmp.sprite), gulp.dest(paths.tmp.css)))
-            .on('data', function () {
-            })
+            /*.pipe(autoprefixer({
+                browsers: ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android >= 4.0'],
+                cascade: true, //是否美化属性值 默认：true
+                remove: true //是否去掉不必要的前缀 默认：true
+            }))
+            .on('error', function (error) {
+                log(error.message);
+                console.log(error.message);
+            })*/
+            .pipe(gulp.dest(paths.dist.css))
             .on('end', function () {
-                console.log('compileLess success.');
-                log('compileLess success.');
-                cb && cb();
+                if (cb) {
+                    console.log('compile Less success.');
+                    log('compile Less success.');
+                    cb();
+                } else {
+                    reloadHandler();
+                }
             })
     }
 
     //编译 sass
-    function compileSass(cb) {
+    /*function compileSass(cb) {
         gulp.src(paths.src.sass)
             .pipe(sass())
             .on('error', function (error) {
@@ -142,62 +142,54 @@ function dist(projectPath, log, callback) {
                 log('compileSass success.');
                 cb && cb();
             })
-    }
+    }*/
 
-    //自动补全
-    function compileAutoprefixer(cb) {
-        gulp.src(paths.tmp.cssAll)
-            .pipe(postcss(postcssOption))
-            .pipe(gulp.dest(paths.tmp.css))
-            .on('end', function () {
-                console.log('compileAutoprefixer success.');
-                log('compileAutoprefixer success.');
-                cb && cb();
-            });
-    }
-
-    //CSS 压缩
-    function miniCSS(cb) {
-        gulp.src(paths.tmp.cssAll)
-            .pipe(minifyCSS({
-                safe: true,
-                reduceTransforms: false,
-                advanced: false,
-                compatibility: 'ie7',
-                keepSpecialComments: 0
-            }))
-            .pipe(gulp.dest(paths.tmp.css))
-            .on('end', function () {
-                console.log('miniCSS success.');
-                log('miniCSS success.');
-                cb && cb();
-            });
+    //编译 js
+    function compileJs(cb) {
+        var myConfig = Object.create(webpackConfig);
+        myConfig.entry = path.join(projectPath, './src/js/'+projectName+'.js')
+        myConfig.output.path = path.join(projectPath, './dist/js/')
+        myConfig.output.filename  = projectName+'.js';
+        myConfig.plugins = [
+            new webpack.DefinePlugin({
+                "process.env": {
+                    // This has effect on the react lib size
+                    "NODE_ENV": JSON.stringify("production")
+                }
+            }),
+            new webpack.optimize.UglifyJsPlugin({
+                compress: {
+                    warnings: false
+                },
+                sourceMap: true,//这里的soucemap 不能少，可以在线上生成soucemap文件，便于调试
+                mangle: true
+            })
+        ];
+        webpack(myConfig, function(err, stats) {
+            if(err) log(err);
+            if (cb) {
+                console.log('compile js success.');
+                log('compile js success.');
+                cb();
+            } else {
+                reloadHandler();
+            }
+        });
     }
 
     //图片压缩
     function imageminImg(cb) {
         gulp.src(paths.src.img)
-            .pipe(imagemin({
-                use: [pngquant()]
-            }))
-            .pipe(gulp.dest(paths.tmp.img))
+            .pipe(imagemin())
+            .on('error', function (error) {
+                log(111)
+                log(error.message);
+                console.log(error.message);
+            })
+            .pipe(gulp.dest(paths.dist.img))
             .on('end', function () {
                 console.log('imageminImg success.');
                 log('imageminImg success.');
-                cb && cb();
-            });
-    }
-
-    //雪碧图压缩
-    function imageminSprite(cb) {
-        gulp.src(paths.tmp.spriteAll)
-            .pipe(imagemin({
-                use: [pngquant()]
-            }))
-            .pipe(gulp.dest(paths.tmp.sprite))
-            .on('end', function () {
-                console.log('imageminSprite success.');
-                log('imageminSprite success.');
                 cb && cb();
             });
     }
@@ -213,17 +205,6 @@ function dist(projectPath, log, callback) {
             });
     }
 
-    //JS 压缩
-    function uglifyJs(cb) {
-        gulp.src(paths.src.js, {base: paths.src.dir})
-            .pipe(uglify())
-            .pipe(gulp.dest(paths.tmp.dir))
-            .on('end', function () {
-                console.log('uglifyJs success.');
-                log('uglifyJs success.');
-                cb && cb();
-            });
-    }
 
     //html 编译
     function compileHtml(cb) {
@@ -233,14 +214,12 @@ function dist(projectPath, log, callback) {
                 config.supportREM,
                 posthtml(
                     posthtmlPx2rem({
-                        rootValue: 20,
+                        rootValue: 75,
                         minPixelValue: 2
                     })
                 ))
             )
-            .pipe(gulp.dest(paths.tmp.html))
-            .pipe(usemin())
-            .pipe(gulp.dest(paths.tmp.html))
+            .pipe(gulp.dest(paths.dist.html))
             .on('end', function () {
                 console.log('compileHtml success.');
                 log('compileHtml success.');
@@ -249,7 +228,7 @@ function dist(projectPath, log, callback) {
     }
 
     //新文件名(md5)
-    function reversion(cb) {
+    /*function reversion(cb) {
         var revAll = new RevAll({
             fileNameManifest: 'manifest.json',
             dontRenameFile: ['.html', '.php']
@@ -272,7 +251,7 @@ function dist(projectPath, log, callback) {
         } else {
             cb && cb();
         }
-    }
+    }*/
 
     //webp 编译
     function supportWebp(cb) {
@@ -354,55 +333,45 @@ function dist(projectPath, log, callback) {
          * 先删除目标目录,保证最新
          * @param next
          */
-            function (next) {
+        function (next) {
             delDist(next);
         },
         function (next) {
             compileLess(next);
         },
-        function (next) {
+        /*function (next) {
             compileSass(next);
-        },
-        function (next) {
-            compileAutoprefixer(next);
-        },
-        function (next) {
-            miniCSS(next);
-        },
+        },*/
         function (next) {
             async.parallel([
                 function (cb) {
                     imageminImg(cb);
                 },
                 function (cb) {
-                    imageminSprite(cb);
-                },
-                function (cb) {
                     copyMedia(cb);
-                },
-                function (cb) {
-                    uglifyJs(cb);
                 }
             ], function (error) {
                 if (error) {
                     throw new Error(error);
                 }
-
                 next();
             })
         },
         function (next) {
+            compileJs(next);
+        },
+        function (next) {
             compileHtml(next);
         },
-        function (next) {
+        /*function (next) {
             reversion(next);
-        },
+        },*/
         function (next) {
             supportWebp(next);
-        },
+        }/*,
         function (next) {
             findChanged(next);
-        }
+        }*/
     ], function (error) {
         if (error) {
             throw new Error(error);

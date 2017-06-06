@@ -1,0 +1,29 @@
+a:hover{text-decoration: none !important;}
+img{display: block;width:100%;}
+.hide{display:none;}
+span.gt{
+    width: 0.24rem;
+    height: 0.24rem;
+    display: inline-block;
+    border: 1px #fff solid;
+    border-color: #fff #fff transparent transparent;
+    transform: rotate(45deg);
+    [data-dpr="2"] & {
+        border-width: 2px;
+    }
+    [data-dpr="3"] & {
+        border-width: 3px;
+    }
+}
+html{height:100%;}
+body{
+    -webkit-overflow-scrolling: touch;
+    user-select: none;
+    height: 100%;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    max-width: 10rem;
+    margin: 0 auto;
+    background-color: #ff7817;
+}
