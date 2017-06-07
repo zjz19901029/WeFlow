@@ -1,12 +1,12 @@
 {
     "ftp": {
-        "host": "",
+        "host": "10.100.112.196",
         "port": "",
-        "user": "",
-        "pass": "",
-        "remotePath": "",
+        "user": "root",
+        "pass": "@bBBEb0EAdc@dEd777",
+        "remotePath": "/usr/local/marketing-activities",
         "includeHtml": true,
-        "ssh": false
+        "ssh": true
     },
     "livereload": true,
     "lazyDir": [

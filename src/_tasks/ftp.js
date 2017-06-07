@@ -6,25 +6,30 @@ const gulp = require('gulp');
 const _ = require('lodash');
 const del = require('del');
 const ftp = require('gulp-ftp');
+const sftp = require('gulp-sftp');
 const util = require('./lib/util');
 const Common = require(path.join(__dirname, '../common'));
 
 module.exports = function (projectPath, log, callback) {
 
     let projectConfigPath = path.join(projectPath, 'weflow.config.json');
-    let config = null;
+    let config = null,config_all = null;
 
     if (Common.fileExist(projectConfigPath)) {
         config = Common.requireUncached(projectConfigPath);
+        config_all = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
     } else {
-        config = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
+        config = config_all = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
     }
 
     let configFTP = config.ftp;
 
-    if (configFTP.host === '' || configFTP.port === '' || configFTP.user === '') {
-        callback('ftp config');
-        return;
+    if (configFTP.host === '' || configFTP.pass === '' || configFTP.user === '' || configFTP.remotePath === '') {
+        configFTP = config_all.ftp;
+        if (configFTP.host === '' || configFTP.pass === '' || configFTP.user === '' || configFTP.remotePath === '') {
+            callback('ftp config');
+            return;
+        }
     }
 
     let projectName = path.basename(projectPath);
@@ -37,20 +42,15 @@ module.exports = function (projectPath, log, callback) {
     }
 
     function remoteFtp(cb) {
-        let remotePath = config['ftp']['remotePath'] || "";
-        let ftpConfig = _.extend(config['ftp'], {
-            remotePath: path.join(remotePath, projectName)
-        });
-        let distPath = config['ftp']['includeHtml'] ? path.join(projectPath, './dist/**/*') : [path.join(projectPath, './dist/**/*'), path.join(projectPath, '!./dist/html/**/*.html')];
-
-
-        gulp.src(distPath, {base: '.'})
-            .pipe(ftp(ftpConfig))
-            .on('end', function () {
-                console.log('ftp success.');
-                log('ftp success.');
-                cb && cb();
-            });
+        let distPath = configFTP['includeHtml'] ? path.join(projectPath, './dev/**/*') : [path.join(projectPath, './dev/**/*'), path.join(projectPath, '!./dev/{html,activities}/**/*.html')];
+        let deploy = configFTP.ssh?sftp:ftp;
+        configFTP.callback = function(){
+            console.log('ftp success.');
+            log('ftp success.');
+            cb && cb();
+        }
+        gulp.src(distPath)
+            .pipe(deploy(configFTP));
     }
 
     async.series([
@@ -62,7 +62,7 @@ module.exports = function (projectPath, log, callback) {
             throw new Error(err);
         }
 
-        delDist();
+        //delDist();
 
         callback && callback();
     });

@@ -12,19 +12,23 @@ const Common = require(path.join(__dirname, '../common'));
 module.exports = function (projectPath, log, callback) {
 
     let projectConfigPath = path.join(projectPath, 'weflow.config.json');
-    let config = null;
+    let config = null,config_all = null;
 
     if (Common.fileExist(projectConfigPath)) {
         config = Common.requireUncached(projectConfigPath);
+        config_all = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
     } else {
-        config = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
+        config = config_all = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
     }
 
     let configSFTP = config.ftp;
 
-    if (configSFTP.host === '' || configSFTP.port === '' || configSFTP.user === '') {
-        callback('sftp config');
-        return;
+    if (configSFTP.host === '' || configSFTP.pass === '' || configSFTP.user === '' || configSFTP.remotePath === '') {
+        configSFTP = config_all.ftp;
+        if (configSFTP.host === '' || configSFTP.pass === '' || configSFTP.user === '' || configSFTP.remotePath === '') {
+            callback('ftp config');
+            return;
+        }
     }
 
     let projectName = path.basename(projectPath);
@@ -38,14 +42,11 @@ module.exports = function (projectPath, log, callback) {
 
     function remoteSftp(cb) {
         let remotePath = config['sftp']['remotePath'] || "";
-        let sftpConfig = _.extend(config['sftp'], {
-            remotePath: path.join(remotePath, projectName)
-        });
-        let distPath = config['sftp']['includeHtml'] ? path.join(projectPath, './dist/**/*') : [path.join(projectPath, './dist/**/*'), path.join(projectPath, '!./dist/html/**/*.html')];
+        let distPath = config['sftp']['includeHtml'] ? path.join(projectPath, './dev/**/*') : [path.join(projectPath, './dev/**/*'), path.join(projectPath, '!./dev/{html,activities}/**/*.html')];
 
 
-        gulp.src(distPath, {base: '.'})
-            .pipe(sftp(sftpConfig))
+        gulp.src(distPath, {base: './dev'})
+            .pipe(sftp(configSFTP))
             .on('end', function () {
                 console.log('sftp success.');
                 log('sftp success.');
@@ -62,7 +63,7 @@ module.exports = function (projectPath, log, callback) {
             throw new Error(err);
         }
 
-        delDist();
+        //delDist();
 
         callback && callback();
     });

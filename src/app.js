@@ -20,7 +20,6 @@ const dev = nodeRequire(path.join(__dirname, './src/_tasks/dev.js'));
 const dist = nodeRequire(path.join(__dirname, './src/_tasks/dist.js'));
 const zip = nodeRequire(path.join(__dirname, './src/_tasks/zip.js'));
 const ftp = nodeRequire(path.join(__dirname, './src/_tasks/ftp.js'));
-const sftp = nodeRequire(path.join(__dirname, './src/_tasks/sftp.js'));
 const Common = nodeRequire(path.join(__dirname, './src/common'));
 const packageJson = nodeRequire(path.join(__dirname, './package.json'));
 
@@ -191,7 +190,7 @@ function initData() {
                 return b.creattime-a.creattime
             })
             for(let i=0;i<tempProjects.length;i++){
-                html += `<li class="projects__list-item" data-project="${tempProjects[i]['name']}" title="${tempProjects[i]['path']}">
+                html += `<li class="projects__list-item" data-project="${tempProjects[i]['name']}" data-path="${tempProjects[i]['path']}" title="${tempProjects[i]['path']}">
                               <span class="icon icon-finder" data-finder="true" title="${FinderTitle}"></span>
                               <div class="projects__list-content">
                                   <span class="projects__name">${tempProjects[i]['name']}</span>
@@ -230,7 +229,7 @@ $example.on('click', function () {
                     throw new Error(err);
                 }
 
-                let $projectHtml = $(`<li class="projects__list-item" data-project="${Common.EXAMPLE_NAME}" title="${projectPath}">
+                let $projectHtml = $(`<li class="projects__list-item" data-project="${Common.EXAMPLE_NAME}" data-path="${projectPath}" title="${projectPath}">
                               <span class="icon icon-finder" data-finder="true" title="${FinderTitle}"></span>
                               <div class="projects__list-content">
                                   <span class="projects__name">${Common.EXAMPLE_NAME}</span>
@@ -331,7 +330,7 @@ function insertOpenProject(projectPath) {
     //插入节点
     let projectName = path.basename(projectPath);
 
-    let $projectHtml = $(`<li class="projects__list-item" data-project="${projectName}" title="${projectPath}">
+    let $projectHtml = $(`<li class="projects__list-item" data-project="${projectName}" data-path="${projectPath}" title="${projectPath}">
                               <span class="icon icon-finder" data-finder="true" title="${FinderTitle}"></span>
                               <div class="projects__list-content">
                                   <span class="projects__name">${projectName}</span>
@@ -379,37 +378,40 @@ function delProject(cb) {
     if (!$curProject.length) {
         return;
     }
+    if(confirm("该项目所有文件将被移除，确定删除该项目？")){
+        del($curProject.data('path'), {force: true}).then(function () {
+            let projectName = $curProject.data('project');
+            let index = $curProject.index();
 
-    let projectName = $curProject.data('project');
-    let index = $curProject.index();
+            killBs();
 
-    killBs();
+            $curProject.remove();
 
-    $curProject.remove();
+            if (index > 0) {
+                $curProject = $('.projects__list-item').eq(index - 1);
+            } else {
+                $curProject = $('.projects__list-item').eq(index);
+            }
 
-    if (index > 0) {
-        $curProject = $('.projects__list-item').eq(index - 1);
-    } else {
-        $curProject = $('.projects__list-item').eq(index);
+            $curProject.trigger('click');
+
+
+            let storage = Common.getStorage();
+
+            if (storage && storage['projects'] && storage['projects'][projectName]) {
+                delete storage['projects'][projectName];
+                Common.setStorage(storage);
+            }
+
+            if (_.isEmpty(storage['projects'])) {
+                $welcome.removeClass('hide');
+            }
+
+            console.log('del project success.');
+
+            cb && cb();
+        })
     }
-
-    $curProject.trigger('click');
-
-
-    let storage = Common.getStorage();
-
-    if (storage && storage['projects'] && storage['projects'][projectName]) {
-        delete storage['projects'][projectName];
-        Common.setStorage(storage);
-    }
-
-    if (_.isEmpty(storage['projects'])) {
-        $welcome.removeClass('hide');
-    }
-
-    console.log('del project success.');
-
-    cb && cb();
 }
 
 function killBs() {
@@ -442,7 +444,7 @@ function newProjectFn() {
         $welcome.addClass('hide');
     }
 
-    let $projectHtml = $(`<li class="projects__list-item" data-project="" title="">
+    let $projectHtml = $(`<li class="projects__list-item" data-project="" data-path="" title="">
                               <span class="icon icon-finder" data-finder="true" title="${FinderTitle}"></span>
                               <div class="projects__list-content">
                                   <span class="projects__name" contenteditable></span>
@@ -514,16 +516,18 @@ function editName($project, $input) {
                 if (!hasText && !keyboard) {
 
                     setTimeout(function () {
-
                         if (text !== '') {
                             setProjectInfo($project, $this, text);
 
                             hasText = true;
                         } else {
                             alert('请输入项目名');
-                            if(Common.PLATFORM !== 'win32'){
-                                _this.focus();
-                            }
+                            setTimeout(function () {//防止弹框后，点击关闭弹框，再次触发blur事件
+                                $this.html('');
+                                if(Common.PLATFORM !== 'win32'){
+                                    _this.focus();
+                                }
+                            }, 10)
                         }
                     }, 100);
                 }
@@ -697,9 +701,9 @@ function runTask(taskName, context) {
 
     if (taskName === 'zip') {
         context.text('执行中');
-        dist(projectPath, function (data) {
+        /*dist(projectPath, function (data) {
             logReply(data);
-        }, function () {
+        }, function () {*/
             zip(projectPath, function (data) {
                 logReply(data);
             }, function () {
@@ -710,31 +714,19 @@ function runTask(taskName, context) {
                     context.text('打包');
                 }, 500);
             });
-        });
+        //});
     }
 
     if (taskName === 'ftp') {
 
         let projectPath = $curProject.attr('title');
 
-        let projectConfigPath = path.join(projectPath, 'weflow.config.json');
-        let projectConfig = null;
-
-        if (Common.fileExist(projectConfigPath)) {
-            projectConfig = Common.requireUncached(projectConfigPath);
-        } else {
-            projectConfig = Common.requireUncached(Common.CONFIGPATH);
-        }
-
-        let deploy = projectConfig['ftp']['ssh'] ? sftp : ftp;
-
-
         context.text('执行中');
-        dist(projectPath, function (data) {
+        /*dist(projectPath, function (data) {
             logReply(data);
-        }, function () {
+        }, function () {*/
 
-            deploy(projectPath, function (data) {
+            ftp(projectPath, function (data) {
                 logReply(data);
             }, function (data) {
                 if (data) {
@@ -752,7 +744,7 @@ function runTask(taskName, context) {
                     }, 500);
                 }
             })
-        })
+       // })
     }
 }
 

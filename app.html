@@ -121,9 +121,9 @@
     <div class="bottom-bar">
         <span class="icon icon-add" id="js-new-project" title="新建项目"></span>
         <span class="icon icon-del" id="js-del-project" title="删除项目"></span>
-        <span class="icon icon-open" title="打开项目">
+        <!-- <span class="icon icon-open" title="打开项目">
             <input class="bottom-bar__open" id="js-open-project" type="file" webkitdirectory multiple>
-        </span>
+        </span> -->
         <span class="icon icon-setting" id="js-setting-button" title="全局设置"></span>
         <span class="icon icon-log" id="js-log-button" title="查看日志"></span>
 
@@ -177,6 +177,9 @@
             <div class="ui-text ui-text_short">
                 <input type="text" name="ftp-host" placeholder="服务器地址" value="">
             </div>
+            <div class="ui-text ui-text_short">
+                <input type="text" name="ftp-port" placeholder="端口" value="">
+            </div>
             <div class="ui-checkbox sftp">
                 <input type="checkbox" name="ftp-ssh" id="sftp">
                 <label for="sftp">使用 SFTP</label>
@@ -185,12 +188,12 @@
                 <input type="text" name="ftp-user" placeholder="用户名" value="">
             </div>
             <div class="ui-text ui-text_short">
-                <input type="password" name="ftp-pass" placeholder="密码" value="">
+                <input type="text" name="ftp-pass" placeholder="密码" value="">
             </div>
             <div class="ui-text">
                 <input type="text" name="ftp-remotePath" placeholder="远程路径" value="">
             </div>
-            <div class="ui-checkbox">
+            <div class="ui-checkbox hide">
                 <input type="checkbox" name="ftp-includeHtml" id="ftp-includeHtml">
                 <label for="ftp-includeHtml">上传文件包含 .html 文件类型</label>
             </div>
