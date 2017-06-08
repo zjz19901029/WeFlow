@@ -69,8 +69,9 @@ Common.getStorage = function () {
     }
 };
 
-Common.setStorage = function (storage) {
+Common.setStorage = function (storage,storefile = true) {
     localStorage.setItem(Common.NAME, JSON.stringify(storage));
+    if(!storefile){return;}
     fs.writeFile(path.join(storage.workspace,Common.NAME+'.json'), JSON.stringify(storage), function(err){
         if(err){
             alert(err)
@@ -83,11 +84,6 @@ Common.resetStorage = function () {
 
     if (storage) {
         storage.removeItem(Common.NAME);
-        fs.writeFile(path.join(storage.workspace,Common.NAME+'.json'), '', function(err){
-            if(err){
-                alert(err)
-            }
-        })
     }
 };
 

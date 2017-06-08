@@ -733,6 +733,13 @@ input:focus {
     border: 1px solid #FF535B;
     border-radius: 2px;
 }
+.ui-text input.setting__workspace_filebtn{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0;
+}
 
 .about {
     position: absolute;

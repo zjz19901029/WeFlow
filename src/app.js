@@ -65,47 +65,50 @@ function init() {
     let storage = Common.getStorage();
 
     if (!storage) {
-
         $welcome.removeClass('hide');
-
-        storage = {};
-        storage.name = Common.NAME;
-
         let workspace = path.join(remote.app.getPath(Common.DEFAULT_PATH), Common.WORKSPACE);
-        if (Common.dirExist(workspace)) {//判断工作区目录已存在，直接获取已存在的记录json
-            var jsonFile = path.join(workspace,Common.NAME+'.json');
-            if(Common.fileExist(jsonFile)){//如果json文件存在
-                let json = fs.readFileSync(path.join(workspace,Common.NAME+'.json'),"utf-8");  
-                let storage = JSON.parse(json);
-                $formWorkspace.val(storage.workspace);
-                Common.setStorage(storage);
-                
-            }else{
-                $formWorkspace.val(workspace);
-                storage.workspace = workspace;
-                Common.setStorage(storage);
-            }
-            console.log('Create workspace success.');
-        } else {
-            fs.mkdir(workspace, function (err) {
-
-                if (err) {
-                    throw new Error(err);
-                }
-
-                $formWorkspace.val(workspace);
-
-                storage.workspace = workspace;
-                Common.setStorage(storage);
-
-                console.log('Create workspace success.');
-            });
-        }
+        getLocalFileStorage(workspace,function(){
+            checkLocalProjects();
+            initData();
+        });
     } else {
         checkLocalProjects();
         initData();
     }
 
+}
+
+//在不存在localstorage的时候，读取本地json文件
+function getLocalFileStorage(workspace,callback){
+    let storage = {};
+    storage.name = Common.NAME;
+    if (Common.dirExist(workspace)) {//判断工作区目录已存在，直接获取已存在的记录json
+        var jsonFile = path.join(workspace,Common.NAME+'.json');
+        if(Common.fileExist(jsonFile)){//如果json文件存在
+            let json = fs.readFileSync(path.join(workspace,Common.NAME+'.json'),"utf-8");  
+            storage = JSON.parse(json);
+            $formWorkspace.val(storage.workspace);
+            Common.setStorage(storage,false);
+        }else{
+
+            $formWorkspace.val(workspace);
+            storage.workspace = workspace;
+            Common.setStorage(storage);
+        }
+        console.log('Create workspace success.');
+        callback&&callback();
+    } else {
+        fs.mkdir(workspace, function (err) {
+            if (err) {
+                throw new Error(err);
+            }
+            $formWorkspace.val(workspace);
+            storage.workspace = workspace;
+            Common.setStorage(storage);
+            console.log('Create workspace success.');
+            callback&&callback();
+        });
+    }
 }
 
 //每次启动的时候检查本地项目是否还存在
@@ -178,7 +181,7 @@ function initData() {
         if (storage['workspace']) {
             $formWorkspace.val(storage['workspace']);
         }
-
+        $projectList.empty();
         if (!_.isEmpty(storage['projects'])) {
             let html = '';
             let tempProjects = [];
@@ -430,6 +433,22 @@ function killBs() {
     setNormal();
 }
 
+function killBsAll() {
+    if(bsObj){
+        for(let projectPath in bsObj){
+            try {
+                bsObj[projectPath].exit();
+                logReply('Listening has quit.');
+                console.log('Listening has quit.');
+            } catch (err) {
+                console.log(err);
+            }
+            bsObj[projectPath] = null;
+        }
+    }
+    setNormal();
+}
+
 //新建项目
 $newProject.on('click', function () {
     console.log('click')
@@ -628,13 +647,14 @@ function newProjectReply(projectPath) {
             Common.setStorage(storage);
 
             $curProject.data('project', projectName);
+            $curProject.data('path', projectPath);
             $curProject.attr('title', projectPath);
             $curProject.find('.projects__path').text(projectPath);
 
             $projectList.prepend($curProject);
         }
 
-        $projectList.scrollTop($projectList.get(0).scrollHeight);
+        $projectList.scrollTop(0);
 
         console.log('new Project success.');
 
@@ -793,15 +813,22 @@ $setting.on('change', 'input', function () {
 
     let $this = $(this);
 
-    if ($this.data('workspace')) {
+    if ($this.data('workspace')) {//更改工作区
 
-        let storage = Common.getStorage();
+        /*let storage = Common.getStorage();
         let originWorkspace = storage.workspace;
 
-        storage.workspace = $.trim($this.val());
-
-        gulp.src(path.join(originWorkspace, '/**/*'))
-            .pipe(gulp.dest(storage.workspace))
+        storage.workspace = $.trim($this.val());*/
+        if(this.files&&this.files.length>0){
+            let projectPath = this.files[0].path;
+            killBsAll();
+            getLocalFileStorage(projectPath,function(){
+                checkLocalProjects();
+                initData();
+            })
+        }
+        //gulp.src(path.join(originWorkspace, '/**/*'))
+            /*.pipe(gulp.dest(storage.workspace))
             .on('end', function () {
 
                 async.series([
@@ -833,7 +860,7 @@ $setting.on('change', 'input', function () {
 
                 });
 
-            });
+            });*/
 
     } else {
         updateConfig($this);
