@@ -121,6 +121,7 @@
     <div class="bottom-bar">
         <span class="icon icon-add" id="js-new-project" title="新建项目"></span>
         <span class="icon icon-del" id="js-del-project" title="删除项目"></span>
+        <span class="icon icon-open" id="js-new-tmpproject" title="新建模板项目"></span>
         <!-- <span class="icon icon-open" title="打开项目">
             <input class="bottom-bar__open" id="js-open-project" type="file" webkitdirectory multiple>
         </span> -->
@@ -128,6 +129,19 @@
         <span class="icon icon-log" id="js-log-button" title="查看日志"></span>
 
         <span class="bottom-bar__status" id="js-logs-status"></span>
+    </div>
+</div>
+
+<div class="newtemp hide" id="js-newtemp">
+    <a href="javascript:;" id="js-newtemp-close" class="icon icon-close"></a>
+    <div class="newtemp__section">
+        <div class="newtemp__name ui-text">
+            <input type="text" placeholder="项目名称" id="js-newtemp-name">
+        </div>
+        <div class="newtemp__select">
+            <select id="js-newtemp-select"></select>
+        </div>
+        <button id="js-newtemp-ok" class="tasks__button">确定</button>
     </div>
 </div>
 

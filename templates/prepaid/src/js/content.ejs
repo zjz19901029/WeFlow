@@ -1,0 +1,22 @@
+<img src="<%= imgPrefix %>/banner.jpg?v=031601" alt="" class="banner">
+
+<div class="box-wrapper">
+    <% for(var i=0; i<data.image.length; i++){ %>
+        <div class="box">
+            <img src="<%= imgPrefix %>/<%= data.image[i] %>" alt="" class="lazy">
+            <a href="<%= api %><%= data.gift[i] %>" class="a-btn btn">立即充值</a>
+        </div>
+    <% } %>
+</div>
+
+<div class="rule">
+    <img src="<%= imgPrefix %>/title.jpg" alt="" class="title lazy">
+    <div class="list collapse-hide">
+        <ul>
+        <% for(var i=0; i<data.rule.length; i++){ %>
+            <li data-index="<%= i+1 %>"><%- data.rule[i] %></li>
+        <% } %>
+        </ul>
+        <span class="collapse collapse-hide"><span></span></span>
+    </div>
+</div>

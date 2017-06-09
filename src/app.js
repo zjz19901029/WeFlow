@@ -28,6 +28,10 @@ let $welcome = $('#js-welcome');
 let $example = $('#js-example');
 let $openProject = $('#js-open-project');
 let $newProject = $('#js-new-project');
+let $newTmpProject = $('#js-new-tmpproject');
+let $newTmpProjectSelect = $("#js-newtemp-select");
+let $newTmpProjectName = $('#js-newtemp-name');
+let $newTmpProjectDialog = $("#js-newtemp");
 let $projectList = $('#js-project-list');
 let $delProject = $('#js-del-project');
 let $buildDevButton = $('#js-build-dev');
@@ -227,7 +231,7 @@ $example.on('click', function () {
             //已经打开,直接切换
         } else {
 
-            extract(Common.TEMPLAGE_EXAMPLE, {dir: storage['workspace']}, function (err) {
+            extract(Common.TEMPLATE_EXAMPLE, {dir: storage['workspace']}, function (err) {
                 if (err) {
                     throw new Error(err);
                 }
@@ -500,9 +504,18 @@ function editName($project, $input) {
             if (event.which === 13 && !hasText) {
                 keyboard = true;
                 if (text !== '') {
-                    setProjectInfo($project, $this, text);
-                    hasText = true;
-                    keyboard = false;
+                    if(checkProjectExits(text)){
+                        alert('项目名已存在');
+                        setTimeout(function () {//防止弹框后，点击关闭弹框，再次触发blur事件
+                            if(Common.PLATFORM !== 'win32'){
+                                _this.focus();
+                            }
+                        }, 10)
+                    }else{
+                        setProjectInfo($project, $this, text);
+                        hasText = true;
+                        keyboard = false;
+                    }
                 } else {
                     alert('请输入项目名')
 
@@ -536,9 +549,17 @@ function editName($project, $input) {
 
                     setTimeout(function () {
                         if (text !== '') {
-                            setProjectInfo($project, $this, text);
-
-                            hasText = true;
+                            if(checkProjectExits(text)){
+                                alert('项目名已存在');
+                                setTimeout(function () {//防止弹框后，点击关闭弹框，再次触发blur事件
+                                    if(Common.PLATFORM !== 'win32'){
+                                        _this.focus();
+                                    }
+                                }, 10)
+                            }else{
+                                setProjectInfo($project, $this, text);
+                                hasText = true;
+                            }
                         } else {
                             alert('请输入项目名');
                             setTimeout(function () {//防止弹框后，点击关闭弹框，再次触发blur事件
@@ -561,22 +582,12 @@ function setProjectInfo($project, $input, text) {
 
     if (storage && storage['workspace']) {
         projectPath = path.join(storage['workspace'], text);
+        $input.attr('contenteditable', false);
+        $curProject = $project.remove();
 
-        if (!Common.dirExist(projectPath)) {
-            $input.attr('contenteditable', false);
-            $curProject = $project.remove();
-
-            newProject(projectPath, function (projectPath) {
-                newProjectReply(projectPath);
-            });
-
-        } else {
-            var res = confirm(text + ' 项目已存在');
-            if(res||!res){
-                $input.text('');
-                editName($project, $input);
-            }
-        }
+        newProject(projectPath, function (projectPath) {
+            newProjectReply(projectPath);
+        });
     }
 
 }
@@ -584,33 +595,16 @@ function setProjectInfo($project, $input, text) {
 function newProject(projectPath, callback) {
     let workspace = path.dirname(projectPath)
     let projectname = path.basename(projectPath)
-    //先判断一下工作区是否存在
-    if (!Common.dirExist(workspace)) {
-        try {
-            fs.mkdirSync(path.join(workspace));
-        } catch (err) {
-            throw new Error(err);
-        }
-    }
 
     //创建项目目录
-    if (Common.dirExist(projectPath)) {
-        throw new Error('project already exists');
-    } else {
-        try {
-            fs.mkdirSync(path.join(projectPath));
-        } catch (err) {
-            throw new Error(err);
-        }
+    try {
+        fs.mkdirSync(path.join(projectPath));
+    } catch (err) {
+        throw new Error(err);
     }
 
-    extract(Common.TEMPLAGE_PROJECT, {dir: projectPath}, function (err) {//解压缩模板文件
+    extract(Common.TEMPLATE_PROJECT, {dir: projectPath}, function (err) {//解压缩模板文件
         if (err) {
-            throw new Error(err);
-        }
-        try {//创建项目专属的img目录
-            fs.mkdirSync(path.join(projectPath,'src/img',projectname));
-        } catch (err) {
             throw new Error(err);
         }
         initdir(projectPath,function (data) {
@@ -638,21 +632,18 @@ function newProjectReply(projectPath) {
             storage['projects'] = {};
         }
 
-        if (storage['projects'][projectName]) {
-            alert('项目已存在');
-        } else {
-            storage['projects'][projectName] = {};
-            storage['projects'][projectName]['path'] = projectPath;
-            storage['projects'][projectName]['creattime'] = new Date().getTime();
-            Common.setStorage(storage);
+        storage['projects'][projectName] = {};
+        storage['projects'][projectName]['path'] = projectPath;
+        storage['projects'][projectName]['creattime'] = new Date().getTime();
+        Common.setStorage(storage);
 
-            $curProject.data('project', projectName);
-            $curProject.data('path', projectPath);
-            $curProject.attr('title', projectPath);
-            $curProject.find('.projects__path').text(projectPath);
+        $curProject.data('project', projectName);
+        $curProject.data('path', projectPath);
+        $curProject.attr('title', projectPath);
+        $curProject.find('.projects__path').text(projectPath);
+        $curProject.find('.projects__name').text(projectName);
 
-            $projectList.prepend($curProject);
-        }
+        $projectList.prepend($curProject);
 
         $projectList.scrollTop(0);
 
@@ -660,6 +651,85 @@ function newProjectReply(projectPath) {
 
         newProjectSucess = false;
 
+    }
+}
+
+function checkProjectExits(projectName){
+    let storage = Common.getStorage();
+    let projectPath = path.join(storage['workspace'], projectName);
+    if (storage['projects'][projectName]||Common.dirExist(projectPath)) {
+        alert('项目已存在');
+        return true;
+    }
+    return false;
+}
+
+//新建模板项目
+$newTmpProject.on('click', function () {
+    newTmpProjectFn();
+});
+$("#js-newtemp-close").on('click',function(){
+    $newTmpProjectDialog.addClass('hide').find("input").val("");
+});
+$("#js-newtemp-ok").on('click',function(){
+    $curProject = $(`<li class="projects__list-item" data-project="" data-path="" title="">
+                              <span class="icon icon-finder" data-finder="true" title="${FinderTitle}"></span>
+                              <div class="projects__list-content">
+                                  <span class="projects__name"></span>
+                                  <div class="projects__path"></div>
+                              </div>
+                              <a href="javascript:;" class="icon icon-info projects__info" title="项目设置"></a>
+                        </li>`);
+    newTmpProject(newProjectReply);
+    $newTmpProjectDialog.addClass('hide').find("input").val("");
+});
+
+//弹出新建模板项目窗口
+function newTmpProjectFn(){
+    getTmpList();//获取当前已有的模板列表
+    $newTmpProjectDialog.removeClass('hide');
+}
+
+function getTmpList(){
+    let files = fs.readdirSync(Common.TEMPLATE_DIR);
+    let tempList = '<option value="">请选择模板</option>';
+    files.forEach(function(file){
+        if(path.extname(file) == ".zip"){
+            tempList += `<option value="${path.join(Common.TEMPLATE_DIR,file)}">${path.basename(file)}</option>`;
+        }
+    })
+    $newTmpProjectSelect.html(tempList);
+}
+//新建模板项目
+function newTmpProject(callback){
+    let name = $newTmpProjectName.val();
+    let tempPath = $newTmpProjectSelect.val();
+    if($.trim(name) == ""){
+        alert("请输入项目名");
+    }else if(tempPath == ""){
+        alert("请选择模板");
+    }else{
+        let storage = Common.getStorage();
+        let projectPath = path.join(storage['workspace'], name);
+        if(!checkProjectExits(name)){
+            let workspace = path.dirname(projectPath)
+
+            //创建项目目录
+            try {
+                fs.mkdirSync(projectPath);
+            } catch (err) {
+                throw new Error(err);
+            }
+
+            extract(tempPath, {dir: projectPath}, function (err) {//解压缩模板文件
+                if (err) {
+                    throw new Error(err);
+                }
+                initdir(projectPath,function (data) {
+                        logReply(data);
+                    },callback);
+            });
+        }
     }
 }
 

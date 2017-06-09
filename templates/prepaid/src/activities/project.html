@@ -12,15 +12,25 @@
     <script src="http://imgs.plateno.com:8080/static/js/flexible_css.js" inline></script>
     <script src="http://imgs.plateno.com:8080/static/js/flexible.js" inline></script>
     <link rel="stylesheet" href="http://imgs.plateno.com:8080/static/css/we-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/<%= projectname %>.css" />
+    <link rel="stylesheet" type="text/css" href="../css/<%= project %>.css" />
 </head>
 <body>
 <div class="wrapper">
-	
+
 </div>
+<button class="we-gotop"></button>
 <script src="http://imgs.plateno.com:8080/static/js/zepto.min.js"></script>
 <script src="http://imgs.plateno.com:8080/static/js/botao-sdk.js"></script>
 <script src="http://imgs.plateno.com:8080/static/js/we-ui.min.js?v=20170602"></script>
-<script src="../js/<%= projectname %>.js"></script>
+<script src="../js/<%= project %>.js"></script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a0bbe4786bc10a6f184fd9860b5a0e0f";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
 </body>
 </html>
