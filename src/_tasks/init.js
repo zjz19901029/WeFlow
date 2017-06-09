@@ -14,10 +14,9 @@ function init(projectPath, log, callback){
         gulp.src([path.join(projectPath,'src/{activities,js,css}/*'),path.join("!",projectPath,'src/{activities,js,css}/*.ejs')])
             .pipe(ejs({project:projectName}))
             .pipe(gulp.dest(function(file){
-                log(JSON.stringify(file))
                 return file.base
             }))
-            .on('end', function () {log(111);next();});
+            .on('end', function () {next();});
     }
 
     function htmlRename(next){

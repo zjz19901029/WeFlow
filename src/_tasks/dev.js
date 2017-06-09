@@ -115,6 +115,7 @@ function dev(projectPath, log, callback) {
         myConfig.entry = path.join(projectPath, './src/js/'+projectName+'.js')
         myConfig.output.path = path.join(projectPath, './dev/js/')
         myConfig.output.filename  = projectName+'.js';
+        myConfig.resolveLoader = { modules: [path.join(__dirname, "../../node_modules")] };//必须指定WEBPACK使用的包路径，不然打包后webpack无法运行
         webpack(myConfig, function(err, stats) {
             if(err) log(err);
             if (cb) {

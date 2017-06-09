@@ -1,16 +1,16 @@
 {
   "name": "WeFlow",
-  "version": "1.3.2",
-  "release": "1.3.1",
+  "version": "2.0.0",
+  "release": "2.0.0",
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build:linux32": "rimraf dist && electron-packager ./ WeFlow --platform=linux --arch=ia32 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist/$npm_package_version --version=0.37.8 --ignore='(.github|.DS_Store)'",
-    "build:linux64": "rimraf dist && electron-packager ./ WeFlow --platform=linux --arch=x64 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist/$npm_package_version --version=0.37.8 --ignore='(.github|.DS_Store)'",
-    "build:mac": "rimraf dist && electron-packager ./ WeFlow --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist/$npm_package_version --version=0.37.8 --ignore='(.github|.DS_Store)'",
-    "build:win32": "rimraf dist && electron-packager ./ WeFlow --platform=win32 --arch=ia32 --icon=./assets/img/WeFlow.png --overwrite --out ./dist --version=0.37.8 --ignore=.github",
-    "build:win64": "rimraf dist && electron-packager ./ WeFlow --platform=win32 --arch=x64 --icon=./assets/img/WeFlow.png --overwrite --out ./dist --version=0.37.8 --ignore=.github",
+    "build:linux32": "rimraf dist && electron-packager ./ WeFlow --platform=linux --arch=ia32 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist/$npm_package_version --version=1.6.10 --ignore='(.github|.DS_Store)'",
+    "build:linux64": "rimraf dist && electron-packager ./ WeFlow --platform=linux --arch=x64 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist/$npm_package_version --version=1.6.10 --ignore='(.github|.DS_Store)'",
+    "build:mac": "rimraf dist && electron-packager ./ WeFlow --platform=darwin --arch=x64 --icon=./assets/img/WeFlow.icns --overwrite --out ./dist/$npm_package_version --version=1.6.10 --ignore='(.github|.DS_Store)'",
+    "build:win32": "rimraf dist && electron-packager ./ WeFlow --platform=win32 --arch=ia32 --icon=./assets/img/WeFlow.png --overwrite --out ./dist --version=1.6.10 --ignore=.github",
+    "build:win64": "rimraf dist && electron-packager ./ WeFlow --platform=win32 --arch=x64 --icon=./assets/img/WeFlow.png --overwrite --out ./dist --version=1.6.10 --ignore=.github",
     "pack": "build --target dir",
     "dist": "rimraf dist && build"
   },
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/weixin/WeFlow"
+    "url": "https://github.com/zjz19901029/WeFlow"
   },
   "keywords": [
     "Electron",
@@ -34,9 +34,9 @@
   "author": "mirro.zhou",
   "license": "",
   "bugs": {
-    "url": "https://github.com/weixin/WeFlow/issues"
+    "url": "https://github.com/zjz19901029/WeFlow/issues"
   },
-  "homepage": "https://github.com/weixin/WeFlow#readme",
+  "homepage": "https://github.com/zjz19901029/WeFlow#readme",
   "devDependencies": {
     "electron": "^1.6.2",
     "electron-packager": "^7.0.3",

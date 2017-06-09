@@ -681,7 +681,6 @@ $("#js-newtemp-ok").on('click',function(){
                               <a href="javascript:;" class="icon icon-info projects__info" title="项目设置"></a>
                         </li>`);
     newTmpProject(newProjectReply);
-    $newTmpProjectDialog.addClass('hide').find("input").val("");
 });
 
 //弹出新建模板项目窗口
@@ -729,6 +728,7 @@ function newTmpProject(callback){
                         logReply(data);
                     },callback);
             });
+            $newTmpProjectDialog.addClass('hide').find("input").val("");
         }
     }
 }
