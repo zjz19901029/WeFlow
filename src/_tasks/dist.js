@@ -14,9 +14,8 @@ const uglify = require('gulp-uglify');
 const usemin = require('gulp-usemin');
 const lazyImageCSS = require('gulp-lazyimagecss');  // 自动为图片样式添加 宽/高/background-size 属性
 const minifyCSS = require('gulp-cssnano');
-const imagemin = require('gulp-imagemin');
+const imagemin = require('weflow-imagemin');
 //const tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
-const pngquant = require('imagemin-pngquant');
 const ejshelper = require('tmt-ejs-helper');
 const postcss = require('gulp-postcss');  // CSS 预处理
 const postcssPxtorem = require('postcss-pxtorem'); // 转换 px 为 rem
@@ -183,7 +182,6 @@ function dist(projectPath, log, callback) {
         gulp.src(paths.src.img)
             .pipe(imagemin())
             .on('error', function (error) {
-                log(111)
                 log(error.message);
                 console.log(error.message);
             })

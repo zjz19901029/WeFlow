@@ -11,7 +11,7 @@ function init(projectPath, log, callback){
     let projectName = path.basename(projectPath);
 
     function ejsCompile(next){
-        gulp.src([path.join(projectPath,'src/{activities,js,css}/*'),path.join("!",projectPath,'src/{activities,js,css}/*.ejs')])
+        gulp.src(path.join(projectPath,'src/{activities,js,css}/!(*.ejs)'))
             .pipe(ejs({project:projectName}))
             .pipe(gulp.dest(function(file){
                 return file.base
@@ -54,7 +54,15 @@ function init(projectPath, log, callback){
         next();
     }
 
+    function delDsFile(next){//删除mac系统下 压缩包的ds——store文件
+        del([path.join(projectPath,'src/**/*.DS_Store')], {force: true});
+        next();
+    }
+
     async.series([
+        function (next) {
+            delDsFile(next);
+        },
         /**
          * ejs处理html模板
          */

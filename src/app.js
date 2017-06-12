@@ -67,52 +67,53 @@ function init() {
     checkForUpdate();
 
     let storage = Common.getStorage();
-
+    let workspace = storage.workspace;
+    
     if (!storage) {
-        $welcome.removeClass('hide');
-        let workspace = path.join(remote.app.getPath(Common.DEFAULT_PATH), Common.WORKSPACE);
-        getLocalFileStorage(workspace,function(){
-            checkLocalProjects();
-            initData();
-        });
-    } else {
+        workspace = path.join(remote.app.getPath(Common.DEFAULT_PATH), Common.WORKSPACE);
+    }
+    
+    getLocalFileStorage(workspace,function(){
         checkLocalProjects();
         initData();
-    }
+    });
 
 }
 
 //在不存在localstorage的时候，读取本地json文件
 function getLocalFileStorage(workspace,callback){
-    let storage = {};
-    storage.name = Common.NAME;
     if (Common.dirExist(workspace)) {//判断工作区目录已存在，直接获取已存在的记录json
         var jsonFile = path.join(workspace,Common.NAME+'.json');
         if(Common.fileExist(jsonFile)){//如果json文件存在
             let json = fs.readFileSync(path.join(workspace,Common.NAME+'.json'),"utf-8");  
-            storage = JSON.parse(json);
+            let storage = JSON.parse(json);
             $formWorkspace.val(storage.workspace);
             Common.setStorage(storage,false);
         }else{
-
-            $formWorkspace.val(workspace);
-            storage.workspace = workspace;
-            Common.setStorage(storage);
+            creatWorkspace(workspace);
+            console.log('Create workspace success.');
         }
-        console.log('Create workspace success.');
         callback&&callback();
     } else {
         fs.mkdir(workspace, function (err) {
             if (err) {
                 throw new Error(err);
             }
-            $formWorkspace.val(workspace);
-            storage.workspace = workspace;
-            Common.setStorage(storage);
-            console.log('Create workspace success.');
+            creatWorkspace(workspace);
             callback&&callback();
         });
     }
+}
+
+function creatWorkspace(workspace){
+    let storage = {};
+    storage.name = Common.NAME;
+    $welcome.removeClass('hide');
+    $formWorkspace.val(workspace);
+    storage.workspace = workspace;
+    storage.projects = {};
+    Common.setStorage(storage);
+    console.log('Create workspace success.');
 }
 
 //每次启动的时候检查本地项目是否还存在
@@ -126,10 +127,8 @@ function checkLocalProjects() {
                 console.log('本地工作区已不存在');
 
                 //清空数据
-                storage.projects = {};
-            }
-
-            if (storage.projects) {
+                Common.resetStorage();
+            }else if (storage.projects) {
 
                 let projects = storage.projects;
 
@@ -140,11 +139,8 @@ function checkLocalProjects() {
                 });
 
                 storage.projects = projects;
-
+                Common.setStorage(storage);
             }
-
-            Common.setStorage(storage);
-
         }
     }
 }
@@ -680,7 +676,12 @@ $("#js-newtemp-ok").on('click',function(){
                               </div>
                               <a href="javascript:;" class="icon icon-info projects__info" title="项目设置"></a>
                         </li>`);
-    newTmpProject(newProjectReply);
+    newTmpProject(function(projectPath){
+        if (!$welcome.hasClass('hide')) {
+            $welcome.addClass('hide');
+        }
+        newProjectReply(projectPath);
+    });
 });
 
 //弹出新建模板项目窗口

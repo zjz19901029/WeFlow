@@ -153,7 +153,7 @@ var template = [
             {
                 label: 'WeFlow 使用帮助',
                 click: function () {
-                    electron.shell.openExternal('https://github.com/weixin/weflow');
+                    electron.shell.openExternal('https://github.com/zjz19901029/WeFlow');
                 }
             },
             {
@@ -165,7 +165,7 @@ var template = [
             {
                 label: '建议 或 反馈…',
                 click: function () {
-                    electron.shell.openExternal('https://github.com/weixin/weflow/issues');
+                    electron.shell.openExternal('https://github.com/zjz19901029/WeFlow/issues');
                 }
             }
         ]

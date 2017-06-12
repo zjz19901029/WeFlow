@@ -18,8 +18,8 @@ Common.TEMPLATE_DIR = path.resolve(path.join(__dirname, '../templates'));
 Common.TEMPLATE_PROJECT = path.resolve(path.join(__dirname, '../templates/default.zip'));
 Common.TEMPLATE_EXAMPLE = path.resolve(path.join(__dirname, '../templates/example.zip'));
 Common.EXAMPLE_NAME = 'WeFlow-example';
-Common.CHECKURL = 'https://raw.githubusercontent.com/weixin/WeFlow/master/package.json';
-Common.DOWNLOADURL = 'https://github.com/weixin/WeFlow/releases';
+Common.CHECKURL = 'https://raw.githubusercontent.com/zjz19901029/WeFlow/master/package.json';
+Common.DOWNLOADURL = 'https://github.com/zjz19901029/WeFlow/releases';
 
 Common.requireUncached = function (module) {
     delete require.cache[require.resolve(module)];
