@@ -20,6 +20,13 @@
 - Electron 版本：v1.6.10
 - Node 版本    ：v7.8.0
 
+## 打包
+
+npm run build:mac
+npm run build:win64
+
+在Mac系统打包Mac版本，在Windows系统打包Windows版本，因为不同系统下，安装的gulp插件会不同，导致在其他系统下安装包无法使用。
+
 ## 设计稿和源码
 
 所有代码在 [GitHub](https://github.com/zjz19901029/WeFlow) 开源，你可以 `fork` 进行定制
