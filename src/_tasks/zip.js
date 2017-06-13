@@ -34,7 +34,7 @@ module.exports = function (projectPath, log, callback) {
 
     function zipTask(cb) {
         let date = formatDate(new Date(),'yyyyMMddhhmm');
-        gulp.src([path.join(projectPath, './dist/**/*'),path.join(projectPath, '!./dist/img/**/*')])
+        gulp.src(path.join(projectPath, './dist/!(img)/**/*'))
             .pipe(zip(projectName+'_'+date+'.zip'))
             .pipe(gulp.dest(projectPath))
             .on('end', function(){
