@@ -946,16 +946,16 @@ function initConfig() {
     config = Common.requireUncached(curConfigPath);
 
     for (let i in config) {
+        if(typeof(config[i]) == "object"){
 
-        if (i === 'ftp') {
-            for (var j in config['ftp']) {
-                let $el = $(`input[name=ftp-${j}]`);
+            for (var j in config[i]) {
+                let $el = $(`input[name=${i}-${j}]`);
 
                 if ($el && $el.length) {
                     if ($el.attr('type') === 'text') {
-                        $el.val(config['ftp'][j]);
+                        $el.val(config[i][j]);
                     } else {
-                        $el.prop('checked', config['ftp'][j]);
+                        $el.prop('checked', config[i][j]);
                     }
                 }
             }

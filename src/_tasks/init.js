@@ -55,7 +55,7 @@ function init(projectPath, log, callback){
     }
 
     function delDsFile(next){//删除mac系统下 压缩包的ds——store文件
-        del([path.join(projectPath,'src/**/*.DS_Store')], {force: true});
+        del([path.join(projectPath,'src/**/.DS_Store')], {force: true});
         next();
     }
 

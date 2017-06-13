@@ -15,15 +15,16 @@ const usemin = require('gulp-usemin');
 const lazyImageCSS = require('gulp-lazyimagecss');  // 自动为图片样式添加 宽/高/background-size 属性
 const minifyCSS = require('gulp-cssnano');
 const imagemin = require('weflow-imagemin');
+const replace = require('gulp-replace');
 //const tmtsprite = require('gulp-tmtsprite');   // 雪碧图合并
 const ejshelper = require('tmt-ejs-helper');
 const postcss = require('gulp-postcss');  // CSS 预处理
 const postcssPxtorem = require('postcss-pxtorem'); // 转换 px 为 rem
 const autoprefixer = require('autoprefixer');
-const posthtml = require('gulp-posthtml');
+/*const posthtml = require('gulp-posthtml');
 const posthtmlPx2rem = require('posthtml-px2rem');
 const RevAll = require('weflow-rev-all');   // reversion
-const revDel = require('gulp-rev-delete-original');
+const revDel = require('gulp-rev-delete-original');*/
 const webpack = require("webpack");
 let webpackConfig = require('./webpack.js');
 //const sass = require('gulp-sass');
@@ -36,12 +37,17 @@ function dist(projectPath, log, callback) {
 
     let projectConfigPath = path.join(projectPath, 'weflow.config.json');
     let projectName = path.basename(projectPath);
-    let config = null;
+    let config = null,config_all = null;
 
     if (Common.fileExist(projectConfigPath)) {
         config = Common.requireUncached(projectConfigPath);
+        config_all = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
     } else {
-        config = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
+        config = config_all = Common.requireUncached(path.join(__dirname, '../../weflow.config.json'));
+    }
+    let CDN = "";
+    if(config.cdn.supportCDN&&config.cdn.path){
+        CDN = config.cdn.path;
     }
 
     let lazyDir = config.lazyDir || ['../slice'];
@@ -97,6 +103,7 @@ function dist(projectPath, log, callback) {
     //编译 less
     function compileLess(cb) {
         gulp.src(paths.src.less)
+            .pipe(gulpif(CDN!="",replace('../img', CDN)))
             .pipe(less())
             .on('error', function (error) {
                 log(error.message);
@@ -208,8 +215,9 @@ function dist(projectPath, log, callback) {
     //html 编译
     function compileHtml(cb) {
         gulp.src(paths.src.html)
+            .pipe(gulpif(CDN!="",replace('../img', CDN)))
             .pipe(ejs(ejshelper()))
-            .pipe(gulpif(
+            /*.pipe(gulpif(
                 config.supportREM,
                 posthtml(
                     posthtmlPx2rem({
@@ -217,7 +225,7 @@ function dist(projectPath, log, callback) {
                         minPixelValue: 2
                     })
                 ))
-            )
+            )*/
             .pipe(gulp.dest(paths.dist.html))
             .on('end', function () {
                 console.log('compileHtml success.');

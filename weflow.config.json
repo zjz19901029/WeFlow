@@ -1,12 +1,16 @@
 {
     "ftp": {
-        "host": "10.100.112.196",
+        "host": "",
         "port": "",
-        "user": "root",
-        "pass": "@bBBEb0EAdc@dEd777",
-        "remotePath": "/usr/local/marketing-activities",
+        "user": "",
+        "pass": "",
+        "remotePath": "",
         "includeHtml": true,
-        "ssh": true
+        "ssh": false
+    },
+    "cdn": {
+        "path": "http://imgs.plateno.com:8080/static/img",
+        "supportCDN": true
     },
     "livereload": true,
     "lazyDir": [
