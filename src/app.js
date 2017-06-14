@@ -640,7 +640,7 @@ function newProjectReply(projectPath) {
         $curProject.find('.projects__name').text(projectName);
 
         $projectList.prepend($curProject);
-
+        $curProject.trigger("click");
         $projectList.scrollTop(0);
 
         console.log('new Project success.');

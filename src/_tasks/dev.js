@@ -33,7 +33,7 @@ function dev(projectPath, log, callback) {
     let paths = {
         src: {
             dir: path.join(projectPath, './src'),
-            img: path.join(projectPath, './src/img/**/*'),
+            img: path.join(projectPath, './src/{img,images}/**/*'),
             slice: path.join(projectPath, './src/slice/**/*.png'),
             js: path.join(projectPath, './src/js/*.js'),
             media: path.join(projectPath, './src/media/**/*'),
@@ -173,6 +173,7 @@ function dev(projectPath, log, callback) {
         }
 
         switch (target) {
+            case 'images':
             case 'img':
                 if (type === 'removed') {
                     let tmp = file.replace(/src/, 'dev');

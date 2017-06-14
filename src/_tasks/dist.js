@@ -72,7 +72,7 @@ function dist(projectPath, log, callback) {
     let paths = {
         src: {
             dir: path.join(projectPath, './src'),
-            img: path.join(projectPath, './src/img/**/*.{JPG,jpg,png,gif,svg}'),
+            img: path.join(projectPath, './src/{img,images}/**/*.{JPG,jpg,png,gif,svg}'),
             js: path.join(projectPath, './src/js/*.js'),
             media: path.join(projectPath, './src/media/**/*'),
             less: path.join(projectPath, './src/css/'+projectName+'.less'),
@@ -83,7 +83,7 @@ function dist(projectPath, log, callback) {
         dist: {
             dir: path.join(projectPath, './dist'),
             css: path.join(projectPath, './dist/css'),
-            img: path.join(projectPath, './dist/img'),
+            img: path.join(projectPath, './dist/{img,images}'),
             html: path.join(projectPath, './dist/activities'),
             sprite: path.join(projectPath, './dist/sprite')
         }
