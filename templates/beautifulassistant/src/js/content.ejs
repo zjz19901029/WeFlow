@@ -1,0 +1,58 @@
+<div class="gallery photos" id="photos">
+    <% for(var i=0; i<data.photo; i++){ %>
+        <div class="cell"><img data-flickity-lazyload="<%= imgPrefix %>/photo<%= i+1 %>.jpg" alt=""></div>
+    <% } %>
+</div>
+<img src="<%= imgPrefix %>/banner1.jpg?v=123123" alt="">
+<div class="hotel">
+    <a data-we-hotelid="<%= data.id %>" class="a-btn we-btn">预订酒店</a>
+    <p></p>
+</div>
+<img src="<%= imgPrefix %>/banner2.jpg" alt="">
+<div class="content">
+    <section>
+        <div class="title">
+            <h3>店员推荐</h3>
+            <h1>最美牡丹篇</h1>
+        </div>
+        <img class="lazy" data-original="<%= imgPrefix %>/1.jpg">
+        <div class="address">• 交通信息：距离酒店20分钟路程，公交王城公园站</div>
+        <div class="desc-t">
+            <img class="lazy" data-original="<%= imgPrefix %>/2.jpg" alt="">
+            <p><b>必玩推荐</b>：这里是洛阳最有名的赏花地，牡丹节的主场地，每年到了4月份，五彩缤纷的牡丹花海美的不要不要的，爱拍照的童鞋一定不能错过。值得一提的是，王城公园还是东周王城遗址，古文化区、动物馆、游乐场，总有一种玩法最适合你。</p>
+        </div>
+    </section>
+    <section>
+        <div class="title">
+            <h3>店员推荐</h3>
+            <h1>洛阳水席篇</h1>
+        </div>
+        <img class="lazy" data-original="<%= imgPrefix %>/3.jpg">
+        <div class="address">• 交通信息：西工区王城大道九都路交叉口西北角</div>
+        <div class="desc-t">
+            <img class="lazy" data-original="<%= imgPrefix %>/4.jpg" alt="">
+            <p><b>必吃推荐</b>：看过《舌尖上的中国》的你一定不会忘记洛阳最地道美食——水席。特点就是有荤有素，有冷有热，有汤有水。而这家传统水席名店，口味地道，价格也实惠，席间还有歌舞表演。吃得相当有文化、高大上，有木有？</p>
+        </div>
+    </section>
+    <section>
+        <div class="title">
+            <h3>店员推荐</h3>
+            <h1>地道烧烤篇</h1>
+        </div>
+        <img class="lazy" data-original="<%= imgPrefix %>/5.jpg">
+        <div class="address">• 交通信息：珠江南路丽春路口西南角</div>
+        <div class="desc-t">
+            <img class="lazy" data-original="<%= imgPrefix %>/6.jpg" alt="">
+            <p><b>必吃推荐</b>：身为大胃王吃货，我平时最喜欢就是搜罗周边美食。这家酒吧风格的大排档，可以喝酒也可以边吃边唱，有烧烤有炒菜！在洛阳没有烤不了的，只有你想不到的，其中这家烧烤口感巨佳。尤其喜欢烤金针菇，秒杀你的味蕾。</p>
+        </div>
+    </section>
+</div>
+<footer>
+    <p></p>
+    <div class="gallery previews" id="preview">
+        <% for(var i=data.series-1, len=(app?12:0); i>len; i--){ if(i==17){continue;}%>
+            <div class="cell" data-index="<%= i>1 ? i : '' %>"><img data-flickity-lazyload="<%= i<data.series-1&&i!=16 ? 'http://imgs.plateno.com:8080/static/img/beautifulassistant'+(i<5 ? 5 : i+1) : imgPrefix %>/beautifulassistant<%= i %>.jpg" alt=""></div>
+        <% } %>
+        <!-- <div class="cell" data-index="<%= data.series %>"><img data-flickity-lazyload="<%= imgPrefix %>/beautifulassistant<%= data.series %>.jpg" alt=""></div> -->
+    </div>
+</footer>

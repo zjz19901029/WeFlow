@@ -1,0 +1,165 @@
+@import "base";
+
+@active: #209c0a;
+@border: #fff800;
+@bubble1: #fff;
+@bubble2: #fff;
+
+.rotatedeg(@index) {
+    transform: rotate(18deg+@index*36);
+}
+.generate-bubbles(@n, @i: 1) when (@i =< @n) {
+  span:nth-child(@{i}) {
+    .rotatedeg(@i);
+  }
+  .generate-bubbles(@n, (@i + 1));
+}
+
+@keyframes bubble1 {
+    0% {
+        box-shadow: none;
+    }
+    100% {
+        box-shadow: 0 0 0.133333rem 0.106667rem @bubble1;
+    }
+}
+
+@keyframes bubble2 {
+    0% {
+        box-shadow: none;
+    }
+    100% {
+        box-shadow: 0 0 0.133333rem 0.106667rem @bubble2;
+    }
+}
+
+.wrap {
+    width: 10.0rem;
+    height: 4.933333rem;
+    padding-top: 6.04rem;
+
+    background: url(../img/<%= project %>/banner.jpg) center top no-repeat;
+    background-size: 100% auto;
+
+    box-sizing: border-box;
+
+    .content {
+        background: url(../img/<%= project %>/shadow.png) center bottom no-repeat;
+        background-size: 9.08rem 0.666667rem;
+        height: 9.36rem;
+
+        position: relative;
+        .bg {
+            width: 9.04rem;
+            height: 9.053333rem;
+            background: url(../img/<%= project %>/bg.png) center center no-repeat;
+            background-size: 9.04rem 9.053333rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            overflow: hidden;
+        }
+        .circle {
+            width: 8.226667rem;
+            height: 8.226667rem;
+            background: url(../img/<%= project %>/circle.png) center center no-repeat;
+            background-size: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            transition: transform 6s cubic-bezier(.68, .01, .13, 1);
+        }
+        .center {
+            width: 3.133333rem;
+            height: 3.133333rem;
+            background: url(../img/<%= project %>/center.png) center center no-repeat;
+            background-size: 2.866667rem 3.133333rem;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            &.disabled {
+                pointer-events: none;
+            }
+        }
+        .bubbles {
+            position: absolute;
+            width: 0.133333rem;
+            height: 0.133333rem;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            span {
+                width: 100%;
+                height: 100%;
+                display: block;
+                position: absolute;
+                left: 0;
+                top: 0.213333rem;
+                border-radius: 50%;
+                transform-origin: 50% 4.306667rem;
+                background: #fffa68;
+                animation: bubble1 1s infinite steps(2);
+                &:nth-child(even) {
+                    background: @bubble2;
+                    animation: bubble2 1s .5s infinite steps(2);
+                }
+            }
+            .generate-bubbles(9);
+        }
+    }
+}
+
+.lasttimes {
+    height: 1.146667rem;
+    line-height: 1.146667rem;
+    font-size: 0.346667rem;
+    color: #fff;
+    text-align: center;
+
+    margin-top: 10.133333rem;
+}
+
+@keyframes marquee{
+    100%{
+        transform:translate(-100%,0);
+    }
+}
+.marquee {
+    display: block;
+    width: 9.066667rem;
+    height: 1.013333rem;
+    line-height: 1.013333rem;
+    margin: 0.293333rem auto 0.973333rem;
+    border: 1px @border dashed;
+    background: @active;
+    color: #fff;
+    font-size: 0.32rem;
+    position: relative;
+    overflow:hidden;
+    p{
+        width: auto;
+        white-space: nowrap;
+        height: 1.013333rem;
+        position:absolute;
+        left: 0;
+        top:0;
+        animation:marquee 20s 0s linear infinite;
+    }
+    span {
+        margin-right: 0.853333rem;
+    }
+    em {
+        color: #fbf287;
+    }
+}
+
+

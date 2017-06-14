@@ -1,0 +1,410 @@
+@active: #2eb1e6;
+@default: #fff;
+@bg: #f7f7f7;
+html{height:100%;}
+body{
+    -webkit-overflow-scrolling: touch;
+    user-select: none;
+    height: 100%;
+    position: relative;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    max-width: 10.0rem;
+    margin: 0 auto;
+}
+
+.wrapper{
+    height: 100%;
+
+    width: 100%;
+    max-width: 10.0rem;
+    margin: 0 auto;
+
+    -webkit-overflow-scrolling: touch;
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background-color: @bg;
+}
+
+/*common*/
+.go-top{
+    right: 0.066667rem;
+    bottom: 0.133333rem;
+    width: 1.066667rem;
+    height: 1.066667rem;
+    background-size: 1.066667rem 1.066667rem;
+}
+
+.hidden{
+    display: none;
+}
+
+.ellipsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.arrow{
+    display: inline-block;
+    width: 0.28rem;
+    height: 0.28rem;
+    background-size: 0.28rem 0.28rem;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+a{
+    text-decoration: none;
+}
+
+/*image*/
+.banner{
+    width: 10.0rem;
+    height: 11.0rem;
+}
+
+.desc{
+    width: 10.0rem;
+    height: 1.666667rem;
+    margin-bottom: 0.6rem;
+}
+
+/*button*/
+.btn{
+    border: 0;
+    background-color: transparent;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+
+    &.btn-md{
+        font-size: 0.373333rem;
+
+        width: 100%;
+        height: 0.706667rem;
+        line-height: 0.706667rem;
+
+        border: 0;
+        background-color: @active;
+        color: @default;
+    }
+
+    &.btn-lg{
+        width: 7.106667rem;
+        height: 1.066667rem;
+        line-height: 1.066667rem;
+        border-radius: 0.133333rem;
+        background-color: @active;
+        font-size: 0.426667rem;
+        color: @default;
+
+        position: relative;
+        top: -1.44rem;
+        margin-bottom: -1.44rem;
+    }
+
+    &.btn-default{
+        width: 9.32rem;
+        height: 1.04rem;
+        line-height: 1.04rem;
+        text-align: center;
+
+        border-radius: 0.053333rem;
+        border: 1px solid @active;
+
+        background-color: @default;
+        color: @active;
+        font-size: 0.4rem;
+
+        margin-top: -0.226667rem;
+        margin-bottom: 0.533333rem;
+    }
+
+    &.btn-disable, &.btn-inactive{
+        cursor: not-allowed;
+        /*pointer-events: none;*/
+    }
+
+    &.btn-disable{
+        background-color: #999;
+    }
+}
+
+/*rule*/
+.rule{
+    .rule-header{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        justify-content: space-between;
+        align-items: center;
+
+        width: 7.106667rem;
+        margin: 0.346667rem auto 0.8rem;
+
+        font-size: 0.32rem;
+        color: #999;
+
+        label{
+            text-align: left;
+        }
+
+        .btn-rule{
+            display: block;
+            text-align: right;
+            color: #666;
+            border-bottom: 0.013333rem solid #666;
+        }
+    }
+
+    .rule-body{
+        background-color: @default;
+        width: 9.306667rem;
+
+        border-radius: 0.133333rem;
+        padding: 0.32rem;
+        margin: 0.266667rem auto;
+        box-sizing: border-box;
+
+        color: #999;
+        padding-left: 0.666667rem;
+        font-size: 0.32rem;
+
+        transition: display 1s ease, height 1s ease;
+
+        h1{
+            font-size: 0.373333rem;
+            margin: 0.04rem auto 0.12rem;
+            margin-left: -0.666667rem;
+        }
+
+        li{
+            text-align: left;
+            position: relative;
+            line-height: 1.5;
+
+            &:before{
+                content: attr(data-index)'、';
+                position: absolute;
+                left: -0.4rem;
+                width: 0.8rem;
+            }
+
+            a{
+                color: @active;
+            }
+        }
+    }
+    
+}
+
+/*tip*/
+.tip{
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: rgba(0,0,0,0.75);
+
+    padding: 0.266667rem;
+    border-radius: 0.133333rem;
+    color: #fff;
+    font-size: 0.4rem;
+
+    transition: display ease 1s;
+}
+
+/*modal*/
+.mask{
+    width: 100%;
+    height: 100%;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    padding: 0.266667rem;
+    border-radius: 0.16rem;
+
+    background-color: #fff;
+
+    .close{
+        position: absolute;
+        display: inline-block;
+        top: 0;
+        right: 0;
+        width: 0.853333rem;
+        height: 0.853333rem;
+        color: #000;
+        font-size: 0.32rem;
+        line-height: 0.853333rem;
+        text-align: center; 
+        transition: all 0.2s;
+
+        cursor: pointer;
+        vertical-align: inherit;
+
+        &:hover{
+            color: @active;
+            transform: rotate(90deg);
+        }
+    }
+
+    .modal-body{
+        width: 6.666667rem;
+        padding: 0.666667rem;
+        text-align: center;
+        line-height: 1.8;
+        font-size: 0.4rem;
+    }
+}
+
+
+.panel-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+
+    .panel{
+        display: inline-block;
+        position: relative;
+        margin-top: 0.92rem; /*top of abs(.panel-header)*/
+
+        .panel-header{
+            width: 9.666667rem;
+            height: 3.466667rem;
+
+            position: absolute;
+            left: 0;
+            top: -0.92rem;
+        }
+
+        .panel-body-wrapper{
+            padding-top: 2.546667rem;  /*height of .panel-header - top of abs(.panel-header)*/
+
+            background-color: @default;
+
+            margin-bottom: 0.533333rem;
+            padding-bottom: 0.333333rem;
+            border-bottom-left-radius: 0.266667rem;
+            border-bottom-right-radius: 0.266667rem;
+
+            box-shadow: -3px 0px 10px 0px rgba(0, 0, 0, 0.1);
+
+            .panel-body{
+                width: 9.666667rem;
+
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+
+                .panel-box{
+                    width: 4.773333rem;
+                    margin-bottom: 0.133333rem;
+
+                    display: inline-block;
+
+                    .hotel{
+                        width: 4.773333rem;
+                        height: 4.373333rem;
+                    }
+
+                    .box{
+                        height: 1.84rem;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: space-around;
+
+                        margin-top: -0.16rem;
+                        padding: 0 0.213333rem;
+                        border-left: 1px solid #cfedff;
+                        border-right: 1px solid #cfedff;
+
+                        .name{
+                            text-align: left;
+                            font-size: 0.346667rem;
+                            color: #474747;
+                            line-height: 1.2;
+
+                            padding-bottom: 0.266667rem;
+                        }
+
+                        .price{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-around;
+                            justify-content: space-between;
+                            align-items: center;
+
+                            font-size: 0.32rem;
+
+                            .left{
+                                color: #fa4e50;
+
+                                span{
+                                    font-size: 0.533333rem;
+                                }
+
+                                del{
+                                    color: #8f8c8c;
+                                }
+                            }
+
+                            .right{
+                                color: #3b9eec;
+
+                                border: 1px solid #3b9eec;
+                                padding: 0 0.053333rem;
+                            }
+                        }
+
+                    }
+
+                    
+                }
+            }
+
+        }
+    }
+
+    
+    
+}
+
+.footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    letter-spacing: 0.026667rem;
+    width: 9.666667rem;
+    margin: 0 auto 0.32rem;
+
+    .logo{
+        width: 0.453333rem;
+        height: 0.466667rem;
+        margin-right: 0.213333rem;
+    }
+}

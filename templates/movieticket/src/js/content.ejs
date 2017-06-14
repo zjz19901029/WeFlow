@@ -1,0 +1,60 @@
+<img src="<%= imgPrefix %>/banner.jpg" alt="" class="banner">
+
+<a href="javascript:void(0)" class="btn btn-lg btn-disable" id="btn-movie">数据加载中..</a>
+
+<div class="rule">
+    <div class="rule-header">
+        <label id="state">本场抢票正在进行中</label>
+        <a href="javascript:void(0)" class="btn-rule">点击查看抢票规则</a>
+    </div>
+    <ul class="rule-body hidden">
+        <h1>抢票规则</h1>
+        <% for(var i=0; i<data.rule.length; i++){ %>
+            <li data-index="<%= i+1 %>"><%- data.rule[i] %></li>
+        <% } %>
+    </ul>
+</div>
+
+<img src="<%= imgPrefix %>/desc.jpg" alt="" class="desc">
+
+<div class="panel-wrapper">
+    <% for(var i=0; i<data.list.length; i++){ %>
+        <div class="panel">
+            <img class="lazy panel-header" data-original="<%= imgPrefix %>/<%= i+1 %>/title.jpg" alt="">
+            <div class="panel-body-wrapper">
+                <div class="panel-body">
+                    <% for(var j=0; j<data.list[i].length; j++){ %>
+                        <div class="panel-box">
+                            <img class="lazy hotel" data-original="<%= imgPrefix %>/<%= i+1 %>/hotel<%= j+1 %>.jpg" alt="">
+                            <div class="box">
+                                <div class="name ellipsis"><%= data.list[i][j].name %></div>
+                                <div class="price">
+                                    <div class="left">
+                                        <% if(data.list[i][j].price){ %> ¥<span><%= data.list[i][j].price %></span><% } %>
+                                        <% if(data.list[i][j].origin){ %><del>¥<%= data.list[i][j].origin %></del><% } %>
+                                    </div> 
+                                    <div class="<%= data.list[i][j].point ? 'right' : '' %>">
+                                        <% if(data.list[i][j].point){ %> 送<span><%= data.list[i][j].point %></span>积分<% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-we-hotelid="<%= data.list[i][j].id %>" class="btn we-btn link btn-md" data-type="v2">立即预订</a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<a data-we-href="<%= list %>" class="btn we-btn link btn-default" data-type="v2">更多酒店 <img class="arrow" src="<%= imgPrefix %>/arrow.png"></a>
+
+<div class="footer"><img src="<%= imgPrefix %>/logo.png" alt="" class="logo"> Smurfs TM & Peyo 2017. Movie 2017 CPII and LSC.</div>
+
+<div class="tip hidden" id="tip"></div>
+
+<div class="mask hidden"></div>
+<div class="modal hidden">
+    <span class="close">✕</span>
+    <div class="modal-body" id="modal"></div>
+</div>

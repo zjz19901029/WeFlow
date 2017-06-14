@@ -1,0 +1,167 @@
+@import "base";
+
+@active: #fe9e58;
+html{
+    height: 100%;
+}
+body {
+    height: 100%;
+    background-color: #fbf6f3;
+    -webkit-overflow-scrolling: touch;
+    user-select: none;
+    height: 100%;
+    position: relative;
+    text-align: center;
+
+    width: 100%;
+    max-width: 10.0rem;
+    margin: 0 auto;
+}
+
+.wrapper{
+    height: 100%;
+
+    width: 100%;
+    max-width: 10.0rem;
+    margin: 0 auto;
+
+    -webkit-overflow-scrolling: touch;
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+}
+.container{
+background: url(../img/<%= project %>/tile.jpg) top center repeat-y;
+    background-size: 100% auto;
+        background-position-y: 3.48rem;
+padding-bottom:1.333333rem;
+}
+.rule{
+    width: 9.066667rem;
+    margin:auto;
+    padding-top: 1.306667rem;
+    padding-bottom: 0.666667rem;
+
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: top center;
+
+    text-align: left;
+
+    position: relative;
+
+    background:#209c0a url(../img/<%= project %>/rule.jpg) top center no-repeat;
+    background-size: 8.44rem 1.186667rem;
+    border:1px #fff800 dashed;
+
+    ul{
+        padding: 0 0.333333rem;
+        text-align: left;
+    
+        li{
+            font-size: 0.32rem;
+            line-height: 1.8;
+
+            padding-left: 0.6rem;
+
+            position: relative;
+            color: #fff;
+
+            &:before{
+                content: attr(data-index)'.';
+                width: 0.373333rem;
+                height: 0.373333rem;
+                display: inline-block;
+                vertical-align: middle;
+                color: #fff;
+                line-height: 0.373333rem;
+                text-align: center;
+
+                position: absolute;
+                left: 0;
+                top: 0.106667rem;
+            }
+        }
+
+
+    }
+}
+
+.mask{
+    background: rgba(0, 0, 0, 0.75);
+
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+    height: 100%;
+}
+
+.modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    padding-top: 0.746667rem;
+
+    background: url(../img/<%= project %>/modal.jpg) top center no-repeat;
+    background-size: 7.493333rem 5.4rem;
+
+    border-radius: 0.106667rem;
+
+    background-color: #fff;
+
+    div{
+        width: 7.493333rem;
+        height: 3.066667rem;
+
+        padding: 0 0.586667rem;
+        box-sizing: border-box;
+        line-height: 1.8;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #333;
+        font-size: 0.346667rem;
+
+        span{
+            color: @active;
+            font-weight: 700;
+
+        }
+    }
+
+    button{
+        background-color: #e42e23;
+        border: 0;
+        width: 3.226667rem;
+        height: 0.92rem;
+        border-radius: 0.133333rem;
+        margin-bottom: 0.533333rem;
+
+        font-size: 0.373333rem;
+        line-height: 0.92rem;
+        color: #fff;
+    }
+
+    .close{
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 0.666667rem;
+        height: 0.666667rem;
+    }
+
+}
+
+.hidden{
+    display: none;
+}
