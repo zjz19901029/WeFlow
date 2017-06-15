@@ -20,7 +20,7 @@ const replace = require('gulp-replace');
 const ejshelper = require('tmt-ejs-helper');
 const postcss = require('gulp-postcss');  // CSS 预处理
 const postcssPxtorem = require('postcss-pxtorem'); // 转换 px 为 rem
-const autoprefixer = require('autoprefixer');
+const autoprefixer = require('gulp-autoprefixer');
 /*const posthtml = require('gulp-posthtml');
 const posthtmlPx2rem = require('posthtml-px2rem');
 const RevAll = require('weflow-rev-all');   // reversion
@@ -105,15 +105,16 @@ function dist(projectPath, log, callback) {
         gulp.src(paths.src.less)
             .pipe(gulpif(CDN!="",replace('../img', CDN)))
             .pipe(less())
-            .on('error', function (error) {
-                log(error.message);
-                console.log(error.message);
-            })
-            /*.pipe(autoprefixer({
+            .pipe(autoprefixer({
                 browsers: ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android >= 4.0'],
                 cascade: true, //是否美化属性值 默认：true
                 remove: true //是否去掉不必要的前缀 默认：true
             }))
+            .on('error', function (error) {
+                log(error.message);
+                console.log(error.message);
+            })
+            /*
             .on('error', function (error) {
                 log(error.message);
                 console.log(error.message);

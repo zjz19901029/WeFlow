@@ -7,7 +7,7 @@ const ejshelper = require('tmt-ejs-helper');
 const async = require('async');
 const gulp = require('gulp');
 const less = require('gulp-less');
-const autoprefixer = require("autoprefixer");
+const autoprefixer = require("gulp-autoprefixer");
 const postcss = require('gulp-postcss');   // CSS 预处理
 const posthtml = require('gulp-posthtml');  // HTML 预处理
 const webpack = require("webpack");
@@ -74,6 +74,11 @@ function dev(projectPath, log, callback) {
     function compileLess(cb) {
         gulp.src(paths.src.less)
             .pipe(less())
+            .pipe(autoprefixer({
+                browsers: ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android >= 4.0'],
+                cascade: true, //是否美化属性值 默认：true
+                remove: true //是否去掉不必要的前缀 默认：true
+            }))
             .pipe(gulp.dest(paths.dev.css))
             .on('data', function () {
             })

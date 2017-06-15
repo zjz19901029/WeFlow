@@ -44,7 +44,6 @@
   },
   "dependencies": {
     "async": "^2.0.0-rc.3",
-    "autoprefixer": "^6.3.3",
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -57,6 +56,7 @@
     "ejs-compiled-loader": "^1.1.0",
     "extract-zip": "^1.5.0",
     "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
     "gulp-babel": "^6.1.2",
     "gulp-cssnano": "^2.1.1",
     "gulp-ejs": "^2.1.1",
