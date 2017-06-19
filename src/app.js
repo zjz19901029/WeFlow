@@ -87,7 +87,8 @@ function getLocalFileStorage(workspace,callback){
         if(Common.fileExist(jsonFile)){//如果json文件存在
             let json = fs.readFileSync(path.join(workspace,Common.NAME+'.json'),"utf-8");  
             let storage = JSON.parse(json);
-            $formWorkspace.val(storage.workspace);
+            $formWorkspace.val(workspace);
+            storage.workspace = workspace;
             Common.setStorage(storage,false);
         }else{
             creatWorkspace(workspace);
@@ -133,7 +134,8 @@ function checkLocalProjects() {
                 let projects = storage.projects;
 
                 _.forEach(projects, function (project, key) {
-                    if (!Common.dirExist(project.path)) {
+                    let projectPath = path.join(storage.workspace,key)
+                    if (!Common.dirExist(projectPath)) {
                         delete projects[key];
                     }
                 });
@@ -193,11 +195,12 @@ function initData() {
                 return b.creattime-a.creattime
             })
             for(let i=0;i<tempProjects.length;i++){
-                html += `<li class="projects__list-item" data-project="${tempProjects[i]['name']}" data-path="${tempProjects[i]['path']}" title="${tempProjects[i]['path']}">
+                let projectPath = path.join(storage.workspace,tempProjects[i]['name'])
+                html += `<li class="projects__list-item" data-project="${tempProjects[i]['name']}" data-path="${projectPath}" title="${projectPath}">
                               <span class="icon icon-finder" data-finder="true" title="${FinderTitle}"></span>
                               <div class="projects__list-content">
                                   <span class="projects__name">${tempProjects[i]['name']}</span>
-                                  <div class="projects__path">${tempProjects[i]['path']}</div>
+                                  <div class="projects__path">${projectPath}</div>
                               </div>
                               <a href="javascript:;" class="icon icon-info projects__info"></a>
                         </li>`;
