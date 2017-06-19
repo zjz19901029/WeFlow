@@ -210,7 +210,7 @@ function initData() {
             //当前活动项目
             $curProject = $projectList.find('.projects__list-item').eq(0);
             $curProject.addClass('projects__list-item_current');
-
+            $welcome.addClass('hide');
         } else {
             $welcome.removeClass('hide');
         }
@@ -1078,8 +1078,8 @@ function setNormal() {
     $buildDevButton.text('开发');
     $buildDevButton.data('devwatch', false);
 
-    $curProject.removeClass('projects__list-item_watching');
-    $curProject.data('watch', false);
+    $curProject&&$curProject.removeClass('projects__list-item_watching');
+    $curProject&&$curProject.data('watch', false);
 }
 
 function setWatching() {
