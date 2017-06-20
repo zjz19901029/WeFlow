@@ -5,7 +5,7 @@
 </div>
 <img src="<%= imgPrefix %>/banner1.jpg?v=123123" alt="">
 <div class="hotel">
-    <a data-we-hotelid="<%= data.id %>" class="a-btn we-btn">预订酒店</a>
+    <a data-we-hotelid="<%= data.id %>" data-we-support='wx,app' class="a-btn we-btn">预订酒店</a>
     <p></p>
 </div>
 <img src="<%= imgPrefix %>/banner2.jpg" alt="">
@@ -50,9 +50,8 @@
 <footer>
     <p></p>
     <div class="gallery previews" id="preview">
-        <% for(var i=data.series-1, len=(app?12:0); i>len; i--){ if(i==17){continue;}%>
-            <div class="cell" data-index="<%= i>1 ? i : '' %>"><img data-flickity-lazyload="<%= i<data.series-1&&i!=16 ? 'http://imgs.plateno.com:8080/static/img/beautifulassistant'+(i<5 ? 5 : i+1) : imgPrefix %>/beautifulassistant<%= i %>.jpg" alt=""></div>
+        <% for(var i=data.series-1, len=(app?12:0); i>len; i--){ %>
+            <div class="cell" data-index="<%= i>1 ? i : '' %>"><img data-flickity-lazyload="<%= i<data.series-1 ? 'http://imgs.plateno.com:8080/static/img/beautifulassistant'+(i<5 ? 5 : i+1) : imgPrefix %>/beautifulassistant<%= i %>.jpg" alt=""></div>
         <% } %>
-        <!-- <div class="cell" data-index="<%= data.series %>"><img data-flickity-lazyload="<%= imgPrefix %>/beautifulassistant<%= data.series %>.jpg" alt=""></div> -->
     </div>
 </footer>

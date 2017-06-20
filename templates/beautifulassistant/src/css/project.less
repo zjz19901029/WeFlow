@@ -1,7 +1,9 @@
-@banner1-bg: #b9312b;
-@banner1-text: #671c19;
-@arrow: #d4a25d;
-@border: #90be4d;
+@banner1-bg: #7c5959;
+@banner1-p-text: #7c5959;
+@banner1-btn-bg: #fec6c5;
+@banner1-btn-txt: #4b4b4b;
+@arrow: #ff716e;
+@border: #dfbb88;
 html{height: 100%;}
 body {
     height: 100%;
@@ -16,6 +18,10 @@ body {
     width: 100%;
     max-width: 10.0rem;
     margin: 0 auto;
+}
+img{
+    display: block;
+    width: 100%;
 }
 .content section.special{
     margin:0 !important;
@@ -101,18 +107,18 @@ div#preview {
     padding-top: 0.626667rem;
     a {
         display: block;
-        background: #ffe100;
+        background: @banner1-btn-bg;
         height: 1.2rem;
         line-height: 1.2rem;
         width: 9.466667rem;
         font-size: 0.426667rem;
-        color: #603c1b;
+        color: @banner1-btn-txt;
         margin: auto;
         text-align: center;
         border-radius: 0.133333rem;
     }
     p {
-        color: @banner1-text;
+        color: @banner1-p-text;
         font-size: 0.266667rem;
         width: 100%;
         height: 1.066667rem;

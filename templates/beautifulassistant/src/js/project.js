@@ -31,7 +31,7 @@ $(function() {
         $('.wrapper').html(html);
 
         $("img.lazy").lazyload({ effect: "fadeIn", threshold: 50, container: $(".wrapper") });
-
+        $(".we-btn").button("init")
         jQuery('#photos').flickity({
             cellAlign: 'center',
             prevNextButtons: true,
