@@ -1,4 +1,6 @@
 const path = require('path')
+const runtime = require('babel-plugin-transform-runtime')
+const es2015 = require('babel-preset-es2015')
 
 const config = {
 	entry:'',
@@ -11,7 +13,11 @@ const config = {
 		loaders: [
 		    {
 			    test: /\.js$/,
-			    loader: 'babel-loader'
+			    loader: 'babel-loader',
+			    options: {
+			        presets: [[es2015]],
+			        plugins: [runtime]
+			    }
 			},{ 
 				test: /\.ejs$/, 
 				loader: 'ejs-compiled-loader' 
