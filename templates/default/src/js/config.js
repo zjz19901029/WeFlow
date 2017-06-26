@@ -13,14 +13,14 @@ var config = {
     },
     dev: {
         wx_share: 'http://ctiptest.platenogroup.com/socialmember-webservice-maserati/',
-        wx_oauth: 'wx65cc7f25977b4ccb&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/actoauth?redirectUrl=' ), // o2om测试服微信授权API
-        wx_login: 'wx65cc7f25977b4ccb&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ) // o2om测试服微信绑定公众号API
+        wx_oauth: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/actoauth?redirectUrl=' ), // o2om测试服微信授权API
+        wx_login: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ) // o2om测试服微信绑定公众号API
     },
 
     test: {
         wx_share: 'http://ctiptest.platenogroup.com/socialmember-webservice-maserati/',
-        wx_oauth: 'wx65cc7f25977b4ccb&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/actoauth?redirectUrl=' ), // o2om测试服微信授权API
-        wx_login: 'wx65cc7f25977b4ccb&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ) // o2om测试服微信绑定公众号API
+        wx_oauth: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/actoauth?redirectUrl=' ), // o2om测试服微信授权API
+        wx_login: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ) // o2om测试服微信绑定公众号API
     },
 
     prod: {
