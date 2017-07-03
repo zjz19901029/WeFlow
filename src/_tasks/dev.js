@@ -79,6 +79,7 @@ function dev(projectPath, log, callback) {
                 cascade: true, //是否美化属性值 默认：true
                 remove: true //是否去掉不必要的前缀 默认：true
             }))
+            .pipe(bs.stream())
             .pipe(gulp.dest(paths.dev.css))
             .on('data', function () {
             })
@@ -88,7 +89,7 @@ function dev(projectPath, log, callback) {
                     log('compile Less success.');
                     cb();
                 } else {
-                    reloadHandler();
+                    //reloadHandler();
                 }
             })
     }
@@ -100,6 +101,7 @@ function dev(projectPath, log, callback) {
                 console.log(error.message);
                 log(error.message);
             }))
+            .pipe(bs.stream())
             .pipe(gulp.dest(paths.dev.html))
             .on('data', function () {
             })
@@ -109,7 +111,7 @@ function dev(projectPath, log, callback) {
                     log('compile Html success.');
                     cb();
                 } else {
-                    reloadHandler();
+                    //reloadHandler();
                 }
             })
     }
