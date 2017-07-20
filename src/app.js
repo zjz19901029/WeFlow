@@ -255,7 +255,7 @@ $example.on('click', function () {
                 }
 
                 storage['projects'][projectName] = {};
-                storage['projects'][projectName]['path'] = projectPath;
+                //storage['projects'][projectName]['path'] = projectPath;
                 Common.setStorage(storage);
 
                 console.log('new Project Success.');
@@ -317,7 +317,7 @@ function openProject(projectPath) {
             alert('项目已存在');
         } else {
             storage['projects'][projectName] = {};
-            storage['projects'][projectName]['path'] = projectPath;
+            //storage['projects'][projectName]['path'] = projectPath;
             Common.setStorage(storage);
 
             //插入打开的项目
@@ -362,7 +362,7 @@ function insertOpenProject(projectPath) {
             storage['projects'][projectName] = {};
         }
 
-        storage['projects'][projectName]['path'] = projectPath;
+        //storage['projects'][projectName]['path'] = projectPath;
 
         Common.setStorage(storage);
     }
@@ -632,7 +632,7 @@ function newProjectReply(projectPath) {
         }
 
         storage['projects'][projectName] = {};
-        storage['projects'][projectName]['path'] = projectPath;
+        //storage['projects'][projectName]['path'] = projectPath;
         storage['projects'][projectName]['creattime'] = new Date().getTime();
         Common.setStorage(storage);
 
