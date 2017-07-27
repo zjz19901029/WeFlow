@@ -50,6 +50,9 @@ $(function() {
                             case 6:
                                 lv = 3;
                                 break;
+                            case 8:
+                                lv = 4;
+                                break;
                         }
                     }
 
