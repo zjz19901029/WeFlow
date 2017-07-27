@@ -20,8 +20,8 @@ var config = {
      * prod 线上环境
      */
     dev: {
-        host: 'http://ctiptest.platenogroup.com/socialmember-webservice-maserati/ext/storedvalue',
-        wx_share: 'http://ctiptest.platenogroup.com/socialmember-webservice-maserati/',
+        host: 'http://10.100.112.123:8084/socialmember-webservice-maserati/ext/storedvalue',
+        wx_share: 'http://10.100.112.123:8084/socialmember-webservice-maserati/',
         wx_oauth: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/actoauth?redirectUrl=' ), // o2om测试服微信授权API
         wx_login: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ) // o2om测试服微信绑定公众号API
     },

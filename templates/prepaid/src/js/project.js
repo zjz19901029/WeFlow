@@ -55,7 +55,7 @@ $(function() {
 
                     compile(lv, type);
                 },
-                fail: function(res){
+                error: function(res){
                     console.error(res)
                     compile(lv, type);
                 }
