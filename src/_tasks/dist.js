@@ -103,8 +103,8 @@ function dist(projectPath, log, callback) {
     //编译 less
     function compileLess(cb) {
         gulp.src(paths.src.less)
-            .pipe(gulpif(CDN!="",replace('../img', CDN)))
             .pipe(less())
+            .pipe(gulpif(CDN!="",replace('../img', CDN)))
             .pipe(autoprefixer({
                 browsers: ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android >= 4.0'],
                 cascade: true, //是否美化属性值 默认：true
