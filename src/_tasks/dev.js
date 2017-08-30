@@ -74,6 +74,10 @@ function dev(projectPath, log, callback) {
     function compileLess(cb) {
         gulp.src(paths.src.less)
             .pipe(less())
+            .on('error', function (error) {
+                console.log(error.message);
+                log(error.message);
+            })
             .pipe(autoprefixer({
                 browsers: ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android >= 4.0'],
                 cascade: true, //是否美化属性值 默认：true
@@ -91,6 +95,10 @@ function dev(projectPath, log, callback) {
                 } else {
                     //reloadHandler();
                 }
+            })
+            .on('error', function (error) {
+                console.log(error.message);
+                log(error.message);
             })
     }
 
