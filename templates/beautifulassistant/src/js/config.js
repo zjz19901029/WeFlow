@@ -19,13 +19,13 @@ var config = {
      * prod     线上环境
      */
     dev: {
-        wx_share: 'http://ctiptest.platenogroup.com/socialmember-webservice-maserati/',
+        wx_share: 'http://10.237.151.123:8084/socialmember-webservice-maserati/',
         wx_oauth: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/actoauth?redirectUrl=' ), // o2om测试服微信授权API
         wx_login: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ) // o2om测试服微信绑定公众号API
     },
 
     test: { // ctiptest
-        wx_share: 'http://ctiptest.platenogroup.com/socialmember-webservice-maserati/',
+        wx_share: 'http://10.237.151.123:8084/socialmember-webservice-maserati/',
         wx_oauth: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/actoauth?redirectUrl=' ), // o2om测试服微信授权API
         wx_login: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ) // o2om测试服微信绑定公众号API
     },
