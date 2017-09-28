@@ -34,7 +34,7 @@ module.exports = function (projectPath, log, callback) {
 
     function zipTask(cb) {
         let date = formatDate(new Date(),'yyyyMMddhhmm');
-        gulp.src(path.join(projectPath, './dist/!(img)/**/*'))
+        gulp.src(path.join(projectPath, './dist/**/*'))
             .pipe(zip(projectName+'_'+date+'.zip'))
             .pipe(gulp.dest(projectPath))
             .on('end', function(){
@@ -63,10 +63,10 @@ module.exports = function (projectPath, log, callback) {
     async.series([
         function(next){
             zipTask(next);
-        },
+        }/*,
         function(next){
             zipCDN(next);
-        }
+        }*/
     ], function(err){
         if(err){
             throw new Error(err);
