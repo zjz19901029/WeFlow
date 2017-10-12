@@ -19,6 +19,7 @@ const initdir = nodeRequire(path.join(__dirname, './src/_tasks/init.js'));
 const dev = nodeRequire(path.join(__dirname, './src/_tasks/dev.js'));
 const dist = nodeRequire(path.join(__dirname, './src/_tasks/dist.js'));
 const zip = nodeRequire(path.join(__dirname, './src/_tasks/zip.js'));
+const zip_mall = nodeRequire(path.join(__dirname, './src/_tasks/zip_mall.js'));
 const ftp = nodeRequire(path.join(__dirname, './src/_tasks/ftp.js'));
 const Common = nodeRequire(path.join(__dirname, './src/common'));
 const packageJson = nodeRequire(path.join(__dirname, './package.json'));
@@ -806,6 +807,24 @@ function runTask(taskName, context) {
                     logReply('打包完成');
                     console.log('打包完成');
                     context.text('打包');
+                }, 500);
+            });
+        //});
+    }
+
+    if(taskName === 'zip_mall') {
+        context.text('执行中');
+        /*dist(projectPath, function (data) {
+            logReply(data);
+        }, function () {*/
+            zip_mall(projectPath, function (data) {
+                logReply(data);
+            }, function () {
+                setTimeout(function () {
+                    $logStatus.text('Done');
+                    logReply('打包完成');
+                    console.log('打包完成');
+                    context.text('打包(铂物馆)');
                 }, 500);
             });
         //});
