@@ -67,13 +67,13 @@ $(function() {
 
         if(WeUI.Util.getClientType()=="app"&&!WeUI.Util.isV1()){
             if(index > 11){
-                BTSDK.openNewWebView({
+                wehotelSDK.openNewWebView({
                     data:{
                         url: url
                     }
                 });
             }else{
-                BTSDK.openV1WebView({
+                wehotelSDK.openV1WebView({
                     data:{
                         url: url
                     }

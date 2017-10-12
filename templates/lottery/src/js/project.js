@@ -30,7 +30,7 @@ $(function() {
         prize5: '<span>感谢支持</span>还差一点点就中奖了~'
     }
 
-    if (BTSDK.appVersion) {// 兼容V1 V2
+    if (wehotelSDK.appVersion) {// 兼容V1 V2
         WeUI.Util.getToken(function(_token){
             TOKEN = _token;
             initLottery();
