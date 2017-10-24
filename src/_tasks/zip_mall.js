@@ -18,7 +18,7 @@ module.exports = function (projectPath, log, callback) {
 
     function zipTask(cb) {
         gulp.src(path.join(projectPath, './dist/**/*'))
-            .pipe(gulp.dest(path.join(projectPath, './zip/activities')))
+            .pipe(gulp.dest(path.join(projectPath, './zip/mall/' + projectName)))
             .on('end', function(){
                 gulp.src(path.join(projectPath, './zip/**/*'))
                 .pipe(zip('webapp.zip'))
