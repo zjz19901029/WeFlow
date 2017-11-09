@@ -17,4 +17,8 @@ $(function() {
         webUrl: window.location.href,
         canShare: true
     });
+    if(WeUI.Util.getClientType() != "wx"  || WeUI.Util.getClientType() == "app"){
+        var url = window.location.href;
+        location.href = 'botaoota://hybridBridgeV2?hybrid_host_path=' + url;
+    }
 });

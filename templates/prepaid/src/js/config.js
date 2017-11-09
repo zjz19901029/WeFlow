@@ -23,21 +23,27 @@ var config = {
         host: 'http://10.100.112.123:8084/socialmember-webservice-maserati/ext/storedvalue',
         wx_share: 'http://10.100.112.123:8084/socialmember-webservice-maserati/',
         wx_oauth: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/actoauth?redirectUrl=' ), // o2om测试服微信授权API
-        wx_login: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ) // o2om测试服微信绑定公众号API
+        wx_login: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ), // o2om测试服微信绑定公众号API
+        hotelDetail: 'http://10.237.157.20:8099/wehotelapp/hotel/index.html#/detail?innId=',
+        hotelList: 'http://10.237.157.20:8099/wehotelapp/hotel/index.html#/list?'
     },
 
     test: {
         host: 'http://ctiptest.platenogroup.com/socialmember-webservice-maserati/ext/storedvalue',
         wx_share: 'http://10.237.151.123:8084/socialmember-webservice-maserati/',
         wx_oauth: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/actoauth?redirectUrl=' ), // o2om测试服微信授权API
-        wx_login: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ) // o2om测试服微信绑定公众号API
+        wx_login: 'wxe196afa36a2a4cf0&redirect_uri=' + encodeURIComponent( 'http://ctiptest.platenogroup.com/oauth2/authorize/login?redirectUrl=' ), // o2om测试服微信绑定公众号API
+        hotelDetail: 'http://10.237.157.20:8099/wehotelapp/hotel/index.html#/detail?innId=',
+        hotelList: 'http://10.237.157.20:8099/wehotelapp/hotel/index.html#/list?'
     },
 
     prod: {
         host: 'http://m.7daysinn.cn/maserati/ext/storedvalue',
         wx_share: 'http://m.7daysinn.cn/maserati/',
         wx_oauth: 'wx56daa115de20b2e1&redirect_uri=' + encodeURIComponent( 'http://m.7daysinn.cn/oauth2/authorize/actoauth?redirectUrl=' ), // 铂涛会公众号微信授权API
-        wx_login: 'wx56daa115de20b2e1&redirect_uri=' + encodeURIComponent( 'http://m.7daysinn.cn/oauth2/authorize/login?redirectUrl=' ) // 铂涛会公众号微信绑定公众号API
+        wx_login: 'wx56daa115de20b2e1&redirect_uri=' + encodeURIComponent( 'http://m.7daysinn.cn/oauth2/authorize/login?redirectUrl=' ), // 铂涛会公众号微信绑定公众号API
+        hotelDetail: 'http://trip.plateno.com/wehotelapp/hotel/index.html#/detail?innId=',
+        hotelList: 'http://trip.plateno.com/wehotelapp/hotel/index.html#/list?'
     },
 
     /**
@@ -53,7 +59,7 @@ var config = {
         
         login: 'botaoota://login',
 
-        api: '/memberInfo',
+        api: '/memberInfoByTokenAndSource',
 
         gift: 'botaoota://accountCharge?urlName=http://trip.plateno.com/static/members/rechargeProtocol.html&giftid='
     },

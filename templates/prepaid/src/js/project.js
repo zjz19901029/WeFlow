@@ -5,6 +5,8 @@ $(function() {
     WeUI.Config.wx_share_host = HOST.wx_share;
     WeUI.Config.login.wx_oauth = HOST.wx_oauth;
     WeUI.Config.login.wx_login = HOST.wx_login;
+    WeUI.Config.hotel.app.href_v2 = HOST.hotelDetail;
+    WeUI.Config.hotellist.app.href_v2 = HOST.hotelList;
     
     var token;
     WeUI.Util.setPageInfo({//设置分享
@@ -21,6 +23,10 @@ $(function() {
         render && render(_token, WeUI.Util.getClientType());
     },WeUI.Util.getClientType() == "wx")
 
+    if(WeUI.Util.getClientType() != "wx"  || WeUI.Util.getClientType() == "app"){
+        var url = window.location.href;
+        location.href = 'botaoota://hybridBridgeV2?hybrid_host_path=' + url;
+    }
     /**
      * 数据渲染
      */
@@ -32,7 +38,8 @@ $(function() {
                 type: 'POST',
                 url: HOST.host + CONFIG[type].api,
                 data: {
-                    token: token
+                    token: token,
+                    source: type == "app"?window.wehotelSDK.sourceType:""
                 },
                 dataType: 'json',
                 success: function(res){

@@ -6,6 +6,10 @@ $(function() {
     WeUI.Config.wx_share_host = HOST.wx_share;
     WeUI.Config.login.wx_oauth = HOST.wx_oauth;
     WeUI.Config.login.wx_login = HOST.wx_login;
+
+    WeUI.Config.hotel.app.href_v2 = HOST.hotelDetail;
+    WeUI.Config.hotellist.app.href_v2 = HOST.hotelList;
+
     /**
      * app标题栏配置
      */

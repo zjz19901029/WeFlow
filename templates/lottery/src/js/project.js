@@ -5,6 +5,8 @@ $(function() {
     WeUI.Config.wx_share_host = HOST.wx_share;
     WeUI.Config.login.wx_oauth = HOST.wx_oauth;
     WeUI.Config.login.wx_login = HOST.wx_login;
+    WeUI.Config.hotel.app.href_v2 = HOST.hotelDetail;
+    WeUI.Config.hotellist.app.href_v2 = HOST.hotelList;
     /**
      * app标题栏配置
      */
@@ -16,6 +18,10 @@ $(function() {
         webUrl: window.location.href,
         canShare: true
     });
+    if(WeUI.Util.getClientType() != "wx"  || WeUI.Util.getClientType() == "app"){
+        var url = window.location.href;
+        location.href = 'botaoota://hybridBridgeV2?hybrid_host_path=' + url;
+    }
 
     const MSG = {
         weixin: '请点击右上角，在浏览器打开本页面~',
