@@ -23,9 +23,9 @@ $(function() {
         render && render(_token, WeUI.Util.getClientType());
     },WeUI.Util.getClientType() == "wx")
 
-    if(WeUI.Util.getClientType() != "wx"  || WeUI.Util.getClientType() == "app"){
+    if (WeUI.Util.getClientType() == "m") {
         var url = window.location.href;
-        location.href = 'botaoota://hybridBridgeV2?hybrid_host_path=' + url;
+        window.location.href = 'botaoota://hybridBridgeV2?hybrid_host_path=' + url;
     }
     /**
      * 数据渲染
