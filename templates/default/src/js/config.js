@@ -38,8 +38,8 @@ var config = {
         wx_oauth: 'wx56daa115de20b2e1&redirect_uri=' + encodeURIComponent( 'http://m.7daysinn.cn/oauth2/authorize/actoauth?redirectUrl=' ), // 铂涛会公众号微信授权API
         wx_login: 'wx56daa115de20b2e1&redirect_uri=' + encodeURIComponent( 'http://m.7daysinn.cn/oauth2/authorize/login?redirectUrl=' ), // 铂涛会公众号微信绑定公众号API
         goodsApi: 'http://activity.plateno.com',
-        goodsDetail: 'http://mall.plateno.com/#/goodsDetail?productId=',
-        goodsIndex: 'http://mall.plateno.com/#/goodsIndex',
+        goodsDetail: 'https://mall.plateno.com/#/goodsDetail?productId=',
+        goodsIndex: 'https://mall.plateno.com/#/goodsIndex',
         hotelDetail: 'http://trip.plateno.com/wehotelapp/hotel/index.html#/detail?innId=',
         hotelList: 'http://trip.plateno.com/wehotelapp/hotel/index.html#/list?'
     }
